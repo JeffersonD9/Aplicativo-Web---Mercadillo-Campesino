@@ -17,7 +17,7 @@
     "bugs": {
         "url": "https://github.com/JeffersonD9/PROYECTO---MERCADILLO/issues"
     },
-    "homepage": "https://github.com/JeffersonD9/PROYECTO---MERCADILLO/tree/JeffersonDev#readme",
+    "homepage": "https://github.com/JeffersonD9/Aplicativo-Web-Mercadillo-Campesino/tree/Testing/main#readme",
     "devDependencies": {
         "@prisma/client": "^5.13.0",
         "bcrypt": "^5.1.1",
