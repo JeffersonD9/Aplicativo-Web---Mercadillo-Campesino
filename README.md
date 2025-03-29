@@ -1,114 +1,94 @@
-# 🌿 MERCADILLO CAMPESINO BUCARAMANGA 🌿
+# 🧪 Testing Branch - Mercadillo Campesino Bucaramanga
 
-> ### *Conectando el campo con la ciudad, un producto a la vez*
+> Este branch está dedicado a las pruebas automatizadas para asegurar la calidad y estabilidad del aplicativo web del Mercadillo Campesino.
 
-## 📝 Descripción
+## 📋 Resumen
 
-Este aplicativo web tiene como objetivo principal promover y dar visibilidad a los productos agrícolas de los campesinos de los alrededores de Bucaramanga. La plataforma sirve como un puente digital entre los productores locales y los consumidores, facilitando el conocimiento y acceso a productos frescos y de calidad.
+Esta rama contiene todas las pruebas automatizadas para verificar el correcto funcionamiento de las rutas, controladores y modelos de la aplicación. Utilizamos Jest como framework de testing junto con Supertest para las pruebas de integración de API.
 
----
+## 🛠️ Tecnologías utilizadas
 
-## ✨ Características principales
+- **Jest**: Framework de testing para JavaScript
+- **Supertest**: Librería para testear HTTP servers
+- **Node.js**: Entorno de ejecución para JavaScript
+- **Express**: Framework web para backend
 
-| 🥕 | Catálogo digital de productos agrícolas organizados por categorías |
-|---|-------------------------------------------------------------------|
-| 👨‍🌾 | Perfiles detallados de vendedores campesinos |
-| ⚙️ | Sistema de administración para la gestión de categorías y usuarios |
-| 📱 | Interfaz intuitiva para visitantes/clientes |
+## 📊 Cobertura actual de pruebas
 
----
+| Tipo de prueba | Rutas cubiertas | Estado |
+|----------------|-----------------|--------|
+| GET Endpoints  | 5 rutas         | ✅     |
+| POST Endpoints | 5 rutas         | ✅     |
+| PUT Endpoints  | No implementado | 🔄     |
+| DELETE Endpoints | No implementado | 🔄     |
 
-## 👥 Roles de usuario
-
-### 👑 Administrador
-- Gestiona las categorías de productos
-- Administra cuentas de usuarios
-- Supervisa el funcionamiento general de la plataforma
-
-### 🧑‍🌾 Vendedor (Campesino)
-- Registra sus productos en el sistema
-- Actualiza información de disponibilidad y precios
-- Gestiona su perfil con información de contacto
-
-### 🛒 Visitante/Cliente
-- Explora catálogos de productos
-- Visualiza perfiles de campesinos
-- Interactúa con los diferentes catálogos
-- Puede contactar a los vendedores
-
----
-
-## 🔄 Flujo de la aplicación
-
-```mermaid
-graph TD
-    A[Administrador configura categorías] --> B[Campesinos se registran]
-    B --> C[Campesinos añaden productos]
-    C --> D[Visitantes exploran la plataforma]
-    D --> E[Visitantes contactan vendedores]
-```
-
----
-
-## 💻 Stack tecnológico
-
-### Backend
-- **Node.js** - Entorno de ejecución
-- **Express** - Framework web
-- **MySQL Workbench** - Base de datos relacional
-- **Prisma ORM** - Mapeo objeto-relacional
-
-### Frontend
-- **EJS** - Motor de plantillas
-- **HTML5/CSS3** - Estructura y estilos
-- **JavaScript** - Interactividad
-
----
-
-## 🚀 Instalación
+## 🚀 Cómo ejecutar las pruebas
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/tu-usuario/mercadillo-campesino.git
-
-# Ingresar al directorio
-cd mercadillo-campesino
-
 # Instalar dependencias
 npm install
 
-# Configurar la base de datos
-npx prisma migrate dev
+# Ejecutar todas las pruebas
+npm test
 
-# Iniciar la aplicación
-npm start
+# Ejecutar pruebas con cobertura
+npm run test:coverage
+
+# Ejecutar pruebas en modo watch
+npm run test:watch
 ```
 
----
+## 📝 Estructura de las pruebas
 
-## ⚙️ Configuración
-
-Crea un archivo `.env` en la raíz del proyecto con la siguiente estructura:
+Las pruebas están organizadas por tipo de endpoint y funcionalidad:
 
 ```
-DATABASE_URL="mysql://usuario:contraseña@localhost:3306/mercadillo_db"
-PORT=3000
-JWT_SECRET=tu_clave_secreta
+tests/
+├── routes/
+│   ├── admin.test.js
+│   ├── auth.test.js
+│   ├── productos.test.js
+│   └── usuarios.test.js
+├── controllers/
+│   └── ... (no implementado aún)
+└── models/
+    └── ... (no implementado aún)
 ```
 
----
+## 🔍 Resultados de las pruebas actuales
 
-## 🙏 Agradecimientos
+### Rutas GET
+- ✅ `/MercadilloBucaramanga` - Retorna 200
+- ✅ `/MercadilloBucaramanga/Admin` - Retorna 302 (redirección)
+- ✅ `/MercadilloBucaramanga/Admin/Usuarios` - Retorna 302 (redirección)
+- ✅ `/MercadilloBucaramanga/Usuario` - Retorna 302 (redirección)
+- ✅ `/MercadilloBucaramanga/Admin/Categorias` - Retorna 302 (redirección)
 
-- A todos los campesinos de la región que confían en esta plataforma
-- A la comunidad de Bucaramanga por apoyar el consumo local
-- Al equipo de desarrollo por su dedicación y trabajo
+### Rutas POST
+- ✅ `/MercadilloBucaramanga/Productos` - Retorna 302 (redirección)
+- ✅ `/MercadilloBucaramanga/Admin/Catalogos` - Retorna 302 (redirección)
+- ✅ `/MercadilloBucaramanga/Admin/Categorias` - Retorna 302 (redirección)
+- ✅ `/MercadilloBucaramanga/Login` (credenciales incorrectas) - Retorna 404
+- ✅ `/MercadilloBucaramanga/Login` (credenciales correctas) - Retorna 201
+- ✅ `/MercadilloBucaramanga/Registrar` - Retorna 200
+
+## 📈 Plan de mejora para las pruebas
+
+1. Implementar pruebas para rutas PUT y DELETE
+2. Añadir pruebas para controladores
+3. Añadir pruebas para modelos y validaciones
+4. Implementar pruebas E2E con Cypress
+5. Configurar integración continua con GitHub Actions o Jenkins
+
+## 📚 Referencias y documentación
+
+- [Documentación de Jest](https://jestjs.io/docs/getting-started)
+- [Documentación de Supertest](https://github.com/visionmedia/supertest)
+- [Guía de buenas prácticas de testing](https://github.com/goldbergyoni/javascript-testing-best-practices)
 
 ---
 
 <div align="center">
-  <p>Hecho con ❤️ para apoyar a los productores locales de Bucaramanga</p>
-  <p><strong>Desarrollado por:</strong></p>
-  <p>Jefferson Steven Muñoz Delgado</p>
-  <p>Ivan Dario Villamizar Archila</p>
+  <p>Desarrollado por Jefferson Steven Muñoz Delgado e Ivan Dario Villamizar Archila</p>
+  <p><strong>Asegurando la calidad del Mercadillo Campesino, test por test</strong></p>
 </div>
