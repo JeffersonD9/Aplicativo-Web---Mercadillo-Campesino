@@ -98,37 +98,6 @@ JWT_SECRET=tu_clave_secreta
 
 ---
 
-## 📋 API Endpoints
-
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| GET | `/api/products` | Obtener todos los productos |
-| GET | `/api/products/:id` | Obtener un producto específico |
-| GET | `/api/categories` | Obtener todas las categorías |
-| POST | `/api/sellers/:id/products` | Crear un nuevo producto |
-| PUT | `/api/products/:id` | Actualizar un producto |
-| DELETE | `/api/products/:id` | Eliminar un producto |
-
----
-
-## 👨‍💻 Contribución
-
-Las contribuciones son bienvenidas. Para contribuir:
-
-1. Haz un fork del proyecto
-2. Crea una nueva rama (`git checkout -b feature/nueva-caracteristica`)
-3. Realiza tus cambios y haz commit (`git commit -m 'Añadir nueva característica'`)
-4. Sube los cambios a tu repositorio (`git push origin feature/nueva-caracteristica`)
-5. Abre un Pull Request
-
----
-
-## 📄 Licencia
-
-Este proyecto está bajo la licencia MIT - ver el archivo LICENSE.md para más detalles.
-
----
-
 ## 🙏 Agradecimientos
 
 - A todos los campesinos de la región que confían en esta plataforma
