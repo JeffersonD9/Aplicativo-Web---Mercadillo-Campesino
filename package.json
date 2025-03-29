@@ -10,14 +10,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/JeffersonD9/PROYECTO---MERCADILLO.git#JeffersonDev"
+        "url": "git+https://github.com/JeffersonD9/Aplicativo-Web-Mercadillo-Campesino.git#main"
     },
     "author": "JEFFERSON MUÑOZ",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/JeffersonD9/PROYECTO---MERCADILLO/issues"
+        "url": "https://github.com/JeffersonD9/Aplicativo-Web-Mercadillo-Campesino/issues"
     },
-    "homepage": "https://github.com/JeffersonD9/PROYECTO---MERCADILLO/tree/JeffersonDev#readme",
+    "homepage": "https://github.com/JeffersonD9/Aplicativo-Web-Mercadillo-Campesino/tree/main#readme",
     "devDependencies": {
         "@prisma/client": "^5.13.0",
         "bcrypt": "^5.1.1",
