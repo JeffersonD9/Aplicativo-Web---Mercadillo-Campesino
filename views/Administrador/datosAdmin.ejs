@@ -1,0 +1,75 @@
+<div class="alert alert-danger d-none" role="alert" id="notificacion"></div>
+<form id="formulario">
+  <div id="grupo_usuarioAdmin">
+    <div class="form-group mt-3 mb-3">
+      <label for="usuario">Usuario</label>
+      <input
+        type="text"
+        class="form-control usuarioAdmin"
+        name="usuarioAdmin"
+        value="<%- adminUserFound.UserName %>"
+        id="usuarioAdmin"
+        aria-describedby="emailHelp"
+        placeholder="Número de Celular"
+      />
+      <p class="formulario__input-error">
+        El usuario tiene que tener como minimo 4 dígitos y solo puede contener
+        numeros, letras y guion bajo.
+      </p>
+    </div>
+  </div>
+  <div id="grupo_celular">
+  <div class="form-group mt-3 mb-3">
+    <label for="celular">Celular</label>
+    <input
+      type="text"
+      class="form-control celular"
+      value="<%- adminUserFound.celular %>"
+      id="celular"
+      name="celular"
+      aria-describedby="emailHelp"
+      placeholder="Número de Celular"
+    />
+    <p class="formulario__input-error">
+        Debe ingresar un número valido
+    </p>
+  </div>
+  </div>
+  <div id="grupo_correo">
+  <div class="form-group mt-3 mb-3">
+    <label for="correo">Correo Electrónico</label>
+    <input
+      type="email"
+      name="correo"
+      class="form-control correo"
+      value="<%- adminUserFound.Email %>"
+      id="correo"
+      aria-describedby="emailHelp"
+      placeholder="Correo Electrónico"
+    />
+    <p class="formulario__input-error">Email Incorrecto</p>
+  </div>
+  </div>
+  <div id="grupo_password">
+  <div class="form-group mt-3 mb-3">
+    <label for="password">Password</label>
+    <input
+      type="password",
+      name="password"
+      class="form-control password"
+      id="password"
+      value="<%- adminUserFound.Password %>"
+      placeholder="Contraseña"
+    />
+    <p class="formulario__input-error">
+      La contraseña debe tener como minimo 10 caracteres y no debe contener
+      espacios en blanco, incluyendo la barra espaciadora.
+    </p>
+  </div>
+</div>
+
+  <button class="btn btn-primary btn-activar">Activar Campos</button>
+  <button class="btn btn-primary btnActualizarCampos">Actualizar</button>
+</form>
+
+<script src="/js/datosAdmin.js" type="module"></script>

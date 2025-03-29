@@ -1,0 +1,29 @@
+
+<!-- Card-->
+<div class="row mx-auto my-5">
+  <% for (let key in dataCatalogo) { %>
+  <div class="col-sm-4 col-md-4 col-lg-3">
+    <div class="card mb-3 with-card">
+      <img
+        src="/<%= dataCatalogo[key].Imagen %> "
+        class="card-img-top img-header-card"
+        alt="..."
+      />
+      <div class="col-12">
+        <div class="card-body-padding">
+          <a  href="/MercadilloBucaramanga/usuario/<%= key %>" class=" btn border-0 p-0 mb-2 nombreUsuario"><%= key %></a>
+          <h5 class="card-subtitle text-muted mb-2">Catálogo</h5>
+          <div class="row row-cols-auto mb-2">
+              <a href="/MercadilloBucaramanga/usuario/<%= key %>#<%= dataCatalogo[key].catalogos %>" class="btn border-0" >   <%= dataCatalogo[key].catalogos  %> </a>
+          </div>
+          <a href="/MercadilloBucaramanga/usuario/<%= key %>" class="btn w-100 btn-card-ingresar" type="submit">
+            Ingresar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% } %>
+</div>
+
+

@@ -1,0 +1,219 @@
+<div class="" style="width: 100%; height: 70px">
+  <div class="alert alert-danger d-none" id="notificacion" role="alert"></div>
+</div>
+
+<a id="btn-crear" type="button" class="btn btn-primary">
+  <i class="bi bi-plus-lg"></i> Añadir Producto
+</a>
+
+<div class="container-fluid my-4 table-responsive">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <table class="table" id="table">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Disponibilidad</th>
+            <th scope="col">$Precio</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Presentacion</th>
+            <th scope="col">Imagen</th>
+            <th scope="col">Acción</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <% if (productos.length === 0) { %>
+            <p>No hay productos</p>
+            <% } %> <% productos.forEach((producto)=>{ %>
+            <td><%- producto.id %></td>
+            <td><%- producto.Nombre %></td>
+            <td><%- producto.Descripcion %></td>
+            <td><%- producto.Disponibilidad ? 'Disponible' : 'No Disponible'  %></td>
+            <td><%- producto.Precio %></td>
+            <td><%- producto.categorias.Nombre %></td>
+            <td><%- producto.Presentacion %></td>
+            <td> <a  href="/<%- producto.Imagen %>" target="_blank"> <img class="img-vendedor-producto" src="/<%- producto.Imagen %>" alt=""> </a> </td>
+            <td>
+              <a href="#" class="btn-eliminar-producto">Eliminar</a>
+              <a href="#" class="btn-actualizar-producto">Actualizar</a>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div
+    class="modal fade"
+    id="modalCrear"
+    tabindex="-1"
+    aria-labelledby="modalCrearLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCrearLabel">Crear Producto</h5>
+          <p id="notificacionLlenarCampos"></p>
+        </div>
+        <div class="modal-body">
+          <form id="formulario">
+            <div class="form-group" id="grupo_nombreProducto">
+              <label for="nombreProducto" class="col-form-label"
+                >Producto:</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="nombreProducto"
+                name="nombreProducto"
+              />
+              <p class="formulario__input-error">
+                El nombre del prodcucto debe consistir únicamente en letras
+              </p>
+            </div>
+            <div class="form-group" id="grupo_descripcionProducto">
+              <label for="descripcionProducto" class="col-form-label"
+                >Descripción:</label
+              >
+              <input
+              type="text"
+                class="card-text form-control"
+                rows="2"
+                id="descripcionProducto"
+                name="descripcionProducto"
+              ></input>
+              <p class="formulario__input-error">
+                Debe ingresar una descripción
+              </p>
+            </div>
+
+            <div class="form-group" id="grupo_disponibilidad">
+              <label for="disponibilidad" class="col-form-label"
+                >Disponibilidad:</label
+              >
+
+              <select
+                class="form-control select-disponibilidad"
+                id="disponibilidad"
+                name="disponibilidad"
+              >
+                <option value="" selected>Seleccionar</option>
+
+                <option value="1">Disponible</option>
+                <option value="0">No Disponible</option>
+              </select>
+              <p class="formulario__input-error">
+                Debe ingresar el estado del producto
+              </p>
+            </div>
+            <div class="form-group" id="grupo_precio">
+              <label for="precio" class="col-form-label">Precio:</label>
+              <input
+                type="number"
+                class="form-control"
+                id="precio"
+                name="precio"
+              />
+              <p class="formulario__input-error">Ingresar un precio</p>
+            </div>
+            <div class="form-group" id="grupo_categoria">
+              <label for="categoria" class="col-form-label">Categoría:</label>
+
+              <select
+                class="form-control select-categoria"
+                id="categoria"
+                name="categoria"
+              >
+                <option value="" selected>Seleccionar</option>
+                <% categoria.forEach((cateogoria) => { %>
+                <option value="<%= cateogoria.id%>"><%=cateogoria.Nombre %></option>
+                <% }); %>
+
+              </select>
+              <p class="formulario__input-error">
+                Debe seleccionar una Categoría
+              </p>
+            </div>
+            <div class="form-group" id="grupo_presentacion">
+                <label for="presentacion" class="col-form-label">Presentacion:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="presentacion"
+                  name="presentacion"
+                />
+                <p class="formulario__input-error">Ingresar informacion de la Presentacion del producto</p>
+              </div>
+
+            <div id="grupo_imagenProducto ">
+              <div class="mt-4">
+                <input
+                  type="file"
+                  name="imagenProducto"
+                  accept="image/*"
+                  id="imagenProducto"
+                  class="form-control"
+                />
+              </div>
+
+              <p class="formulario__input-error">Debe Ingresar una Imagen</p>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary btnModalCrearCerrar"
+                data-bs-dismiss="modal"
+              >
+                Cerrar
+              </button>
+              <button type="submit" class="btn btn-light">
+                Guardar Cambios
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="eliminarModal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="eliminarModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+     
+      </div>
+      <div class="modal-body">
+        <h1 class="modal-title fs-5" id="eliminarModalLabel"></h1>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btnModalCerrar" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+        <button type="button" class="btn btn-primary btnModalEliminar">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/productos.js" type="module"></script>

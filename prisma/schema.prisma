@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model Usuario{
+      id Int  @id @default(autoincrement())
+      Nombres   String @db.VarChar(50)
+      Apellidos String @db.VarChar(50) 
+      UserName  String @unique    @db.VarChar(50) 
+      Password   String @db.VarChar(200)
+      Email  String  @unique   @db.VarChar(100)
+      Celular  String @db.VarChar(10)
+      Imagen String
+      DateCreated  DateTime @default(now())
+      id_Rol Int 
+      roles Roles @relation(fields: [id_Rol],references: [id])
+      productos Productos[]
+  }
+
+model Roles{
+
+    id Int @id @default(autoincrement())
+    Nombre String @db.VarChar(50) 
+    usuarios Usuario[] 
+    Admins Admin[]
+}
+model Catalogos {
+  id          Int         @id @default(autoincrement())
+  Nombre      String      @unique @db.VarChar(50)
+  Descripcion String?     @db.VarChar(150)
+  id_Admin    Int
+  categorias  Categorias[]
+  Admins      Admin       @relation(fields: [id_Admin], references: [id])
+}
+
+model Categorias {
+  id          Int         @id @default(autoincrement())
+  Nombre      String      @unique @db.VarChar(100)
+  productos   Productos[]
+  id_Cat      Int
+  id_Admin    Int
+  catalogos   Catalogos   @relation(fields: [id_Cat], references: [id])
+  Admins      Admin       @relation(fields: [id_Admin], references: [id])
+}
+
+model Admin{
+
+  id Int @id @default(autoincrement())
+  Email String @unique  @db.VarChar(100)
+  UserName String  @unique  @db.VarChar(50)
+  Password  String @db.VarChar(200)
+  celular  String @db.VarChar(10)
+  id_Rol Int
+  roles Roles @relation(fields: [id_Rol],references: [id])
+  catalogos Catalogos []
+  categorias Categorias[]
+}
+
+model Productos{
+
+  id Int @id @default(autoincrement())
+  Nombre  String @db.VarChar(50)
+  Descripcion  String @db.VarChar(200)
+  Disponibilidad Boolean 
+  Precio   String @db.VarChar(20)
+  Presentacion   String @db.VarChar(50)
+  Imagen String
+  id_Categoria Int
+  id_Usuario Int
+  categorias Categorias @relation(fields: [id_Categoria],references: [id])  
+  usuarios Usuario  @relation(fields: [id_Usuario],references: [id], onDelete: Cascade)
+  }

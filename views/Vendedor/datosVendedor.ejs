@@ -1,0 +1,128 @@
+<div class="alert alert-danger d-none" role="alert" id="notificacion"></div>
+<form id="formulario">
+
+  <div id="grupo_userName">
+    <div class="form-group mt-3 mb-3">
+      <label for="userName">Usuario</label>
+      <input
+        type="text"
+        class="form-control userName"
+        name="userName"
+        value="<%- userFound.UserName %>"
+        id="userName"
+        aria-describedby="emailHelp"
+        placeholder="userName"
+      />
+      <p class="formulario__input-error">El Usuario tiene que tener como minimo 4 dígitos y solo puede contener
+        numeros, letras y guion bajo.</p>
+    </div>
+  </div>
+
+  <div id="grupo_nombre">
+    <div class="form-group mt-3 mb-3">
+      <label for="nombre">Nombres</label>
+      <input
+        type="text"
+        class="form-control nombre"
+        name="nombre"
+        value="<%- userFound.Nombres %>"
+        id="nombre"
+        aria-describedby="emailHelp"
+        placeholder="Nombres"
+      />
+      <p class="formulario__input-error">El nombre solo debe contener letras</p>
+    </div>
+  </div>
+  <div id="grupo_apellido">
+    <div class="form-group mt-3 mb-3">
+      <label for="apellido">Apellidos</label>
+      <input
+        type="text"
+        class="form-control apellido"
+        name="apellido"
+        value="<%- userFound.Apellidos %>"
+        id="apellido"
+        aria-describedby="emailHelp"
+        placeholder="Apellido"
+      />
+      <p class="formulario__input-error">
+        El apellido solo debe contener letras
+      </p>
+    </div>
+  </div>
+  <div id="grupo_celular">
+    <div class="form-group mt-3 mb-3">
+      <label for="celular">Celular</label>
+      <input
+        type="text"
+        class="form-control celular"
+        value="<%- userFound.Celular %>"
+        id="celular"
+        name="celular"
+        aria-describedby="emailHelp"
+        placeholder="Número de Celular"
+      />
+      <p class="formulario__input-error">Debe ingresar un número valido</p>
+    </div>
+  </div>
+  <div id="grupo_email">
+    <div class="form-group mt-3 mb-3">
+      <label for="email">Correo Electrónico</label>
+      <input
+        type="email"
+        name="email"
+        class="form-control correo"
+        value="<%- userFound.Email %>"
+        id="email"
+        aria-describedby="emailHelp"
+        placeholder="Correo Electrónico"
+      />
+      <p class="formulario__input-error">Email Incorrecto</p>
+    </div>
+  </div>
+  <div id="grupo_password">
+    <div class="form-group mt-3 mb-3">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        ,
+        name="password"
+        class="form-control password"
+        id="password"
+        value="<%- userFound.Password %>"
+        placeholder="Contraseña"
+      />
+      <p class="formulario__input-error">
+        La contraseña debe tener como minimo 10 caracteres y no debe contener
+        espacios en blanco, incluyendo la barra espaciadora.
+      </p>
+    </div>
+  </div>
+
+  <div id="grupo_imagen">
+    <div class="mt-4 mb-4">
+      <input
+        type="file"
+        name="imagen"
+        accept="image/*"
+        id="imagen"
+        class="form-control"
+      />
+      <input
+        type="text"
+        name="imagenText"
+        value="<%- userFound.Imagen %>"
+
+        id="imagenText"
+        class="form-control"
+      />
+    </div>
+
+    <p class="formulario__input-error">Debe Ingresar una Imagen</p>
+  </div>
+
+  <button class="btn btn-primary btn-activar">Activar Campos</button>
+  <button class="btn btn-primary btnActualizarCampos">Actualizar</button>
+</form>
+
+<script src="/js/datosVendedor.js" type="module"></script>

@@ -1,0 +1,113 @@
+<style>
+  /* Estilo para centrar los controles laterales del carrusel */
+  .carousel-control-prev,
+  .carousel-control-next {
+    position: absolute;
+    top: 60%;
+    transform: translateY(-50%);
+    width: 15px; /* Ajusta el ancho según sea necesario */
+    height: 15px; /* Ajusta la altura según sea necesario */
+    z-index: 10;
+    background-color: rgba(55, 81, 63, 0.728);
+  }
+
+  /* Estilo para el control izquierdo */
+  .carousel-control-prev {
+    left: 0px; /* Ajusta la posición izquierda */
+  }
+
+  /* Estilo para el control derecho */
+  .carousel-control-next {
+    right: 0px; /* Ajusta la posición derecha */
+  }
+</style>
+
+<div class="row mx-auto my-5">
+    <% if (productos.length > 0) { %>
+     
+  <% productos.forEach((element, index) => { %>
+
+     <% if (element.productos.length>0) { %>
+  <div class="col-sm-5 col-md-5 col-lg-4 col-xl-3">
+    <div id="carousel<%- index %>" class="carousel slide w-100">
+      <div class="carousel-inner">
+        <% element.productos.forEach((producto, i) => { %>
+        <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+          <div class="card">
+            <div class="px-3 pt-4 flex-wrap d-flex align-items-center">
+              <div
+                class="d-flex align-items-center flex-grow-1"
+                style="margin-bottom: 2px"
+              >
+                <a href="/MercadilloBucaramanga/usuario/<%=element.UserName %>">
+                  <img
+                    src="/<%=element.Imagen %>"
+                    class="rounded-circle border"
+                    style="width: 30px; height: 30px; margin-right: 5px"
+                /></a>
+
+                <a  href="/MercadilloBucaramanga/usuario/<%=element.UserName %>"  class="p-0 m-0 btn-catalogo-nav btn"><%- element.UserName %></a>
+              </div>
+              <p class="m-0">
+                Productos: <%- element.productos.length %>
+              </p>
+            </div>
+            <img
+              src="/<%=producto.Imagen%>"
+              class="pt-2"
+              alt="..."
+              style="height: 150px; object-fit: cover; width: 100%"
+            />
+            <div class="card-body mx-2">
+              <h5 class="card-title"><%- producto.Nombre %></h5>
+              Descripción:
+              <textarea
+                class="card-text form-control border-0 p-0 my-2"
+                rows="2"
+                readonly
+              >
+<%- producto.Descripcion %></textarea>
+              
+              <div class="d-flex align-items-center flex-wrap">
+                <p class="flex-grow-1 m-0">Precio: $<%- producto.Precio %></p>
+                <h6
+                  class="m-0 <%= producto.Disponibilidad ? 'text-success' : 'text-danger' %>"
+                >
+                  <%= producto.Disponibilidad ? 'Disponible' : 'No Disponible'
+                  %>
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+      <a
+        class="carousel-control-prev"
+        href="#carousel<%- index %>"
+        role="button"
+        data-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      </a>
+      <a
+        class="carousel-control-next"
+        href="#carousel<%- index %>"
+        role="button"
+        data-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      </a>
+    </div>
+  </div>
+  
+
+  <% } %>
+  
+   <% }) %>
+   <% } else { %>
+    <p>No hay productos registrados</p>
+<% } %>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
