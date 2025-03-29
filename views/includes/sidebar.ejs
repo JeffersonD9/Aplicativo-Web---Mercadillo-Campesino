@@ -1,0 +1,39 @@
+
+<nav
+  class="navbar navbar-expand-md sidebar p-0 px-2 pt-1 navbar-light bg-light fixed-top col-md-3 col-lg-2   d-md-block nav-width" 
+>
+
+ <!-- Botón de hamburguesa para pantallas pequeñas -->
+ <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+<a style="margin-right: 5px; font-size: 20px;"
+class="navbar-brand"
+href="/MercadilloBucaramanga"
+>Mercadillo</a
+>
+<div class="collapse navbar-collapse navbar-expand-md  col-md-3 col-lg-2 hamburguesa  w-100" id="navbarNav">
+    
+
+  <div id="data"></div>
+</div>
+</nav>
+
+
+
+<!-- Script para mostrar la imagen seleccionada -->
+<script>
+  function mostrarImagen(event) {
+    const input = event.target;
+    if (input.files && input.files[0]) {
+      const lector = new FileReader();
+
+      lector.onload = function (e) {
+        const vistaPrevia = document.getElementById("vistaPrevia");
+        vistaPrevia.innerHTML = `<img src="${e.target.result}" style="max-width: 300px; max-height: 300px;" />`;
+      };
+
+      lector.readAsDataURL(input.files[0]);
+    }
+  }
+</script>

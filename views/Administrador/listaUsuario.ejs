@@ -1,0 +1,75 @@
+
+
+<div class="alert alert-danger d-none" role="alert" id="notificacion"></div>
+
+<div class="container-fluid my-4">
+  <div class="row table-responsive">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <table class="table" id="table">
+        <thead class="table-light">
+          <tr class="">
+            <th scope="col">#</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Email</th>
+            <th scope="col">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <% usuarios.forEach((vendedor)=>{ %>
+            <td><%= vendedor.id %></td>
+            <td><%= vendedor.Nombres %></td>
+            <td><%= vendedor.Apellidos %></td>
+            <td><%= vendedor.UserName %></td>
+            <td><%= vendedor.Email %></td>
+            <td>
+              <a href="#" class="btn-eliminar-usuario">Eliminar</a>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="eliminarModal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="eliminarModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h1 class="modal-title fs-5" id="eliminarModalLabel"></h1>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btnModalCerrar" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+        <button type="button" class="btn btn-primary btnModalEliminar">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="/js/vendedorAdmin.js" type="module"></script>
