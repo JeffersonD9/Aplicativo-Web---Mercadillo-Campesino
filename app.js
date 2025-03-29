@@ -6,7 +6,7 @@ import Salesman from "./routes/DashBoardSalesman.js";
 import Admin from "./routes/DashBoardAdmin.js";
 import Main from "./routes/DashBoardMain.js"
 import path from "path";
-import { PORT } from "./config.js";
+import { PORT,NODE_ENV } from "./config.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -14,6 +14,10 @@ import multer from "multer";
 const app = express();
 app.use(cors());
 app.use(morgan("dev"));
+
+if (NODE_ENV === "production") {
+    console.log = function () {}; 
+  }
 
 //Path
 let __dirname = path.dirname(new URL(import.meta.url).pathname);
