@@ -42,10 +42,10 @@ Este aplicativo web tiene como objetivo principal promover y dar visibilidad a l
 
 ```mermaid
 graph TD
-    A[Administrador configura categorías] --> B[Campesinos se registran]
-    B --> C[Campesinos añaden productos]
-    C --> D[Visitantes exploran la plataforma]
+    A[Administrador configura categorías y productos] --> B[Campesinos se registran]
+    C[Inicio del proceso de usuario visitante] --> D[Visitantes exploran la plataforma]
     D --> E[Visitantes contactan vendedores]
+
 ```
 
 ---
