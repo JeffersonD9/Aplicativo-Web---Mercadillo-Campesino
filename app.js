@@ -15,7 +15,7 @@ const app = express();
 app.use(cors());
 app.use(morgan("dev"));
 
-if (NODE_ENV === "production") {
+if (NODE_ENV === "Production") {
     console.log = function () {}; 
   }
 
