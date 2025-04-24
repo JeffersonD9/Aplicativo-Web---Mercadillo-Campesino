@@ -13,20 +13,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Admin {
+  id         Int          @id @default(autoincrement())
+  Email      String       @unique @db.VarChar(100)
+  UserName   String       @unique @db.VarChar(50)
+  Password   String       @db.VarChar(200)
+  celular    String       @db.VarChar(10)
+  id_Rol     Int
+  roles      Roles        @relation(fields: [id_Rol], references: [id])
+}
 model Mercadillo {
-  id         Int       @id @default(autoincrement())
-  Direccion  String    @db.VarChar(50)
-  Nombre     String    @db.VarChar(50)
-  usuarios   Usuario[]
+  id        Int       @id @default(autoincrement())
+  Direccion String    @db.VarChar(50)
+  Nombre    String    @db.VarChar(50)
+  usuarios  Usuario[]
 }
 
-model ProductosPorCategoria {
+model ProductosAsignadosUsuario {
   id           Int     @id @default(autoincrement())
   id_usuario   Int
   id_producto  Int
   id_categoria Int
   Nombre       String  @db.VarChar(50)
   Descripcion  String  @db.VarChar(50)
+  Imagen       String
   usuario      Usuario @relation(fields: [id_usuario], references: [id])
 }
 
@@ -44,8 +54,8 @@ model Usuario {
   id_Mercadillo         Int
   rol                   Roles                   @relation(fields: [id_Rol], references: [id])
   Mercadillo            Mercadillo              @relation(fields: [id_Mercadillo], references: [id])
-  ProductosPorCategoria ProductosPorCategoria[]
-  productos             Productos[]
+  ProductosPorCategoria ProductosAsignadosUsuario[]
+  //productos             Productos[]
 }
 
 model Roles {
@@ -55,47 +65,35 @@ model Roles {
   Admins   Admin[]
 }
 
-model Catalogos {
-  id          Int          @id @default(autoincrement())
-  Nombre      String       @unique @db.VarChar(50)
-  Descripcion String?      @db.VarChar(150)
-  id_Admin    Int
-  categorias  Categorias[]
-  Admins      Admin        @relation(fields: [id_Admin], references: [id])
-}
+// model Catalogos {
+//   id          Int          @id @default(autoincrement())
+//   Nombre      String       @unique @db.VarChar(50)
+//   Descripcion String?      @db.VarChar(150)
+//   id_Admin    Int
+//   //categorias  Categorias[]
+//   Admins      Admin        @relation(fields: [id_Admin], references: [id])
+// }
 
-model Categorias {
-  id        Int         @id @default(autoincrement())
-  Nombre    String      @unique @db.VarChar(100)
-  productos Productos[]
-  id_Cat    Int
-  id_Admin  Int
-  catalogos Catalogos   @relation(fields: [id_Cat], references: [id])
-  Admins    Admin       @relation(fields: [id_Admin], references: [id])
-}
+// model Categorias {
+//   id        Int         @id @default(autoincrement())
+//   Nombre    String      @unique @db.VarChar(100)
+//   productos Productos[]
+//   id_Cat    Int
+//   id_Admin  Int
+//   catalogos Catalogos   @relation(fields: [id_Cat], references: [id])
+//   Admins    Admin       @relation(fields: [id_Admin], references: [id])
+// }
 
-model Admin {
-  id         Int          @id @default(autoincrement())
-  Email      String       @unique @db.VarChar(100)
-  UserName   String       @unique @db.VarChar(50)
-  Password   String       @db.VarChar(200)
-  celular    String       @db.VarChar(10)
-  id_Rol     Int
-  roles      Roles        @relation(fields: [id_Rol], references: [id])
-  catalogos  Catalogos[]
-  categorias Categorias[]
-}
-
-model Productos {
-  id             Int        @id @default(autoincrement())
-  Nombre         String     @db.VarChar(50)
-  Descripcion    String     @db.VarChar(200)
-  Disponibilidad Boolean
-  Precio         String     @db.VarChar(20)
-  Presentacion   String     @db.VarChar(50)
-  Imagen         String
-  id_Categoria   Int
-  id_Usuario     Int
-  categorias     Categorias @relation(fields: [id_Categoria], references: [id])
-  usuarios       Usuario    @relation(fields: [id_Usuario], references: [id], onDelete: Cascade)
-}
+// model Productos {
+//   id             Int        @id @default(autoincrement())
+//   Nombre         String     @db.VarChar(50)
+//   Descripcion    String     @db.VarChar(200)
+//   Disponibilidad Boolean
+//   Precio         String     @db.VarChar(20)
+//   Presentacion   String     @db.VarChar(50)
+//   Imagen         String
+//   id_Categoria   Int
+//   id_Usuario     Int
+//   categorias     Categorias @relation(fields: [id_Categoria], references: [id])
+//   usuarios       Usuario    @relation(fields: [id_Usuario], references: [id], onDelete: Cascade)
+// }
