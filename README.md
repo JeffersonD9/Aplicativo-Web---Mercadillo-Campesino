@@ -45,7 +45,7 @@ flowchart TB
     subgraph "AWS Cloud"
         EC2[Microservicio EC2]
         API[API REST de Productos]
-        RDS[(Base de datos RDS<br>- PRODUCTO<br>- CATEGORIA)]
+        RDS[(Base de datos RDS<br>PRODUCTO<br>CATEGORIA)]
         EC2 --- API
         API --- RDS
     end
@@ -53,7 +53,7 @@ flowchart TB
     subgraph "Sistema Local"
         APP[Aplicación Principal]
         APPI[API Local]
-        DB_LOCAL[(Base de datos Local<br>- USUARIO<br>- VENDEDOR<br>- VENDEDOR_PRODUCTO)]
+        DB_LOCAL[(Base de datos Local<br>USUARIO<br>VENDEDOR<br>VENDEDOR_PRODUCTO)]
         APP --- APPI
         APPI --- DB_LOCAL
     end
@@ -68,15 +68,23 @@ flowchart TB
     end
     
     %% Flujos por rol
-    ADMIN -->|"1. Crea productos<br>2. Gestiona categorías<br>3. Administra usuarios"| APP
-    VENDEDOR -->|"1. Selecciona productos<br>2. Crea su catálogo"| APP
-    CLIENTE -->|"Visualiza productos<br>por vendedor"| APP
-    
+    ADMIN --> StepAdmin
+    StepAdmin["Crea productos<br>Gestiona categorías<br>Administra usuarios"]
+    StepAdmin --> APP
+
+    VENDEDOR --> StepVendor
+    StepVendor["Selecciona productos<br>Crea su catálogo"]
+    StepVendor --> APP
+
+    CLIENTE --> StepClient
+    StepClient["Visualiza productos<br>por vendedor"]
+    StepClient --> APP
+
     %% Estilos
     classDef cloud fill:#C2E0F4,stroke:#333,stroke-width:1px,color:#000000
     classDef local fill:#D5F5E3,stroke:#333,stroke-width:1px,color:#000000
     classDef users fill:#FCF3CF,stroke:#333,stroke-width:1px,color:#000000
-    
+
     class EC2,API,RDS cloud
     class APP,APPI,DB_LOCAL local
     class ADMIN,VENDEDOR,CLIENTE users
