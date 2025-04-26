@@ -41,10 +41,46 @@ Este aplicativo web tiene como objetivo principal promover y dar visibilidad a l
 ## 🔄 Flujo de la aplicación
 
 ```mermaid
-graph TD
-    A[Administrador configura categorías y productos] --> B[Campesinos se registran]
-    C[Inicio del proceso de usuario visitante] --> D[Visitantes exploran la plataforma]
-    D --> E[Visitantes contactan vendedores]
+flowchart TB
+    subgraph "AWS Cloud"
+        EC2[Microservicio EC2]
+        API[API REST de Productos]
+        RDS[(Base de datos RDS<br>- PRODUCTO<br>- CATEGORIA)]
+        EC2 --- API
+        API --- RDS
+    end
+    
+    subgraph "Sistema Local"
+        APP[Aplicación Principal]
+        APPI[API Local]
+        DB_LOCAL[(Base de datos Local<br>- USUARIO<br>- VENDEDOR<br>- VENDEDOR_PRODUCTO)]
+        APP --- APPI
+        APPI --- DB_LOCAL
+    end
+    
+    %% Conexiones entre sistemas
+    API <---> APPI
+    
+    subgraph "Actores"
+        ADMIN[Administrador]
+        VENDEDOR[Vendedor]
+        CLIENTE[Usuario Final]
+    end
+    
+    %% Flujos por rol
+    ADMIN -->|"1. Crea productos<br>2. Gestiona categorías<br>3. Administra usuarios"| APP
+    VENDEDOR -->|"1. Selecciona productos<br>2. Crea su catálogo"| APP
+    CLIENTE -->|"Visualiza productos<br>por vendedor"| APP
+    
+    %% Estilos
+    classDef cloud fill:#C2E0F4,stroke:#333,stroke-width:1px,color:#000000
+    classDef local fill:#D5F5E3,stroke:#333,stroke-width:1px,color:#000000
+    classDef users fill:#FCF3CF,stroke:#333,stroke-width:1px,color:#000000
+    
+    class EC2,API,RDS cloud
+    class APP,APPI,DB_LOCAL local
+    class ADMIN,VENDEDOR,CLIENTE users
+
 
 ```
 
