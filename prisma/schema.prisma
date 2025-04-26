@@ -26,21 +26,25 @@ model Mercadillo {
   id        Int       @id @default(autoincrement())
   Direccion String    @db.VarChar(50)
   Nombre    String    @db.VarChar(50)
-  usuarios  Usuario[]
+  vendedor  Vendedor[]
 }
 
 model ProductosAsignadosUsuario {
   id           Int     @id @default(autoincrement())
-  id_usuario   Int
+  id_vendedor   Int
   id_producto  Int
-  id_categoria Int
   Nombre       String  @db.VarChar(50)
   Descripcion  String  @db.VarChar(50)
   Imagen       String
-  usuario      Usuario @relation(fields: [id_usuario], references: [id])
+  vendedor      Vendedor @relation(fields: [id_vendedor], references: [id])
 }
-
-model Usuario {
+model Roles {
+  id       Int       @id @default(autoincrement())
+  Nombre   String    @db.VarChar(50)
+  vendedores Vendedor[]
+  Admins   Admin[]
+}
+model Vendedor {
   id                    Int                     @id @default(autoincrement())
   Nombres               String                  @db.VarChar(50)
   Apellidos             String                  @db.VarChar(50)
@@ -56,13 +60,6 @@ model Usuario {
   Mercadillo            Mercadillo              @relation(fields: [id_Mercadillo], references: [id])
   ProductosPorCategoria ProductosAsignadosUsuario[]
   //productos             Productos[]
-}
-
-model Roles {
-  id       Int       @id @default(autoincrement())
-  Nombre   String    @db.VarChar(50)
-  usuarios Usuario[]
-  Admins   Admin[]
 }
 
 // model Catalogos {
