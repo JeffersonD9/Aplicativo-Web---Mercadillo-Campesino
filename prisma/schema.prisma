@@ -12,85 +12,32 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
-model Admin {
-  id         Int          @id @default(autoincrement())
-  Email      String       @unique @db.VarChar(100)
-  UserName   String       @unique @db.VarChar(50)
-  Password   String       @db.VarChar(200)
-  celular    String       @db.VarChar(10)
-  id_Rol     Int
-  roles      Roles        @relation(fields: [id_Rol], references: [id])
-}
 model Mercadillo {
-  id        Int       @id @default(autoincrement())
-  Direccion String    @db.VarChar(50)
-  Nombre    String    @db.VarChar(50)
-  vendedor  Vendedor[]
+  id        Int        @id @default(autoincrement())
+  Direccion String     @db.VarChar(50)
+  Nombre    String     @db.VarChar(50)
+  usuario  Usuario[]
 }
 
 model ProductosAsignadosUsuario {
-  id           Int     @id @default(autoincrement())
-  id_vendedor   Int
-  id_producto  Int
-  Nombre       String  @db.VarChar(50)
-  Descripcion  String  @db.VarChar(50)
-  Imagen       String
-  vendedor      Vendedor @relation(fields: [id_vendedor], references: [id])
+  id          Int      @id @default(autoincrement())
+  id_vendedor Int
+  id_producto Int
+  Nombre      String   @db.VarChar(50)
+  Descripcion String   @db.VarChar(50)
+  Imagen      String
+  vendedor    Usuario @relation(fields: [id_vendedor], references: [id])
 }
-model Roles {
-  id       Int       @id @default(autoincrement())
-  Nombre   String    @db.VarChar(50)
-  vendedores Vendedor[]
-  Admins   Admin[]
-}
-model Vendedor {
-  id                    Int                     @id @default(autoincrement())
-  Nombres               String                  @db.VarChar(50)
-  Apellidos             String                  @db.VarChar(50)
-  UserName              String                  @unique @db.VarChar(50)
-  Password              String                  @db.VarChar(200)
-  Email                 String                  @unique @db.VarChar(100)
-  Celular               String                  @db.VarChar(10)
-  Imagen                String
-  DateCreated           DateTime                @default(now())
-  id_Rol                Int
+
+model Usuario {
+  id                    Int                         @id @default(autoincrement())
+  Nombres               String                      @db.VarChar(50)
+  Apellidos             String                      @db.VarChar(50)
+  Password              String                      @db.VarChar(200)
+  Email                 String                      @unique @db.VarChar(100)
+  Celular               String                      @db.VarChar(10)
+  Roles                 Int
   id_Mercadillo         Int
-  rol                   Roles                   @relation(fields: [id_Rol], references: [id])
-  Mercadillo            Mercadillo              @relation(fields: [id_Mercadillo], references: [id])
+  Mercadillo            Mercadillo                  @relation(fields: [id_Mercadillo], references: [id])
   ProductosPorCategoria ProductosAsignadosUsuario[]
-  //productos             Productos[]
 }
-
-// model Catalogos {
-//   id          Int          @id @default(autoincrement())
-//   Nombre      String       @unique @db.VarChar(50)
-//   Descripcion String?      @db.VarChar(150)
-//   id_Admin    Int
-//   //categorias  Categorias[]
-//   Admins      Admin        @relation(fields: [id_Admin], references: [id])
-// }
-
-// model Categorias {
-//   id        Int         @id @default(autoincrement())
-//   Nombre    String      @unique @db.VarChar(100)
-//   productos Productos[]
-//   id_Cat    Int
-//   id_Admin  Int
-//   catalogos Catalogos   @relation(fields: [id_Cat], references: [id])
-//   Admins    Admin       @relation(fields: [id_Admin], references: [id])
-// }
-
-// model Productos {
-//   id             Int        @id @default(autoincrement())
-//   Nombre         String     @db.VarChar(50)
-//   Descripcion    String     @db.VarChar(200)
-//   Disponibilidad Boolean
-//   Precio         String     @db.VarChar(20)
-//   Presentacion   String     @db.VarChar(50)
-//   Imagen         String
-//   id_Categoria   Int
-//   id_Usuario     Int
-//   categorias     Categorias @relation(fields: [id_Categoria], references: [id])
-//   usuarios       Usuario    @relation(fields: [id_Usuario], references: [id], onDelete: Cascade)
-// }
