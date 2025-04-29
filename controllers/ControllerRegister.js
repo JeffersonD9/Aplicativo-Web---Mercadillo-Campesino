@@ -8,7 +8,6 @@ async function Register(req, res) {
   try {
 
     const newUser = await service.Create(req);
-    console.log(newUser)
     if (newUser == null)
       return res.status(400).json({ message: "Error al crear el usuario" });
 
