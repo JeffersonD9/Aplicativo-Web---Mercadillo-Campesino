@@ -12,7 +12,7 @@ export async function LoginAdmin(req, res) {
     const nameToken = Email.split('@')[0];
     const userValidate = await service.validateUserLogin(Email, role, Password);
 
-    if (userValidate != null)
+    if (userValidate == null)
       return res.status(400).json({ message: "Invalidate Credentials" });
 
     const token = await CreateAccesToken({
@@ -39,7 +39,7 @@ export async function RenderDashboardAdmin(req, res) {
     }
 
     const adminUserFound = await service.validateSession(req);
-    if (!adminUserFound) {
+    if (adminUserFound == null) {
       return res.status(401).json({ message: "Usuario no encontrado" });
     }
 
@@ -59,7 +59,7 @@ export async function MostrarUsuarios(req, res) {
   try {
 
     const usuarios = await service.getAllUsers();
-    if (!usuarios) res.status(401).json({ message: "Users not Found" });
+    if (usuarios == null) res.status(401).json({ message: "Users not Found" });
 
     res.render("Administrador/administrador", {
       UserName: req.user,
