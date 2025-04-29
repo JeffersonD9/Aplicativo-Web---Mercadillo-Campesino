@@ -14,7 +14,7 @@ router.delete('/Admin/Usuarios/:id_usuario', authRequired, EliminarUsuario)
 router.get('/Admin/Mercadillos', authRequired, getAllMercadillos)
 router.get('/Admin/Mercadillos/:id_mercadillo', authRequired, getMercadilloById)
 router.post('/Admin/Mercadillos/create', authRequired, createMercadillo)
-router.put('/Admin/Mercadillos/:id_mercadillo', authRequired, updateMercadillo)
+router.patch('/Admin/Mercadillos/:id_mercadillo', authRequired, updateMercadillo)
 router.delete('/Admin/Mercadillos/:id_mercadillo', authRequired, deleteMercadillo)
 
 
