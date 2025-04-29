@@ -1,7 +1,7 @@
 import { LoginAdmin } from "./ControllerAuthAdmin.js";
 import { LoginSalesman } from "./ControllerAuthSalesman.js";
 import { UserServices } from "../Services/UserService.js";
-import { Roles } from "../Helpers/ValidationRoles/UtilsFunctions.js";
+import { Roles } from "../Helpers/ValidationRoles/Roles.js";
 const service = new UserServices();
 
 export async function Login(req, res) {

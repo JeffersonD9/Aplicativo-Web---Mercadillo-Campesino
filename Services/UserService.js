@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { Roles } from "../Helpers/ValidationRoles/UtilsFunctions.js";
+import { Roles } from "../Helpers/ValidationRoles/Roles.js";
 import { EncryptPassword, ValidatePassword } from "../Helpers/EncriptedPassword/EncriptPassword.js";
 
 /**
@@ -15,17 +15,21 @@ export class UserServices {
 
     //#region Metodos para admin y Vendedor
 
+    /**
+     * Valida el login de un usuario comparando email, rol y contraseña
+     * @param {string} email - Email del usuario
+     * @param {int} role - Rol del usuario
+     * @param {string} passwordIngresada - Contraseña ingresada sin encriptar
+     * @returns {Promise<Object|null>} - Usuario si la autenticación es válida, si no null
+     */
     async validateUserLogin(email, role, passwordIngresada) {
-
         try {
-
             const user = await this.findUser(email, role);            
             if (user == null) return null;
 
             const passwordCorrecta = await ValidatePassword(passwordIngresada, user.Password);
             console.log(passwordCorrecta)
             return passwordCorrecta ? user : null;
-
         } catch (error) {
             console.error(`Error al validar login: ${error.message}`);
             return null;
@@ -33,9 +37,9 @@ export class UserServices {
     }
 
     /**
-     * Busca un usuario por email y roles
+     * Busca un usuario por email y rol
      * @param {string} email - Email del usuario
-     * @param {int} roles - Roles permitidos
+     * @param {int} roles - Rol del usuario
      * @returns {Promise<Object|null>} - Usuario encontrado o null
      */
     async findUser(email, roles) {
@@ -53,6 +57,10 @@ export class UserServices {
         }
     }
 
+    /**
+     * Obtiene todos los usuarios con rol de vendedor
+     * @returns {Promise<Array|null>} - Lista de usuarios o null en caso de error
+     */
     async getAllUsers() {
         try {
             const usersFound = await this.prisma.usuario.findMany({
@@ -70,14 +78,13 @@ export class UserServices {
     /**
      * Cambia la contraseña de un usuario
      * @param {string} email - Email del usuario
+     * @param {int} role - Rol del usuario
      * @param {string} newPassword - Nueva contraseña sin encriptar
      * @returns {Promise<boolean>} - true si se actualizó correctamente, false si hubo error
      */
     async changePassword(email, role, newPassword) {
-
         try {
-
-            const hashedPassword = await EncryptPassword(newPassword)
+            const hashedPassword = await EncryptPassword(newPassword);
 
             await this.prisma.usuario.update({
                 where: {
@@ -91,7 +98,6 @@ export class UserServices {
 
             console.log(`Contraseña actualizada para el usuario ${email}`);
             return true;
-
         } catch (error) {
             console.error(`Error al cambiar contraseña: ${error.message}`);
             return false;
@@ -105,7 +111,6 @@ export class UserServices {
      */
     async validateSession(req) {
         try {
-
             const userFound = await this.prisma.usuario.findUnique({
                 where: {
                     id: req.user.id,
@@ -113,23 +118,22 @@ export class UserServices {
                     Roles: req.user.role,
                 },
             });
-
             return userFound;
         } catch (error) {
             console.error(`Error al validar sesión: ${error.message}`);
             return null;
         }
     }
+
     //#endregion
 
     /**
-    * Actualiza el usuario
-    * @param {int} idUsuario - id de usuario
-    * @param {object} data - objeto con data a editar
-    * @returns {Promise<object>} - devuelve el usuario actualizado
-    */
+     * Actualiza los datos de un usuario con rol de vendedor
+     * @param {int} idUsuario - ID del usuario
+     * @param {object} data - Objeto con los nuevos datos del usuario
+     * @returns {Promise<object>} - Usuario actualizado
+     */
     async ActualizarVendedor(idUsuario, data) {
-
         var role = Roles.VENDEDOR;
         const passwordHash = await EncryptPassword(data.Password)
         console.log("Data ", data)
@@ -152,9 +156,14 @@ export class UserServices {
         return userFound;
     }
 
+    /**
+     * Elimina un usuario por su ID
+     * @param {int} id_usuario - ID del usuario a eliminar
+     * @returns {Promise<Object>} - Resultado de la eliminación
+     * @throws {Error} - Si el usuario no existe o hay un error al eliminar
+     */
     async deleteUser(id_usuario) {
         try {
-
             const usuarioExiste = await prisma.usuario.findUnique({
                 where: {
                     Id: id_usuario
@@ -172,14 +181,17 @@ export class UserServices {
             });
 
             return resultado;
-
         } catch (error) {
             console.error(`Error al eliminar usuario: ${error.message}`);
             throw error;
         }
     }
 
-
+    /**
+     * Obtiene el rol de un usuario dado su email
+     * @param {string} Email - Email del usuario
+     * @returns {Promise<int|null>} - Rol del usuario o null si hay error
+     */
     async findRole(Email) {
         try {
             const userFound = await this.prisma.usuario.findUnique({
@@ -189,11 +201,9 @@ export class UserServices {
             });
 
             return userFound.Roles;
-
         } catch (error) {
             console.error(`Error al buscar usuario: ${error.message}`);
             return null;
         }
     }
-
 }

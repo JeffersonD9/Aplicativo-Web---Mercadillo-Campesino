@@ -1,7 +1,7 @@
 import { CreateAccesToken } from "../Services/CreateToken.js";
 import { enviar_email } from "../templateCorreo/envioPassword.js";
 import { UserServices } from "../Services/UserService.js";
-import { Roles } from "../Helpers/ValidationRoles/UtilsFunctions.js";
+import { Roles } from "../Helpers/ValidationRoles/Roles.js";
 
 const service = new UserServices();
 const role = Roles.VENDEDOR;

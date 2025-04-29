@@ -1,6 +1,6 @@
 import { CreateAccesToken } from "../Services/CreateToken.js";
 import { UserServices } from "../Services/UserService.js";
-import { Roles } from "../Helpers/ValidationRoles/UtilsFunctions.js";
+import { Roles } from "../Helpers/ValidationRoles/Roles.js";
 const service = new UserServices();
 
 export async function LoginAdmin(req, res) {
@@ -10,9 +10,9 @@ export async function LoginAdmin(req, res) {
 
     const role = Roles.ADMIN;
     const nameToken = Email.split('@')[0];
-    console.log("password : ",Password)
+    
     const userValidate = await service.validateUserLogin(Email, role, Password);
-    console.log(userValidate)
+    
     if (userValidate == null)
       return res.status(400).json({ message: "Invalidate Credentials" });
 
