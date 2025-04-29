@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import { Roles } from "../Helpers/ValidationRoles/UtilsFunctions.js";
-import { EncryptPassword } from "../Helpers/EncriptedPassword/EncriptPassword.js";
+import { EncryptPassword, ValidatePassword } from "../Helpers/EncriptedPassword/EncriptPassword.js";
 
 /**
  * Clase de servicios para operaciones relacionadas con usuarios
@@ -19,11 +19,11 @@ export class UserServices {
 
         try {
 
-            const user = await this.findUser(email, role);
+            const user = await this.findUser(email, role);            
+            if (user == null) return null;
 
-            if (!user) return null;
-
-            const passwordCorrecta = await bcrypt.compare(passwordIngresada, user.Password);
+            const passwordCorrecta = await ValidatePassword(passwordIngresada, user.Password);
+            console.log(passwordCorrecta)
             return passwordCorrecta ? user : null;
 
         } catch (error) {

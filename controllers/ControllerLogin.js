@@ -8,11 +8,14 @@ export async function Login(req, res) {
 
   const { Email } = req.body;
   const role = await service.findRole(Email);
-
+  console.log(role)
+  
   if (role == Roles.VENDEDOR) {
+    console.log("Vendor")
     LoginSalesman(req, res);
   } else if (role == Roles.ADMIN) {
     LoginAdmin(req, res);
+    console.log("admin")
   } else{   
     res.status(404).json({ message: "El Usuario No Existe" });
   }

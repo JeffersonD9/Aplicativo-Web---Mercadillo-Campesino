@@ -10,8 +10,9 @@ export async function LoginAdmin(req, res) {
 
     const role = Roles.ADMIN;
     const nameToken = Email.split('@')[0];
+    console.log("password : ",Password)
     const userValidate = await service.validateUserLogin(Email, role, Password);
-
+    console.log(userValidate)
     if (userValidate == null)
       return res.status(400).json({ message: "Invalidate Credentials" });
 
