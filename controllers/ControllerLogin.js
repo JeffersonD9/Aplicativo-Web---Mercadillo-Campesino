@@ -1,14 +1,17 @@
 import { LoginAdmin } from "./ControllerAuthAdmin.js";
 import { LoginSalesman } from "./ControllerAuthSalesman.js";
-import { FilterRole } from "../Helpers/FilterRole.js";
+import { UserServices } from "../Services/UserService.js";
+import { Roles } from "../Helpers/ValidationRoles/UtilsFunctions.js";
+const service = new UserServices();
 
 export async function Login(req, res) {
-  const { Email } = req.body;
-  const role = await FilterRole(Email);
 
-  if (role == 1) {
+  const { Email } = req.body;
+  const role = await service.findRole(Email);
+
+  if (role == Roles.VENDEDOR) {
     LoginSalesman(req, res);
-  } else if (role == 2) {
+  } else if (role == Roles.ADMIN) {
     LoginAdmin(req, res);
   } else{   
     res.status(404).json({ message: "El Usuario No Existe" });

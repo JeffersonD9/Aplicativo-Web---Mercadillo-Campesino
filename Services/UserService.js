@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { Roles } from "../Helpers/ValidationRoles/UtilsFunctions";
-import { EncryptPassword } from "../Helpers/EncriptedPassword/EncriptPassword";
+import { Roles } from "../Helpers/ValidationRoles/UtilsFunctions.js";
+import { EncryptPassword } from "../Helpers/EncriptedPassword/EncriptPassword.js";
 
 /**
  * Clase de servicios para operaciones relacionadas con usuarios
@@ -10,12 +10,12 @@ export class UserServices {
 
     constructor() {
         this.prisma = prisma;
-        this.roles = Roles;
+        // this.roles = Roles;
     }
 
     //#region Metodos para admin y Vendedor
 
-    async validateUserLogin(email, role, password) {
+    async validateUserLogin(email, role, passwordIngresada) {
 
         try {
 
@@ -74,7 +74,7 @@ export class UserServices {
      * @param {string} newPassword - Nueva contraseña sin encriptar
      * @returns {Promise<boolean>} - true si se actualizó correctamente, false si hubo error
      */
-    async changePassword(email, newPassword) {
+    async changePassword(email, role, newPassword) {
 
         try {
 
@@ -82,7 +82,8 @@ export class UserServices {
 
             await this.prisma.usuario.update({
                 where: {
-                    Email: email
+                    Email: email,
+                    Roles: role
                 },
                 data: {
                     Password: hashedPassword,
@@ -130,7 +131,7 @@ export class UserServices {
     */
     async ActualizarVendedor(idUsuario, data) {
 
-        var role = this.roles.VENDEDOR;
+        var role = Roles.VENDEDOR;
         const passwordHash = await EncryptPassword(data.Password)
         console.log("Data ", data)
 
@@ -148,6 +149,7 @@ export class UserServices {
                 Estado: data.Estado
             }
         });
+
         return userFound;
     }
 
@@ -159,22 +161,39 @@ export class UserServices {
                     Id: id_usuario
                 }
             });
-    
+
             if (!usuarioExiste) {
                 throw new Error(`Usuario con ID ${id_usuario} no encontrado`);
             }
-    
+
             const resultado = await prisma.usuario.delete({
                 where: {
                     Id: id_usuario
                 }
             });
-    
+
             return resultado;
-            
+
         } catch (error) {
             console.error(`Error al eliminar usuario: ${error.message}`);
             throw error;
+        }
+    }
+
+
+    async findRole(Email) {
+        try {
+            const userFound = await this.prisma.usuario.findUnique({
+                where: {
+                    Email: Email,
+                },
+            });
+
+            return userFound.Roles;
+
+        } catch (error) {
+            console.error(`Error al buscar usuario: ${error.message}`);
+            return null;
         }
     }
 

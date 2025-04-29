@@ -1,5 +1,4 @@
 import { CreateAccesToken } from "../Services/CreateToken.js";
-import bcrypt from "bcrypt";
 import { UserServices } from "../Services/UserService.js";
 import { Roles } from "../Helpers/ValidationRoles/UtilsFunctions.js";
 const service = new UserServices();
@@ -87,30 +86,30 @@ export async function EliminarUsuario(req, res) {
   }
 }
 
-export async function ActualizarAdmin(req, res) {
+// export async function ActualizarAdmin(req, res) {
 
-  const { Email, Password, UserName, celular } = req.body;
-  console.log(req.body)
-  const id_adminbody = parseInt(req.params.id_admin, 10);
+//   const { Email, Password, UserName, celular } = req.body;
+//   console.log(req.body)
+//   const id_adminbody = parseInt(req.params.id_admin, 10);
 
-  try {
-    const passwordHash = await bcrypt.hash(Password, 10)
-    const actualizarAdmin = await prisma.admin.update({
-      where: { id: id_adminbody },
-      data: {
-        Email,
-        Password: passwordHash,
-        celular,
-        UserName
-      }
-    });
-    res.status(200).json({
-      message: "Usuario actualizado",
-      data: actualizarAdmin,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error });
-    console.log(error);
-  }
-}
+//   try {
+//     const passwordHash = await bcrypt.hash(Password, 10)
+//     const actualizarAdmin = await prisma.admin.update({
+//       where: { id: id_adminbody },
+//       data: {
+//         Email,
+//         Password: passwordHash,
+//         celular,
+//         UserName
+//       }
+//     });
+//     res.status(200).json({
+//       message: "Usuario actualizado",
+//       data: actualizarAdmin,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: error });
+//     console.log(error);
+//   }
+// }
 
