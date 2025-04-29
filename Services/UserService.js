@@ -224,8 +224,7 @@ export class UserServices {
         try {
 
             const userDTO = this.CreateDTOUser(req);
-            console.log(userDTO)
-
+            
             if (userDTO.Password == null || userDTO == null)
                 return null;
 
