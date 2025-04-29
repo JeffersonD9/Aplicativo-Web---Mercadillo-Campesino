@@ -57,7 +57,6 @@ export class UserServices {
         try {
             const usersFound = await this.prisma.usuario.findMany({
                 where: {
-                    Email: email,
                     Roles: Roles.VENDEDOR
                 },
             });
