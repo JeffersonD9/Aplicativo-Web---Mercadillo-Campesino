@@ -1,48 +1,24 @@
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
 import { CreateAccesToken } from "../Services/CreateToken.js";
-import fs from "fs";
-import path from "path";
-
-const prisma = new PrismaClient();
+import { UserServices } from "../Services/UserService.js";
+const service = new UserServices();
 
 async function Register(req, res) {
-  const { Nombres, Apellidos, UserName, Email, Password, Celular } = req.body;
+  const { Email } = req.body;
 
   try {
-    const passwordHash = await bcrypt.hash(Password, 10);
-    // const dataImagen =  req.file.originalname
-    // const base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(dataImagen)));
 
-    const newUser = await prisma.usuario.create({
-      data: {
-        Nombres,
-        Apellidos,
-        id_Rol: 1,
-        UserName,
-        Email,
-        Password: passwordHash,
-        Celular,
-        Imagen: req.file.path,
-      },
-    });
+    const newUser = await service.Create(req);
+    console.log(newUser)
+    if (newUser == null)
+      return res.status(400).json({ message: "Error al crear el usuario" });
 
-    const token = await CreateAccesToken({id: newUser.id,UserName: newUser.UserName,});
+    const nameToken = Email.split('@')[0];
+    const token = await CreateAccesToken({ id: newUser.Id, UserName: nameToken, });
 
     res.cookie("token", token);
-    res.status(201).send({UserName, Email, redirect: "Usuario",});
+    res.status(201).send({ nameToken, Email, redirect: "Usuario", });
   } catch (error) {
     if (
-      error.code == "P2002" &&
-      error.meta.target.includes("Usuario_UserName_key")
-    ) {
-      res.status(409).json({
-        error: { message: `El usuario ${UserName} ya existe`,
-          code: "CONFLICT",
-          details: error.meta.target,
-        },
-      });
-    } else if (
       error.code == "P2002" &&
       error.meta.target.includes("Usuario_Email_key")
     ) {

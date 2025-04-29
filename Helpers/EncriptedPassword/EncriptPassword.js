@@ -6,7 +6,6 @@ import bcrypt from "bcrypt";
 * @returns {Promise<string>} - Password hasheada
 */
 export async function EncryptPassword(password) {
-
     const passwordHash = await bcrypt.hash(password, 10)
     return passwordHash
 }

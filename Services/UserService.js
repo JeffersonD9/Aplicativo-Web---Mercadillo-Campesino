@@ -13,6 +13,19 @@ export class UserServices {
         // this.roles = Roles;
     }
 
+    CreateDTOUser(req) {
+
+        const newUserDTO = {
+            Nombres: req.body.Nombres,
+            Apellidos: req.body.Apellidos,
+            Email: req.body.Email,
+            Password: req.body.Password,
+            Celular: req.body.Celular,
+        };
+
+        return newUserDTO;
+    }
+
     //#region Metodos para admin y Vendedor
 
     /**
@@ -24,7 +37,7 @@ export class UserServices {
      */
     async validateUserLogin(email, role, passwordIngresada) {
         try {
-            const user = await this.findUser(email, role);            
+            const user = await this.findUser(email, role);
             if (user == null) return null;
 
             const passwordCorrecta = await ValidatePassword(passwordIngresada, user.Password);
@@ -206,4 +219,36 @@ export class UserServices {
             return null;
         }
     }
+
+    async Create(req) {
+        try {
+
+            const userDTO = this.CreateDTOUser(req);
+            console.log(userDTO)
+
+            if (userDTO.Password == null || userDTO == null)
+                return null;
+
+            const passwordHash = await EncryptPassword(userDTO.Password)
+
+            const newUser = await prisma.usuario.create({
+                data: {
+                    Nombres: userDTO.Nombres,
+                    Apellidos: userDTO.Apellidos,
+                    Roles: Roles.VENDEDOR,
+                    Email: userDTO.Email,
+                    Password: passwordHash,
+                    Celular: userDTO.Celular,
+                },
+            });
+
+            return newUser;
+        } catch (error) {
+            console.log(error)
+            return null;
+
+        }
+
+    }
+
 }

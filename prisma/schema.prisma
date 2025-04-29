@@ -38,7 +38,7 @@ model Usuario {
   Email                 String                      @unique @db.VarChar(100)
   Celular               String                      @db.VarChar(10)
   Roles                 Int                         @default(1)
-  Estado                Boolean
+  Estado                Boolean                     @default(true)
   Id_Mercadillo         Int?
   Mercadillo            Mercadillo?                 @relation(fields: [Id_Mercadillo], references: [Id])
   ProductosPersonalizados ProductosPersonalizados[]
