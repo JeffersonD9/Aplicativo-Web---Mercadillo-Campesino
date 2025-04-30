@@ -126,7 +126,7 @@ export class UserServices {
         try {
             const userFound = await this.prisma.usuario.findUnique({
                 where: {
-                    id: req.user.id,
+                    Id: req.user.id,
                     Email: req.body.Email,
                     Roles: req.user.role,
                 },
@@ -224,12 +224,12 @@ export class UserServices {
         try {
 
             const userDTO = this.CreateDTOUser(req);
-            
+         
             if (userDTO.Password == null || userDTO == null)
                 return null;
 
             const passwordHash = await EncryptPassword(userDTO.Password)
-
+            console.log(Roles.VENDEDOR, "rol");
             const newUser = await prisma.usuario.create({
                 data: {
                     Nombres: userDTO.Nombres,

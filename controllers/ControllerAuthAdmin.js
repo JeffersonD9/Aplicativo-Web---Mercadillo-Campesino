@@ -35,21 +35,18 @@ export async function LoginAdmin(req, res) {
 export async function RenderDashboardAdmin(req, res) {
   try {
 
-    if (!req.body.Email || !req.user || !req.user.role) {
-      return res.status(400).json({ message: "Datos incompletos o inválidos" });
-    }
-
+    
     const adminUserFound = await service.validateSession(req);
     if (adminUserFound == null) {
       return res.status(401).json({ message: "Usuario no encontrado" });
     }
 
-    // return res.render("Administrador/administrador", {
-    //   UserName: adminUserFound.UserName,
-    //   index: "Admin",
-    //   body: "datosAdmin",
-    //   adminUserFound
-    // });
+    return res.render("Administrador/administrador", {
+      UserName: adminUserFound.UserName,
+      index: "Admin",
+      body: "datosAdmin",
+      adminUserFound
+    });
   } catch (error) {
     console.error("Error en ProfileAdmin:", error);
     return res.status(500).json({ message: error.message });
