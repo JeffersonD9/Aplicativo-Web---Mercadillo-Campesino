@@ -2,6 +2,7 @@ import { Router } from "express";
 import { RenderDashboardAdmin, MostrarUsuarios, EliminarUsuario } from '../controllers/ControllerAuthAdmin.js'
 import { authRequired } from '../MiddleWares/ValidateToken.js'
 import { createMercadillo, deleteMercadillo, getAllMercadillos, getMercadilloById, updateMercadillo } from "../controllers/ControllerMercadillos.js";
+import { UpdateVendedor } from "../controllers/ControllerAuthSalesman.js";
 
 const router = Router()
 
@@ -9,7 +10,8 @@ router.get('/Admin', authRequired, RenderDashboardAdmin);
 //router.put('/Admin/:id_admin',authRequired, ActualizarAdmin);
 
 router.get('/Admin/Usuarios', authRequired, MostrarUsuarios);
-router.delete('/Admin/Usuarios/:id_usuario', authRequired, EliminarUsuario)
+router.delete('/Admin/Usuarios/delete:id_usuario', authRequired, EliminarUsuario)
+router.patch('/Admin/Usuarios/edit/:id_vendedor',authRequired,UpdateVendedor)
 
 router.get('/Admin/Mercadillos', authRequired, getAllMercadillos)
 router.get('/Admin/Mercadillos/:id_mercadillo', authRequired, getMercadilloById)
