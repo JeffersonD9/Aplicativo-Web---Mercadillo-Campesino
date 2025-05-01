@@ -1,69 +1,255 @@
-<div class="alert alert-danger d-none" role="alert" id="notificacion"></div>
 
-<div class="container-fluid my-4">
-  <div class="mb-3 text-end">
-    <a href="/ruta/crear" class="btn btn-success">Agregar Campesino</a>
-  </div>
 
-  <div class="row table-responsive">
-    <div class="col-12">
-      <table class="table table-striped table-bordered table-hover align-middle text-center" id="table">
-        <thead class="table-light">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nombres</th>
-            <th scope="col">Apellidos</th>
-            <th scope="col">Email</th>
-            <th scope="col">Celular</th>
-            <th scope="col">Mercadillo</th>
-            <th scope="col">Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% usuarios.forEach((vendedor) => { %>
-            <tr>
-              <td><%= vendedor.Id %></td>
-              <td><%= vendedor.Nombres %></td>
-              <td><%= vendedor.Apellidos %></td>
-              <td><%= vendedor.Email %></td>
-              <td><%= vendedor.Celular %></td>
-              <td><%= vendedor.nombreMercadillo %></td>
-              <td>
-                <a href="#" class="btn btn-outline-danger btn-sm btn-eliminar-usuario" role="button">
-                  <i class="bi bi-trash"></i>
-                </a>
-                <% if (vendedor.Estado) { %>
-                  <a href="#" class="btn btn-warning btn-sm btn-toggle-estado" data-estado="activo">Desactivar</a>
-                <% } else { %>
-                  <a href="#" class="btn btn-success btn-sm btn-toggle-estado" data-estado="inactivo">Activar</a>
-                <% } %>
-              </td>
-            </tr>
-          <% }); %>
-        </tbody>
-      </table>
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../includes/header') -%>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/MercadilloBucaramanga/Admin">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Admin</div>
+            </a>
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Menú
+            </div>
+            <!-- Nav Item  -->
+            <li class="nav-item">
+                <a class="nav-link" href="/MercadilloBucaramanga/Admin/Usuarios">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Campesinos</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="charts.html">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Mercadillos</span></a>
+            </li>
+
+            <!-- Nav Item  -->
+            <li class="nav-item">
+                <a class="nav-link" href="tables.html">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Categorias</span></a>
+            </li>
+
+            <!-- Nav Item  -->
+            <li class="nav-item">
+                <a class="nav-link" href="tables.html">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Productos Base </span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+        </ul>
+        
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                     <!-- Sidebar Toggle (Topbar) -->
+                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle"  id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="img-profile rounded-circle"
+                                    src="img/undraw_profile.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item"   data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" >  </i>
+                                    Cerrar sesion
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- /.container-fluid -->
+
+                 <!-- Begin Page Content -->
+                 <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800 mb-4">Lista de campesinos registrados</h1>
+                    <div class="alert alert-danger d-none" role="alert" id="notificacion"></div>
+
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Campesinos</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nombres</th>
+                                            <th>Apellidos</th>
+                                            <th>Email</th>
+                                            <th>Celular</th>
+                                            <th>Mercadillo</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nombres</th>
+                                            <th>Apellidos</th>
+                                            <th>Email</th>
+                                            <th>Celular</th>
+                                            <th>Mercadillo</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <% usuarios.forEach((vendedor) => { %>
+                                            <tr>
+                                              <td><%= vendedor.Id %></td>
+                                              <td><%= vendedor.Nombres %></td>
+                                              <td><%= vendedor.Apellidos %></td>
+                                              <td><%= vendedor.Email %></td>
+                                              <td><%= vendedor.Celular %></td>
+                                              <td><%= vendedor.nombreMercadillo %></td>
+                                              <td>
+                                                <a href="#" class="btn btn-outline-danger btn-sm btn-eliminar-usuario" data-toggle="modal" data-target="#eliminarModal" role="button">
+                                                  <i class="bi bi-trash"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-outline-primary btn-sm btn-actualizar-usuario ml-1" data-toggle="modal" data-target="#actualizarModal" role="button">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <% if (vendedor.Estado) { %>
+                                                  <a href="#" class="btn btn-warning btn-sm btn-toggle-estado" data-estado="activo">Desactivar</a>
+                                                <% } else { %>
+                                                  <a href="#" class="btn btn-success btn-sm btn-toggle-estado" data-estado="inactivo">Activar</a>
+                                                <% } %>
+                                              </td>
+                                            </tr>
+                                          <% }); %>
+                                      
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include('../includes/footer') -%>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+
     </div>
-  </div>
-</div>
+    <!-- End of Page Wrapper -->
 
-<!-- Modal -->
-<div class="modal fade" id="eliminarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="eliminarModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="eliminarModalLabel"></h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        ¿Estás seguro de eliminar este campesino?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btnModalCerrar" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary btnModalEliminar">Eliminar</button>
-      </div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"> </i>
+    </a>
+
+
+    <!-- Modal Eliminar -->
+    <div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">¿Estás seguro de eliminar este campesino?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-primary btnModalEliminar"  data-dismiss="modal">Eliminar</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Modal Actualizar -->
+    <%- include('../includes/modalActualizarCampesino') -%>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">¿Listo para irse?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Seleccione "Cerrar sesión" a continuación si está listo para finalizar su sesión actual.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-primary"  href="/MercadilloBucaramanga/Login"  id="cerrar-sesion" >Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <!-- Bootstrap core JavaScript-->
+    
+    
+    <%- include('../includes/scripts') -%>
+    
+</body>
 <script src="/js/vendedorAdmin.js" type="module"></script>
+</html>

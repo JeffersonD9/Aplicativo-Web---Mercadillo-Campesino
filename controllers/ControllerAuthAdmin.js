@@ -44,7 +44,7 @@ export async function RenderDashboardAdmin(req, res) {
     return res.render("Administrador/administrador", {
       UserName: adminUserFound.UserName,
       index: "Admin",
-      body: "inicio",
+      body: "administrador",
       adminUserFound
     });
     
@@ -68,7 +68,7 @@ export async function MostrarUsuarios(req, res) {
 
       console.log(usuariosConMercadillo)
 
-      res.render("Administrador/administrador", {
+      res.render("Administrador/listaUsuario", {
           UserName: req.user,
           body: "listaUsuario",
           usuarios: usuariosConMercadillo,
