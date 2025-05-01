@@ -80,6 +80,13 @@ export class UserServices {
                 where: {
                     Roles: Roles.VENDEDOR
                 },
+                include: {
+                    Mercadillo: {
+                        select: {
+                            Nombre: true
+                        }
+                    }
+                }
             });
             return usersFound;
         } catch (error) {

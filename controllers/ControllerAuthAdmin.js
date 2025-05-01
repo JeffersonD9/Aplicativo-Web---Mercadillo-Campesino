@@ -40,13 +40,14 @@ export async function RenderDashboardAdmin(req, res) {
     if (adminUserFound == null) {
       return res.status(401).json({ message: "Usuario no encontrado" });
     }
-
+    console.log(adminUserFound)
     return res.render("Administrador/administrador", {
       UserName: adminUserFound.UserName,
       index: "Admin",
-      body: "datosAdmin",
+      body: "inicio",
       adminUserFound
     });
+    
   } catch (error) {
     console.error("Error en ProfileAdmin:", error);
     return res.status(500).json({ message: error.message });
@@ -55,19 +56,26 @@ export async function RenderDashboardAdmin(req, res) {
 
 export async function MostrarUsuarios(req, res) {
   try {
+      const usuarios = await service.getAllUsers();
+      
+      if (usuarios == null) return res.status(401).json({ message: "Users not Found" });
 
-    const usuarios = await service.getAllUsers();
-  
-    if (usuarios == null) res.status(401).json({ message: "Users not Found" });
+      // Opcional: Transformar los datos para facilitar el acceso en la vista
+      const usuariosConMercadillo = usuarios.map(user => ({
+          ...user,
+          nombreMercadillo: user.Mercadillo?.Nombre || 'Sin mercadillo asignado'
+      }));
 
-    res.render("Administrador/administrador", {
-      UserName: req.user,
-      body: "listaUsuario",
-      usuarios,
-      index: "Admin",
-    });
+      console.log(usuariosConMercadillo)
+
+      res.render("Administrador/administrador", {
+          UserName: req.user,
+          body: "listaUsuario",
+          usuarios: usuariosConMercadillo,
+          index: "Admin",
+      });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
   }
 }
 

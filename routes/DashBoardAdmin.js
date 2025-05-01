@@ -11,7 +11,7 @@ router.get('/Admin', authRequired, RenderDashboardAdmin);
 //router.put('/Admin/:id_admin',authRequired, ActualizarAdmin);
 
 router.get('/Admin/Usuarios', authRequired, MostrarUsuarios);
-router.delete('/Admin/Usuarios/delete:id_usuario', authRequired, EliminarUsuario)
+router.delete('/Admin/Usuarios/delete/:id_usuario', authRequired, EliminarUsuario)
 router.patch('/Admin/Usuarios/edit/:id_vendedor',authRequired,UpdateVendedor)
 router.post("/Admin/Usuarios/Registrar", Register)
 

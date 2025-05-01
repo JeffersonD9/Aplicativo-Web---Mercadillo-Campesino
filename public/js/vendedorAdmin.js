@@ -1,86 +1,91 @@
-import {load} from "../js/dataTabla.js";
+import { load } from "../js/dataTabla.js";
 load();
-  
-  const btnModalEliminar = document.querySelector(".btnModalEliminar");
-  const btnModalCerrar = document.querySelector(".btnModalCerrar");
-  const btnClose = document.querySelector(".btn-close");
-  let notificacion = document.getElementById("notificacion");
-  let idUsuarioAEliminar = null;
-  let filaAEliminar = null;
 
-  const modalEliminar = new bootstrap.Modal(
-    document.getElementById("eliminarModal")
-  );
+const btnModalEliminar = document.querySelector(".btnModalEliminar");
+const btnModalCerrar = document.querySelector(".btnModalCerrar");
+const btnClose = document.querySelector(".btn-close");
+let notificacion = document.getElementById("notificacion");
+let idUsuarioAEliminar = null;
+let filaAEliminar = null;
 
-  function tiempoNotificacion() {
-    setTimeout(() => {
-      notificacion.classList.add("d-none");
-      notificacion.textContent = "";
-    }, 3000);
-  }
+const modalEliminar = new bootstrap.Modal(document.getElementById("eliminarModal"));
 
-  function notificacionExitosa(data) {
-    notificacion.classList.remove("alert-danger", "d-none");
-    notificacion.classList.add("alert-success", "d-block");
-    notificacion.textContent = data.message;
-  }
+function tiempoNotificacion() {
+  setTimeout(() => {
+    notificacion.classList.add("d-none");
+    notificacion.textContent = "";
+  }, 3000);
+}
 
-  function notificacionAlerta(data) {
-    notificacion.classList.remove("alert-success", "d-none");
-    notificacion.classList.add("alert-danger", "d-block");
-    notificacion.textContent = data.message;
-  }
+function notificacionExitosa(data) {
+  notificacion.classList.remove("alert-danger", "d-none");
+  notificacion.classList.add("alert-success", "d-block");
+  notificacion.textContent = data.message;
+}
 
-  async function eliminarUsuario() {
-    console.log( "Eliminar usuario", idUsuarioAEliminar, filaAEliminar);
-    desactivarModalEliminar();
-    if (!idUsuarioAEliminar || !filaAEliminar) return;
+function notificacionAlerta(data) {
+  notificacion.classList.remove("alert-success", "d-none");
+  notificacion.classList.add("alert-danger", "d-block");
+  notificacion.textContent = data.message;
+}
 
-    try {
-      const response = await fetch(`http://localhost:3000/MercadilloBucaramanga/Admin/Usuarios/delete${idUsuarioAEliminar}`, {
-        method: "DELETE",
-      });
+async function eliminarUsuario() {
+  if (!idUsuarioAEliminar || !filaAEliminar) return;
 
-      let json = await response.json();
+  try {
+    const response = await fetch(`http://localhost:3000/MercadilloBucaramanga/Admin/Usuarios/delete/${idUsuarioAEliminar}`, {
+      method: "DELETE",
+    });
 
-      if (response.ok) {
-        filaAEliminar.parentNode.removeChild(filaAEliminar); // Elimina la fila
-        notificacionExitosa(json);
-        tiempoNotificacion();
-      } else {
-        notificacionAlerta('Error al eliminar el usuario');
-      }
-    } catch (error) {
-      notificacionAlerta('Error al realizar la solicitud:', error);
+    const json = await response.json();
+
+    if (response.ok) {
+      filaAEliminar.remove();
+      notificacionExitosa(json);
+      tiempoNotificacion();
+    } else {
+      notificacionAlerta({ message: "Error al eliminar el usuario" });
     }
-
-    idUsuarioAEliminar = null;
-    filaAEliminar = null;
+  } catch (error) {
+    console.error(error);
+    notificacionAlerta({ message: "Error al realizar la solicitud" });
   }
 
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("btn-eliminar-usuario")) {
-      const fila = e.target.closest('tr');
-      const id = fila.firstElementChild.innerHTML;
-      const nombreUsuario = fila.children[1].innerHTML;
+  desactivarModalEliminar();
+  idUsuarioAEliminar = null;
+  filaAEliminar = null;
+}
 
-      idUsuarioAEliminar = id;
-      filaAEliminar = fila;
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("btn-eliminar-usuario")) {
+    const fila = e.target.closest("tr");
+    const id = fila.firstElementChild.innerHTML;
+    const nombreUsuario = fila.children[1].innerHTML;
 
-      activarModalEliminar(id, nombreUsuario);
-    }
-  });
+    idUsuarioAEliminar = id;
+    filaAEliminar = fila;
 
-  function activarModalEliminar(id, nombreUsuario) {
-    const eliminarModalLabel = document.getElementById("eliminarModalLabel");
-    eliminarModalLabel.textContent = `Está seguro de Eliminar Usuario ${nombreUsuario}`;
-    modalEliminar.show();
+    activarModalEliminar(nombreUsuario);
   }
+});
 
-  function desactivarModalEliminar() {
-    modalEliminar.hide();
-  }
+function activarModalEliminar(nombreUsuario) {
+  const eliminarModalLabel = document.getElementById("eliminarModalLabel");
+  eliminarModalLabel.textContent = `¿Eliminar al usuario ${nombreUsuario}?`;
+  modalEliminar.show();
+}
 
+function desactivarModalEliminar() {
+  modalEliminar.hide();
+}
+
+// Validación por si los botones no están en el DOM
+if (btnModalEliminar) {
   btnModalEliminar.addEventListener("click", eliminarUsuario);
-  btnModalCerrar.addEventListener("click",desactivarModalEliminar);
-  btnClose.addEventListener("click",desactivarModalEliminar);
+}
+if (btnModalCerrar) {
+  btnModalCerrar.addEventListener("click", desactivarModalEliminar);
+}
+if (btnClose) {
+  btnClose.addEventListener("click", desactivarModalEliminar);
+}
