@@ -3,32 +3,49 @@
 <link rel="stylesheet" href="/css/indexStyles/main.css">
 <link rel="stylesheet" href="/css/indexStyles/responsive.css">
 <%- include('./partials/head') %>
-<body>
-    <!-- Header Section -->
-    <%- include('./partials/header') %>
 
-    <!-- Hero Section -->
-    <%- include('./partials/hero') %>
+    <body>
+        <!-- Header Section -->
+        <%- include('./partials/header') %>
 
-    <!-- About Section -->
-    <%- include('./partials/about') %>
+            <% if (mensaje==='sesionFinalizada' ) { %>
+                <div id="notificacion" class="alert alert-warning"
+                    style="position: fixed; top: 20px; right: 20px; z-index: 9999; background-color: #f8d7da; color: #721c24; padding: 12px 20px; border-radius: 8px;">
+                    Tu sesión ha finalizado. Serás redirigido...
+                </div>
 
-    <!-- Features Section -->
-    <%- include('./partials/features') %>
+                <script>
+                    setTimeout(() => {
+                        const noti = document.getElementById('notificacion');
+                        if (noti) noti.style.display = 'none';
+                        window.location.href = "/MercadilloBucaramanga";
+                    }, 3000);
+                </script>
+                <% } %>
 
-    <!-- Products Section -->
-    <%- include('./partials/products') %>
+                    <!-- Hero Section -->
+                    <%- include('./partials/hero') %>
 
-    <!-- Testimonials Section -->
-    <%-/* include('./partials/testimonials') */%>
+                        <!-- About Section -->
+                        <%- include('./partials/about') %>
 
-    <!-- CTA Section -->
-    <%- include('./partials/cta') %>
+                            <!-- Features Section -->
+                            <%- include('./partials/features') %>
 
-    <!-- Footer -->
-    <%- include('./partials/footer') %>
+                                <!-- Products Section -->
+                                <%- include('./partials/products') %>
 
-    <!-- Scripts -->
-    <script src="/public/js/main.js"></script>
-</body>
+                                    <!-- Testimonials Section -->
+                                    <%- /* include('./partials/testimonials') */%>
+
+                                        <!-- CTA Section -->
+                                        <%- include('./partials/cta') %>
+
+                                            <!-- Footer -->
+                                            <%- include('./partials/footer') %>
+
+                                                <!-- Scripts -->
+                                                <script src="/public/js/main.js"></script>
+    </body>
+
 </html>

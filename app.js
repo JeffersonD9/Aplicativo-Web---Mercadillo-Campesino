@@ -44,9 +44,9 @@ const upload = multer({ dest: uploadPath });
 // Routes
 
 app.get("/MercadilloBucaramanga", (req, res) => {
-    res.redirect(302, "/MercadilloBucaramanga/home");
+    res.redirect(302, "/MercadilloBucaramanga/Inicio");
 });
-app.get("/MercadilloBucaramanga/home", RenderIndex);
+app.get("/MercadilloBucaramanga/Inicio", RenderIndex);
 app.use("/MercadilloBucaramanga", Products);
 app.use("/MercadilloBucaramanga", Login, Admin, Salesman);
 
