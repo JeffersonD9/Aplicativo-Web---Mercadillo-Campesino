@@ -16,8 +16,8 @@ app.use(cors());
 app.use(morgan("dev"));
 
 if (NODE_ENV === "Production") {
-    console.log = function () {}; 
-  }
+    console.log = function () { };
+}
 
 // Path 
 const __filename = fileURLToPath(import.meta.url);
@@ -43,7 +43,10 @@ const upload = multer({ dest: uploadPath });
 
 // Routes
 
-app.get("/MercadilloBucaramanga", RenderIndex);
+app.get("/MercadilloBucaramanga", (req, res) => {
+    res.redirect(302, "/MercadilloBucaramanga/home");
+});
+app.get("/MercadilloBucaramanga/home", RenderIndex);
 app.use("/MercadilloBucaramanga", Products);
 app.use("/MercadilloBucaramanga", Login, Admin, Salesman);
 

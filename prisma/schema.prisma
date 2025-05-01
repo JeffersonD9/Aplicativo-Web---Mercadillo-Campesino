@@ -16,15 +16,13 @@ model mercadillo {
 
 model productospersonalizados {
   Id          Int     @id @default(autoincrement())
-  Id_vendedor Int
+  Id_Usuario Int
   Id_producto Int
   Nombre      String  @db.VarChar(50)
   Descripcion String  @db.VarChar(50)
   Imagen      String
   Categoria   String  @db.VarChar(50)
-  usuario     usuario @relation(fields: [Id_vendedor], references: [Id], map: "ProductosPersonalizados_Id_vendedor_fkey")
-
-  @@index([Id_vendedor], map: "ProductosPersonalizados_Id_vendedor_fkey")
+  usuario     usuario @relation(fields: [Id_Usuario], references: [Id])
 }
 
 model usuario {
@@ -39,7 +37,5 @@ model usuario {
   Estado                  Boolean                   @default(true)
   Id_Mercadillo           Int?
   productospersonalizados productospersonalizados[]
-  mercadillo              mercadillo?               @relation(fields: [Id_Mercadillo], references: [Id], map: "Usuario_Id_Mercadillo_fkey")
-
-  @@index([Id_Mercadillo], map: "Usuario_Id_Mercadillo_fkey")
+  mercadillo              mercadillo?               @relation(fields: [Id_Mercadillo], references: [Id])
 }

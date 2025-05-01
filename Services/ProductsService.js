@@ -22,10 +22,10 @@ export class ProductService {
 
     async getAll(count) {
 
-        const productos = await prisma.productosPersonalizados.findMany({
+        const productos = await prisma.productospersonalizados.findMany({
             take: count,
             include: {
-                vendedor: true,
+                usuario: true,
             },
         });
         
@@ -34,12 +34,12 @@ export class ProductService {
 
     async getByCategory(categoryName){
 
-        const productos = await prisma.productosPersonalizados.findMany({
+        const productos = await prisma.productospersonalizados.findMany({
             where: {
                 Categoria: categoryName,
             },
             include: {
-                vendedor: true,
+                usuario: true,
             },
         });
 
