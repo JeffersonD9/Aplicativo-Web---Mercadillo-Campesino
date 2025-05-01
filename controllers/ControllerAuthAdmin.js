@@ -57,11 +57,12 @@ export async function MostrarUsuarios(req, res) {
   try {
 
     const usuarios = await service.getAllUsers();
+  
     if (usuarios == null) res.status(401).json({ message: "Users not Found" });
 
     res.render("Administrador/administrador", {
       UserName: req.user,
-      body: "listaUsuarios",
+      body: "listaUsuario",
       usuarios,
       index: "Admin",
     });
@@ -76,7 +77,6 @@ export async function EliminarUsuario(req, res) {
 
     const id_usuario = parseInt(req.params.id_usuario, 10);
     const result = service.deleteUser(id_usuario);
-    
     res.status(200).json({ message: "Usuario Borrado", data: result });
   } catch (error) {
     res.status(500).json({ message: error });

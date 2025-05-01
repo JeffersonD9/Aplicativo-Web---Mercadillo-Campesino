@@ -32,11 +32,12 @@ load();
   }
 
   async function eliminarUsuario() {
+    console.log( "Eliminar usuario", idUsuarioAEliminar, filaAEliminar);
     desactivarModalEliminar();
     if (!idUsuarioAEliminar || !filaAEliminar) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/MercadilloBucaramanga/Admin/Usuarios/${idUsuarioAEliminar}`, {
+      const response = await fetch(`http://localhost:3000/MercadilloBucaramanga/Admin/Usuarios/delete${idUsuarioAEliminar}`, {
         method: "DELETE",
       });
 

@@ -11,7 +11,6 @@
             <th scope="col">#</th>
             <th scope="col">Nombres</th>
             <th scope="col">Apellidos</th>
-            <th scope="col">Usuario</th>
             <th scope="col">Email</th>
             <th scope="col">Acción</th>
           </tr>
@@ -19,10 +18,9 @@
         <tbody>
           <tr>
             <% usuarios.forEach((vendedor)=>{ %>
-            <td><%= vendedor.id %></td>
+            <td><%= vendedor.Id %></td>
             <td><%= vendedor.Nombres %></td>
             <td><%= vendedor.Apellidos %></td>
-            <td><%= vendedor.UserName %></td>
             <td><%= vendedor.Email %></td>
             <td>
               <a href="#" class="btn-eliminar-usuario">Eliminar</a>
