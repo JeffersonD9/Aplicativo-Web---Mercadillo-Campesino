@@ -25,22 +25,23 @@ model ProductosPersonalizados {
   Id_vendedor Int
   Id_producto Int
   Nombre      String  @db.VarChar(50)
+  Categoria   String  @db.VarChar(50)
   Descripcion String  @db.VarChar(50)
   Imagen      String
   vendedor    Usuario @relation(fields: [Id_vendedor], references: [Id])
 }
 
 model Usuario {
-  Id                    Int                         @id @default(autoincrement())
-  Nombres               String                      @db.VarChar(50)
-  Apellidos             String                      @db.VarChar(50)
-  Password              String                      @db.VarChar(200)
-  Email                 String                      @unique @db.VarChar(100)
-  Celular               String                      @db.VarChar(10)
-  Roles                 Int                         @default(1)
-  Puesto                Int                         
-  Estado                Boolean                     @default(true)
-  Id_Mercadillo         Int?
-  Mercadillo            Mercadillo?                 @relation(fields: [Id_Mercadillo], references: [Id])
+  Id                      Int                       @id @default(autoincrement())
+  Nombres                 String                    @db.VarChar(50)
+  Apellidos               String                    @db.VarChar(50)
+  Password                String                    @db.VarChar(200)
+  Email                   String                    @unique @db.VarChar(100)
+  Celular                 String                    @db.VarChar(10)
+  Roles                   Int                       @default(1)
+  Puesto                  Int
+  Estado                  Boolean                   @default(true)
+  Id_Mercadillo           Int?
+  Mercadillo              Mercadillo?               @relation(fields: [Id_Mercadillo], references: [Id])
   ProductosPersonalizados ProductosPersonalizados[]
 }

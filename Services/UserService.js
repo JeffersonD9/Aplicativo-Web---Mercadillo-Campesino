@@ -246,8 +246,7 @@ export class UserServices {
             console.log(error)
             return null;
 
-        }
-
+        }        
     }
 
 }

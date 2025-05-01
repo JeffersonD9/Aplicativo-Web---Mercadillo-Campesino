@@ -249,7 +249,7 @@ nav ul li a:hover {
     margin-bottom: 1rem;
 }
 
-/* Testimonials Section */
+/* Testimonials Section
 .testimonials {
     background-color: #f8f9fa;
     padding: 5rem 2rem;
@@ -278,7 +278,7 @@ nav ul li a:hover {
 .testimonial-author {
     font-weight: bold;
     color: var(--primary-color);
-}
+} */
 
 /* CTA Section */
 .cta {

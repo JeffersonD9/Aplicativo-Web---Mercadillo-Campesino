@@ -1,18 +1,63 @@
 <section class="products" id="productos">
     <h2 class="section-title">Nuestros Productos</h2>
     <div class="products-grid">
-        <% productList.forEach(function(product) { %>
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="<%= product.image %>" alt="<%= product.title %>" />
-                </div>
-                <div class="product-info">
-                    <div class="product-category"><%= product.category %></div>
-                    <h3 class="product-title"><%= product.title %></h3>
-                    <div class="product-producer"><%= product.producer %></div>
-                    <p><%= product.description %></p>
-                </div>
-            </div>
-        <% }); %>
+        <!-- Los productos se cargarán dinámicamente -->
+    </div>
+    <div class="text-center mt-4">
+        <a href="/MercadilloBucaramanga/productos" class="btn btn-primary">Ver todos los productos</a>
     </div>
 </section>
+
+<script type="module">
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    // Obtener los productos destacados desde la API (limitado a 3)
+    const response = await fetch('/MercadilloBucaramanga/Inicio/Productos');
+    
+    if (!response.ok) {
+      throw new Error('Error al obtener los productos');
+    }
+    
+    const productos = await response.json();
+    
+    // Renderizar los productos en la sección correspondiente
+    const productosContainer = document.querySelector('.products-grid');
+    
+    if (productosContainer) {
+      // Limpiar el contenedor
+      productosContainer.innerHTML = '';
+      
+      if (productos.length === 0) {
+        productosContainer.innerHTML = '<div class="no-products">No hay productos destacados disponibles</div>';
+        return;
+      }
+      
+      // Crear las tarjetas de productos
+      productos.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        
+        productCard.innerHTML = `
+          <div class="product-image">
+            <img src="${product.image}" alt="${product.title}" />
+          </div>
+          <div class="product-info">
+            <div class="product-category">${product.category}</div>
+            <h3 class="product-title">${product.title}</h3>
+            <div class="product-producer">${product.producer}</div>
+            <p>${product.description}</p>
+          </div>
+        `;
+        
+        productosContainer.appendChild(productCard);
+      });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    const productosContainer = document.querySelector('.products-grid');
+    if (productosContainer) {
+      productosContainer.innerHTML = '<div class="error">Error al cargar los productos</div>';
+    }
+  }
+});
+</script>

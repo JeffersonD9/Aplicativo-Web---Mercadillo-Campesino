@@ -4,42 +4,49 @@ import morgan from "morgan";
 import Salesman from "./routes/DashBoardSalesman.js";
 import Admin from "./routes/DashBoardAdmin.js";
 import path from "path";
-import { PORT,NODE_ENV } from "./config.js";
+import { fileURLToPath } from 'url';
+import { PORT, NODE_ENV } from "./config.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
+import Products from "./routes/IndexLadingPage.js"
 import multer from "multer";
+import { RenderIndex } from "./controllers/ControllerMain.js";
 const app = express();
 app.use(cors());
 app.use(morgan("dev"));
 
-// if (NODE_ENV === "Production") {
-//     console.log = function () {}; 
-//   }
+if (NODE_ENV === "Production") {
+    console.log = function () {}; 
+  }
 
-// Path
-let __dirname = path.dirname(new URL(import.meta.url).pathname);
-console.log(__dirname)
-__dirname = __dirname.slice(1);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views")); //Identificar la carpeta views
-app.use(express.static(path.join(__dirname, "public"))); //Identificar la carpeta public
-app.use( "/imagenes", express.static(path.join(__dirname, "imagenes"))); //Identificar la carpeta imagenes
+// Path 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const uploadPath = path.join(__dirname, 'public', 'Image_Products');
-const upload = multer({dest: uploadPath})
-
-app.set("port", PORT);
+// Middlewares
+app.use(cors());
+app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
+// Configuración de vistas
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// Carpeta pública para archivos estáticos (CSS, JS, imágenes)
+app.use(express.static(path.join(__dirname, "public")));
+
+// Multer
+const uploadPath = path.join(__dirname, 'public', 'Image_Products');
+const upload = multer({ dest: uploadPath });
 
 // Routes
-app.get("/",(res,req)=>{
-    return req.redirect("/MercadilloBucaramanga")
-})
-app.use("/MercadilloBucaramanga",Login, Admin, Salesman);
-//app.use('/MercarilloBucaramanga',Admin)
 
+app.get("/MercadilloBucaramanga", RenderIndex);
+app.use("/MercadilloBucaramanga", Products);
+app.use("/MercadilloBucaramanga", Login, Admin, Salesman);
+
+// Puerto
+app.set("port", PORT);
 export default app;
