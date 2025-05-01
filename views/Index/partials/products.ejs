@@ -1,0 +1,18 @@
+<section class="products" id="productos">
+    <h2 class="section-title">Nuestros Productos</h2>
+    <div class="products-grid">
+        <% productList.forEach(function(product) { %>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="<%= product.image %>" alt="<%= product.title %>" />
+                </div>
+                <div class="product-info">
+                    <div class="product-category"><%= product.category %></div>
+                    <h3 class="product-title"><%= product.title %></h3>
+                    <div class="product-producer"><%= product.producer %></div>
+                    <p><%= product.description %></p>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</section>
