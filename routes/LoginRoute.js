@@ -9,8 +9,6 @@ const router = Router()
 router.get("/Login", Ingresar)
 router.post("/Login", Login)
 
-router.get("/Registrar", IngresarFormRegistroUsuario)
-router.post("/Registrar", Register)
 router.post("/LogOut", LogOut)
 
 router.get("/Restablecer", FromCambiarPassword)

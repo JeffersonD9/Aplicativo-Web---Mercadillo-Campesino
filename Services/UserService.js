@@ -153,7 +153,7 @@ export class UserServices {
 
         const userFound = await prisma.usuario.update({
             where: {
-                id: idUsuario,
+                Id: idUsuario,
                 Roles: role
             },
             data: {
