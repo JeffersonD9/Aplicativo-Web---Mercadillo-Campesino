@@ -15,6 +15,20 @@ router.delete('/Admin/Usuarios/delete/:id_usuario', authRequired, EliminarUsuari
 router.patch('/Admin/Usuarios/edit/:id_vendedor',authRequired,UpdateVendedor)
 router.post("/Admin/Usuarios/Registrar", Register)
 
+// Productos
+
+router.get('/Admin/Productos/create');
+router.get('/Admin/Productos/edit');
+router.get('/Admin/Productos/');
+
+// Categorias
+
+router.get('/Admin/Categorias/create');
+router.get('/Admin/Categorias/edit');
+router.get('/Admin/Categorias/');
+
+// Mercadillos
+
 router.get('/Admin/Mercadillos', authRequired, getAllMercadillos)
 router.get('/Admin/Mercadillos/:id_mercadillo', authRequired, getMercadilloById)
 router.post('/Admin/Mercadillos/create', authRequired, createMercadillo)

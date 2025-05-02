@@ -1,9 +1,11 @@
-
+import { getCookie } from "./expresiones.js"
 const btnModalEliminar = document.querySelector(".btnModalEliminar");
 const btnClose = document.querySelector(".btn-close");
 let notificacion = document.getElementById("notificacion");
 let idUsuarioAEliminar = null;
 let filaAEliminar = null;
+
+
 
 const modalEliminar = new bootstrap.Modal(document.getElementById("eliminarModal"));
 
@@ -154,11 +156,13 @@ document.addEventListener('click', (e) => {
 // Función para actualizar un campo específico
 async function actualizarCampoUsuario(id, campo, valor) {
   try {
-      const response = await fetch(`http://localhost:3000/MercadilloBucaramanga/Admin/Usuarios/update/${id}`, {
+      const response = await fetch(`http://localhost:3000/MercadilloBucaramanga/Admin/Usuarios/edit/${id}`, {
           method: 'PATCH',
           headers: {
               'Content-Type': 'application/json'
           },
+      
+          authorization: `${getCookie("token")}`,
           body: JSON.stringify({ [campo]: valor })
       });
 
@@ -177,3 +181,5 @@ async function actualizarCampoUsuario(id, campo, valor) {
       notificacionAlerta({ message: 'Error al actualizar el campo' });
   }
 }
+
+

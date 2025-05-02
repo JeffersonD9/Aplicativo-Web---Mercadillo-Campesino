@@ -70,7 +70,7 @@ nav ul li a:hover {
 
 /* Hero Section */
 .hero {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/hero-bg.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/img//ImagesIndex/WallperProducts.jpg');
     background-size: cover;
     background-position: center;
     height: 80vh;
@@ -249,7 +249,7 @@ nav ul li a:hover {
     margin-bottom: 1rem;
 }
 
-/* Testimonials Section */
+/* Testimonials Section
 .testimonials {
     background-color: #f8f9fa;
     padding: 5rem 2rem;
@@ -278,7 +278,7 @@ nav ul li a:hover {
 .testimonial-author {
     font-weight: bold;
     color: var(--primary-color);
-}
+} */
 
 /* CTA Section */
 .cta {

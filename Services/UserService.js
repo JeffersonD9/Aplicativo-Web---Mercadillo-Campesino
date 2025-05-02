@@ -81,7 +81,7 @@ export class UserServices {
                     Roles: Roles.VENDEDOR
                 },
                 include: {
-                    Mercadillo: {
+                    mercadillo: {
                         select: {
                             Nombre: true
                         }
@@ -253,8 +253,7 @@ export class UserServices {
             console.log(error)
             return null;
 
-        }
-
+        }        
     }
 
 }

@@ -124,7 +124,7 @@ export async function UpdateVendedor(req, res) {
   try {
     const id_vendedor = parseInt(req.params.id_vendedor, 10);
     const data = req.body;
-
+    console.log(data);
     if (isNaN(id_vendedor)) {
       return res.status(400).json({ message: "ID de vendedor inválido" });
     }
