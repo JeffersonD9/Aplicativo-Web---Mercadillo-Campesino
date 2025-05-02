@@ -29,8 +29,11 @@ export class UserServices {
         if (req.body.Celular !== undefined) newUserDTO.Celular = req.body.Celular;
         if (req.body.Estado !== undefined) newUserDTO.Estado = req.body.Estado;
 
-        if (creation)
+        if (creation) {
+            if (req.body.Puesto !== undefined) newUserDTO.Puesto = req.body.Puesto;
             newUserDTO.Roles = Roles.VENDEDOR
+        }
+
         return newUserDTO;
     }
 
@@ -156,12 +159,12 @@ export class UserServices {
      * @returns {Promise<object>} - Usuario actualizado
      */
     async ActualizarVendedor(idUsuario, req) {
-
-        var role = Roles.VENDEDOR;
-        console.log("Data ", data)
-
+        const role = Roles.VENDEDOR;
+    
         const userDTO = await this.CreateDTOUser(req);
-
+    
+        console.log("Data ", userDTO);
+    
         const userFound = await prisma.usuario.update({
             where: {
                 Id: idUsuario,
@@ -169,7 +172,7 @@ export class UserServices {
             },
             data: userDTO
         });
-
+    
         return userFound;
     }
 
@@ -227,7 +230,7 @@ export class UserServices {
     async Create(req) {
         try {
 
-            const userDTO = await this.CreateDTOUser(req,true);
+            const userDTO = await this.CreateDTOUser(req, true);
             if (userDTO.Password == null || userDTO == null)
                 return null;
 

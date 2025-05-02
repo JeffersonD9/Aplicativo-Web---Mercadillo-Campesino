@@ -128,9 +128,9 @@ export async function UpdateVendedor(req, res) {
       return res.status(400).json({ message: "ID de vendedor inválido" });
     }
 
-    if (!data || Object.keys(data).length === 0) {
-      return res.status(400).json({ message: "Datos de actualización vacíos" });
-    }
+    // if (!data || Object.keys(data).length === 0) {
+    //   return res.status(400).json({ message: "Datos de actualización vacíos" });
+    // }
 
     const userfound = await service.ActualizarVendedor(id_vendedor, req);
 
@@ -138,7 +138,7 @@ export async function UpdateVendedor(req, res) {
       return res.status(400).json({ message: "Error al actualizar el vendedor" });
     }
 
-    return res.status(200).json({ message: "Vendedor actualizado correctamente", data: userfound });
+    return res.status(200).json({ message: "Vendedor actualizado correctamente"});
 
   } catch (error) {
     console.error(error);
