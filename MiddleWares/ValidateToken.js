@@ -9,8 +9,6 @@ export const authRequired = (req, res, next) => {
         return res.redirect("/MercadilloBucaramanga?mensaje=sesionFinalizada");
       }
 
-    /*res.status(401).json({message: "No token, Authorization denied"})*/
-
     JTW.verify(token, SECRET_TOKEN, (err, user) => {
 
         if (err) return res.status(403).json({ message: "Invalid Token" })

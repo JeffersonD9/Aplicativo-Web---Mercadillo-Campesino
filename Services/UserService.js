@@ -13,18 +13,27 @@ export class UserServices {
         // this.roles = Roles;
     }
 
-    CreateDTOUser(req) {
+    async CreateDTOUser(req, creation = false) {
 
-        const newUserDTO = {
-            Nombres: req.body.Nombres,
-            Apellidos: req.body.Apellidos,
-            Email: req.body.Email,
-            Password: req.body.Password,
-            Celular: req.body.Celular,
-        };
+        const newUserDTO = {};
 
+        if (req.body.Nombres !== undefined) newUserDTO.Nombres = req.body.Nombres;
+        if (req.body.Apellidos !== undefined) newUserDTO.Apellidos = req.body.Apellidos;
+        if (req.body.Email !== undefined) newUserDTO.Email = req.body.Email;
+
+        if (req.body.Password !== undefined) {
+            const passwordHash = await EncryptPassword(req.body.Password)
+            newUserDTO.Password = passwordHash;
+        }
+
+        if (req.body.Celular !== undefined) newUserDTO.Celular = req.body.Celular;
+        if (req.body.Estado !== undefined) newUserDTO.Estado = req.body.Estado;
+
+        if (creation)
+            newUserDTO.Roles = Roles.VENDEDOR
         return newUserDTO;
     }
+
 
     //#region Metodos para admin y Vendedor
 
@@ -153,24 +162,19 @@ export class UserServices {
      * @param {object} data - Objeto con los nuevos datos del usuario
      * @returns {Promise<object>} - Usuario actualizado
      */
-    async ActualizarVendedor(idUsuario, data) {
+    async ActualizarVendedor(idUsuario, req) {
+        
         var role = Roles.VENDEDOR;
-        const passwordHash = await EncryptPassword(data.Password)
         console.log("Data ", data)
+
+        const userDTO = await this.CreateDTOUser(req);
 
         const userFound = await prisma.usuario.update({
             where: {
                 Id: idUsuario,
                 Roles: role
             },
-            data: {
-                Nombres: data.Nombres,
-                Apellidos: data.Apellidos,
-                Password: passwordHash,
-                Email: data.Email,
-                Celular: data.Celular,
-                Estado: data.Estado
-            }
+            data: userDTO
         });
 
         return userFound;
@@ -230,22 +234,12 @@ export class UserServices {
     async Create(req) {
         try {
 
-            const userDTO = this.CreateDTOUser(req);
-         
+            const userDTO = await this.CreateDTOUser(req,true);
             if (userDTO.Password == null || userDTO == null)
                 return null;
 
-            const passwordHash = await EncryptPassword(userDTO.Password)
-            console.log(Roles.VENDEDOR, "rol");
             const newUser = await prisma.usuario.create({
-                data: {
-                    Nombres: userDTO.Nombres,
-                    Apellidos: userDTO.Apellidos,
-                    Roles: Roles.VENDEDOR,
-                    Email: userDTO.Email,
-                    Password: passwordHash,
-                    Celular: userDTO.Celular,
-                },
+                data: userDTO
             });
 
             return newUser;
@@ -253,7 +247,7 @@ export class UserServices {
             console.log(error)
             return null;
 
-        }        
+        }
     }
 
 }
