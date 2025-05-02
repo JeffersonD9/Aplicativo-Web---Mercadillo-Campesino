@@ -123,7 +123,6 @@ export async function ActualizarPassword(req, res) {
 export async function UpdateVendedor(req, res) {
   try {
     const id_vendedor = parseInt(req.params.id_vendedor, 10);
-    const data = req.body;
 
     if (isNaN(id_vendedor)) {
       return res.status(400).json({ message: "ID de vendedor inválido" });
@@ -133,7 +132,7 @@ export async function UpdateVendedor(req, res) {
       return res.status(400).json({ message: "Datos de actualización vacíos" });
     }
 
-    const userfound = await service.ActualizarVendedor(id_vendedor, data);
+    const userfound = await service.ActualizarVendedor(id_vendedor, req);
 
     if (userfound == null) {
       return res.status(400).json({ message: "Error al actualizar el vendedor" });
