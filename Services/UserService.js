@@ -37,7 +37,6 @@ export class UserServices {
         return newUserDTO;
     }
 
-
     //#region Metodos para admin y Vendedor
 
     /**
@@ -249,5 +248,4 @@ export class UserServices {
 
         }
     }
-
 }

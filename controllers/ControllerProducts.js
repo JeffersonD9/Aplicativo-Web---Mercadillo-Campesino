@@ -5,7 +5,7 @@ export const getAllProductos = async (req, res) => {
     try {
 
         var products = await service.getAll(6);
-        console.log(products)
+      
         if (products == null)
             return res.status(204).json({ message: `No Content`, data: [] });
       

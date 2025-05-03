@@ -1,33 +1,34 @@
 <section class="products" id="productos">
-    <h2 class="section-title">Nuestros Productos</h2>
+    <h2 class="section-title">Algunos De Nuestros Productores</h2>
     <div class="products-grid">
         <!-- Los productos se cargarán dinámicamente -->
     </div>
     <div class="text-center mt-4">
         <a href="/MercadilloBucaramanga/productos" class="btn btn-primary">Ver todos los productos</a>
     </div>
+    <br>
 </section>
 
 <script type="module">
     document.addEventListener('DOMContentLoaded', async () => {
         try {
             console.log('Iniciando carga de productos...');
-            
+
             // Obtener los productos destacados desde la API
             const response = await fetch('/MercadilloBucaramanga/Inicio/Productos');
             console.log('Respuesta de la API:', response.status, response.statusText);
-            
+
             if (!response.ok) {
                 throw new Error(`Error al obtener los productos: ${response.status}`);
             }
 
             const resultado = await response.json();
             console.log('Datos recibidos del servidor:', resultado);
-            
+
             // Comprobar si la respuesta tiene formato { message, data }
-            const productos = resultado.data ? resultado.data : 
-                             (Array.isArray(resultado) ? resultado : []);
-            
+            const productos = resultado.data ? resultado.data :
+                (Array.isArray(resultado) ? resultado : []);
+
             console.log('Productos procesados:', productos);
 
             // Renderizar los productos en la sección correspondiente
@@ -44,15 +45,33 @@
                 }
 
                 console.log('Renderizando', productos.length, 'productos');
-                
+
                 // Crear las tarjetas de productos
                 productos.forEach(product => {
                     if (!product) return; // Saltar productos nulos
-                    
+
                     try {
                         const productCard = document.createElement('div');
                         productCard.className = 'product-card';
-                        console.log(product.image)
+
+                        const whatsappNumber = product.phone ? product.phone.replace(/\D/g, '') : '';
+
+                        const mensaje = [
+                            '*¡HOLA!*',
+                            '',
+                            `Vi tu producto "*${product.title || 'de su catálogo'}*" en el *Mercadillo Bucaramanga* y me interesa.`,
+                            '',
+                            '¿Podrías darme más información sobre:',
+                            '- Precio',
+                            '- Disponibilidad',
+                            '- Entregar',
+                            '',
+                            '¡Muchas gracias!*'
+                        ].join('\n');
+
+                        const mensajePredefinido = encodeURIComponent(mensaje);
+                        const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}?text=${mensajePredefinido}` : '';
+
                         productCard.innerHTML = `
                             <div class="product-image">
                                 <img src="${product.image || '/MercadilloBucaramanga/img/placeholder.jpg'}" alt="${product.title || 'Producto'}" />
@@ -60,8 +79,18 @@
                             <div class="product-info">
                                 <div class="product-category">${product.category || 'Sin categoría'}</div>
                                 <h3 class="product-title">${product.title || 'Producto sin nombre'}</h3>
-                                <div class="product-producer">${product.producer || 'Productor no especificado'}</div>
-                                <p>${product.description || 'Sin descripción'}</p>
+                                <div class="product-meta">
+                                    <span class="product-producer">👤 ${product.producer || 'Productor no especificado'}</span>
+                                    <span class="product-mercado">📍 ${product.mercadillo || 'Mercadillo desconocido'}</span>
+                                </div>
+                                <p class="product-description">${product.description || 'Sin descripción'}</p>
+                                ${whatsappNumber ? `
+                                <div class="product-contact">
+                                    <a href="${whatsappLink}" target="_blank" class="whatsapp-button" title="Contactar por WhatsApp">
+                                        <i class="fab fa-whatsapp"></i> Chatear
+                                    </a>
+                                </div>
+                                ` : ''}
                             </div>
                         `;
 

@@ -59,7 +59,21 @@ export class MercadilloService {
             return null;
         }
     }
-    
+
+    async getByVendor(id_mercadillo, id_vendedor) {
+        try {
+
+            const mercadillo = await this.prisma.usuario.findUnique({
+                where: { Id: id_vendedor, Id_Mercadillo: id_mercadillo }
+            });
+
+            return mercadillo;
+        } catch (error) {
+            console.error(`Error al buscar mercadillo por ID: ${error.message}`);
+            return null;
+        }
+    }
+
     /**
      * Actualiza un mercadillo existente en la base de datos
      * @param {number|string} id_mercadillo - ID del mercadillo a actualizar
@@ -92,7 +106,7 @@ export class MercadilloService {
 
             return true;
         } catch (error) {
-            
+
             console.error(`Error al eliminar mercadillo: ${error.message}`);
             return false;
         }

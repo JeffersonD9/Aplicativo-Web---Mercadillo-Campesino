@@ -14,6 +14,9 @@ export class ProductService {
             category: producto.NombreCategoria,
             description: producto.Descripcion,
             image: producto.Imagen,
+            phone : producto.usuario.Celular,
+            puesto : producto.usuario.Puesto,
+            mercadillo: producto.usuario.mercadillo.Nombre,
             producer: `${producto.usuario.Nombres} ${producto.usuario.Apellidos}`
         }));
 
@@ -24,16 +27,28 @@ export class ProductService {
 
         const productos = await prisma.productospersonalizados.findMany({
             take: count,
-            include: {
-                usuario: true,
+            where: {
+                usuario: {
+                    Id_Mercadillo: {
+                        not: null
+                    }
+                }
             },
+            include: {
+                usuario: {
+                    include: {
+                        mercadillo: true
+                    }
+                }
+            }
         });
-       
-        if (productos == null)
+    
+        if (!productos)
             return null;
-
-        return this.BuildDTOProducts(productos);;
+    
+        return this.BuildDTOProducts(productos);
     }
+    
 
     async getByCategory(categoryName) {
 

@@ -383,39 +383,49 @@ nav ul li a:hover::after {
 
 /* Products Section */
 .products {
-    padding: 5rem 2rem;
-    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* Alinea la grilla horizontalmente */
+    justify-content: center; /* Centra la grilla verticalmente si hay poco contenido */
     margin: 0 auto;
 }
 
+/* La grilla de los productos */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Coloca los productos en columnas */
     gap: 2rem;
+    justify-items: center;   /* Centra las tarjetas dentro de cada celda */
+    padding: 0 1rem;         /* Añade un pequeño espacio a los lados */
+    width: 100%;             /* Asegura que ocupe el 100% de su contenedor */
+    max-width: 1200px;       /* Limita el ancho máximo de la grilla para no ocupar toda la pantalla */
+    margin: 0 auto;          /* Centra la grilla en pantallas grandes */
 }
 
+/* Cada tarjeta de producto */
 .product-card {
-    background-color: white;
-    border-radius: 10px;
+    width: 100%;
+    max-width: 350px;         /* Limita el ancho máximo de las tarjetas */
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.07);
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 0;         /* Espacio superior e inferior entre las tarjetas */
 }
 
+/* Efecto hover de la tarjeta */
 .product-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-.product-image {
-    height: 200px;
-    overflow: hidden;
+    transform: translateY(-8px);
 }
 
 .product-image img {
     width: 100%;
-    height: 100%;
+    height: 220px;
     object-fit: cover;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .product-info {
@@ -424,19 +434,69 @@ nav ul li a:hover::after {
 
 .product-category {
     color: var(--secondary-color);
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 0.85rem;
     margin-bottom: 0.5rem;
+    text-transform: uppercase;
 }
 
 .product-title {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 0.75rem;
 }
 
-.product-producer {
-    font-style: italic;
-    color: #6c757d;
+.product-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
     margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.product-producer,
+.product-mercado {
+    font-style: italic;
+    color: var(--primary-color);
+}
+
+.product-description {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+    color: #444;
+}
+
+.whatsapp-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #25D366;
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: background-color 0.3s;
+}
+
+.whatsapp-button:hover {
+    background-color: #128C7E;
+}
+
+.no-products {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #999;
+}
+
+.error {
+    font-size: 1.2rem;
+    text-align: center;
+    color: red;
 }
 
 /* Testimonials Section
