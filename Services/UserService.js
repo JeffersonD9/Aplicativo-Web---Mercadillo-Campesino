@@ -134,15 +134,15 @@ export class UserServices {
      * @param {Request} req - Objeto de solicitud 
      * @returns {Promise<Object|null>} - Admin encontrado o null
      */
-    async validateSession(req) {
+    async validateSession(userId) {
         try {
+
             const userFound = await this.prisma.usuario.findUnique({
                 where: {
-                    Id: req.user.id,
-                    Email: req.body.Email,
-                    Roles: req.user.role,
+                    Id: userId,
                 },
             });
+            
             return userFound;
         } catch (error) {
             console.error(`Error al validar sesión: ${error.message}`);
@@ -160,11 +160,11 @@ export class UserServices {
      */
     async ActualizarVendedor(idUsuario, req) {
         const role = Roles.VENDEDOR;
-    
+
         const userDTO = await this.CreateDTOUser(req);
-    
+
         console.log("Data ", userDTO);
-    
+
         const userFound = await prisma.usuario.update({
             where: {
                 Id: idUsuario,
@@ -172,7 +172,7 @@ export class UserServices {
             },
             data: userDTO
         });
-    
+
         return userFound;
     }
 
@@ -214,12 +214,16 @@ export class UserServices {
      */
     async findRole(Email) {
         try {
+
             const userFound = await this.prisma.usuario.findUnique({
                 where: {
                     Email: Email,
                 },
             });
 
+            if (userFound == undefined)
+                return null;
+            
             return userFound.Roles;
         } catch (error) {
             console.error(`Error al buscar usuario: ${error.message}`);

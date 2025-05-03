@@ -5,19 +5,21 @@ import { Roles } from "../Helpers/ValidationRoles/Roles.js";
 const service = new UserServices();
 
 export async function Login(req, res) {
-
   const { Email } = req.body;
   const role = await service.findRole(Email);
-  console.log(role)
-  
+
+  if (role == null) {
+    return res.status(404).json({ message: "El Usuario No Existe" });
+  }
+
   if (role == Roles.VENDEDOR) {
-    console.log("Vendor")
-    LoginSalesman(req, res);
+    console.log("Vendor");
+    return await LoginSalesman(req, res);
   } else if (role == Roles.ADMIN) {
-    LoginAdmin(req, res);
-    console.log("admin")
-  } else{   
-    res.status(404).json({ message: "El Usuario No Existe" });
+    console.log("Admin");
+    return await LoginAdmin(req, res);
+  } else {
+    return res.status(404).json({ message: "El Usuario No Existe" });
   }
 }
 
@@ -28,7 +30,7 @@ export async function LogOut(req, res) {
   //console.log(req.user.userName)
   return res
     .status(200)
-    .json({ redirect: "/MercadilloBucaramanga"});
+    .json({ redirect: "/MercadilloBucaramanga" });
 }
 
 export function Ingresar(req, res) {

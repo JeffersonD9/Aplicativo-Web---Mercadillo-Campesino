@@ -38,24 +38,25 @@ export async function ProfileSalesman(req, res) {
 
   try {
 
-    if (!req.body.Email || !req.user || !req.user.role) {
+    if (!req.user.Name || !req.user || !req.user.role) {
       return res.status(400).json({ message: "Datos incompletos o inválidos" });
     }
 
-    const adminUserFound = await service.validateSession(req);
-    if (adminUserFound == null) {
+    const userFound = await service.validateSession(req.user.id);
+    if (userFound == null) {
       return res.status(401).json({ message: "Usuario no encontrado" });
     }
 
-    // return res.render("Vendedor/vendedor", {
-    //   UserName: userFound.UserName,
-    //   index: "Usuario",
-    //   body: "datosVendedor",
-    //   userFound,
-    // });
+    return res.render("Vendedor/vendedor", {
+      UserName: userFound.Nombres,
+      index: "Usuario",
+      body: "datosVendedor",
+      userFound,
+    });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.log(error)
+    return res.status(500).json({ message: "Internal error" });
   }
 }
 
