@@ -52,7 +52,7 @@
                     try {
                         const productCard = document.createElement('div');
                         productCard.className = 'product-card';
-
+                        console.log(product.image)
                         productCard.innerHTML = `
                             <div class="product-image">
                                 <img src="${product.image || '/MercadilloBucaramanga/img/placeholder.jpg'}" alt="${product.title || 'Producto'}" />

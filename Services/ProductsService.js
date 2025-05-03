@@ -10,11 +10,11 @@ export class ProductService {
 
         const productsDTO = productos.map(producto => ({
             id: producto.Id,
-            title: producto.Nombre,
-            category: producto.Categoria,
+            title: producto.NombreProducto,
+            category: producto.NombreCategoria,
             description: producto.Descripcion,
             image: producto.Imagen,
-            producer: `${producto.vendedor.Nombres} ${producto.vendedor.Apellidos}`
+            producer: `${producto.usuario.Nombres} ${producto.usuario.Apellidos}`
         }));
 
         return productsDTO;
@@ -28,20 +28,26 @@ export class ProductService {
                 usuario: true,
             },
         });
-        
+       
+        if (productos == null)
+            return null;
+
         return this.BuildDTOProducts(productos);;
     }
 
-    async getByCategory(categoryName){
+    async getByCategory(categoryName) {
 
         const productos = await prisma.productospersonalizados.findMany({
             where: {
-                Categoria: categoryName,
+                NombreCategoria: categoryName,
             },
             include: {
                 usuario: true,
             },
         });
+
+        if (productos == null)
+            return null;
 
         return this.BuildDTOProducts(productos);
     }
