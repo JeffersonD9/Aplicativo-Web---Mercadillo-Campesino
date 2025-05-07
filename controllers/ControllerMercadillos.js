@@ -10,16 +10,39 @@ const service = new MercadilloService();
 export async function getAllMercadillos(req, res) {
     try {
         const mercadillos = await service.getAll();
-        res.status(200).json({
-            success: true,
-            data: mercadillos
+        console.log(mercadillos)
+        // res.status(200).json({
+        //     success: true,
+        //     data: mercadillos
+        // });
+
+        res.render("Administrador/mercadillo", {
+            UserName: req.user,
+            body: "mercadillo",
+            mercadillo: mercadillos,
+            index: "Admin",
         });
+
+        
     } catch (error) {
         res.status(500).json({
             message: error.message
         });
     }
 }
+
+
+
+export async function getMercadillosJson(req, res) {
+    try {
+        const mercadillos = await service.getAll();
+        console.log(mercadillos)
+        res.status(200).json(mercadillos);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 
 /**
  * Obtiene un mercadillo por su ID
@@ -81,7 +104,7 @@ export async function createMercadillo(req, res) {
  */
 export async function updateMercadillo(req, res) {
     try {
-        const id_mercadillo = parseInt(req.params.id, 10);
+        const id_mercadillo = parseInt(req.params.id_mercadillo, 10);
         const data = req.body;
 
         if (isNaN(id_mercadillo)) {
@@ -114,9 +137,8 @@ export async function updateMercadillo(req, res) {
  */
 export async function deleteMercadillo(req, res) {
     try {
-
-        const id_mercadillo = parseInt(req.params.id, 10);
-
+        
+        const id_mercadillo = parseInt(req.params.id_mercadillo, 10);
         if (isNaN(id_mercadillo)) {
             return res.status(400).json({ message: "ID de mercadillo inválido" });
         }

@@ -1,60 +1,116 @@
-<!-- Modal Actualizar -->
+<!-- Modal Actualizar Campesino -->
 <div class="modal fade" id="actualizarModal" tabindex="-1" role="dialog" aria-labelledby="actualizarModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
+        <div class="alert alert-danger d-none" role="alert" id="notificacionActualizar"></div>
+
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="actualizarModalLabel">Actualizar Campesino</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                <h5 class="modal-title" id="actualizarModalLabel">Editar Campesino</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formActualizar">
-                    <input type="hidden" id="usuarioIdActualizar">
+                <form id="formActualizarCampesino">
+                    <input type="hidden" id="idActualizar">
                     
-                    <div class="form-group row">
-                        <label for="nombresActualizar" class="col-sm-2 col-form-label">Nombres</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="nombresActualizar">
-                        </div>
-                        <div class="col-sm-2">
-                            <button type="button" class="btn btn-primary btn-actualizar-campo" data-campo="Nombres">Actualizar</button>
+                    <!-- Campo Nombres con botón individual -->
+                    <div class="form-group">
+                        <label for="nombresActualizar">Nombres</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="nombresActualizar" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Nombres">
+                                    <i class="bi bi-check"></i> Actualizar
+                                </button>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="form-group row">
-                        <label for="apellidosActualizar" class="col-sm-2 col-form-label">Apellidos</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="apellidosActualizar">
-                        </div>
-                        <div class="col-sm-2">
-                            <button type="button" class="btn btn-primary btn-actualizar-campo" data-campo="Apellidos">Actualizar</button>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group row">
-                        <label for="emailActualizar" class="col-sm-2 col-form-label">Email</label>
-                        <div class="col-sm-8">
-                            <input type="email" class="form-control" id="emailActualizar">
-                        </div>
-                        <div class="col-sm-2">
-                            <button type="button" class="btn btn-primary btn-actualizar-campo" data-campo="Email">Actualizar</button>
+                    <!-- Campo Apellidos con botón individual -->
+                    <div class="form-group">
+                        <label for="apellidosActualizar">Apellidos</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="apellidosActualizar" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Apellidos">
+                                    <i class="bi bi-check"></i> Actualizar
+                                </button>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="form-group row">
-                        <label for="celularActualizar" class="col-sm-2 col-form-label">Celular</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="celularActualizar">
+                    <!-- Campo Email con botón individual -->
+                    <div class="form-group">
+                        <label for="emailActualizar">Email</label>
+                        <div class="input-group">
+                            <input type="email" class="form-control" id="emailActualizar" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Email">
+                                    <i class="bi bi-check"></i> Actualizar
+                                </button>
+                            </div>
                         </div>
-                        <div class="col-sm-2">
-                            <button type="button" class="btn btn-primary btn-actualizar-campo" data-campo="Celular">Actualizar</button>
+                    </div>
+                    
+                    <!-- Campo Celular con botón individual -->
+                    <div class="form-group">
+                        <label for="celularActualizar">Celular</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="celularActualizar" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Celular">
+                                    <i class="bi bi-check"></i> Actualizar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Campo Mercadillo con botón individual -->
+                    <div class="form-group">
+                        <label for="mercadilloActualizar">Mercadillo</label>
+                        <div class="input-group">
+                            <select class="form-control" id="mercadilloActualizar" required>
+                                <option value="">Seleccione un mercadillo</option>
+                                <!-- Las opciones se llenarán con JavaScript -->
+                            </select>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Id_Mercadillo">
+                                    <i class="bi bi-check"></i> Actualizar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Campo Puesto con botón individual -->
+                    <div class="form-group">
+                        <label for="puestoActualizar">Puesto</label>
+                        <div class="input-group">
+                            <input id="puestoActualizar" class="form-control" type="number">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Puesto">
+                                    <i class="bi bi-check"></i> Actualizar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Campo Contraseña con botón individual -->
+                    <div class="form-group">
+                        <label for="passwordActualizar">Nueva Contraseña</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="passwordActualizar" placeholder="Dejar vacío para no cambiar">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Password">
+                                    <i class="bi bi-check"></i> Actualizar
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

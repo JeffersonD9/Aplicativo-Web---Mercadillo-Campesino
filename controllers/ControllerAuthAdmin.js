@@ -63,15 +63,15 @@ export async function MostrarUsuarios(req, res) {
       // Opcional: Transformar los datos para facilitar el acceso en la vista
       const usuariosConMercadillo = usuarios.map(user => ({
           ...user,
-          nombreMercadillo: user.Mercadillo?.Nombre || 'Sin mercadillo asignado'
+          nombreMercadillo: user.mercadillo?.Nombre || 'Sin mercadillo asignado'
       }));
 
       console.log(usuariosConMercadillo)
 
-      res.render("Administrador/listaUsuario", {
+      res.render("Administrador/campesinos", {
           UserName: req.user,
-          body: "listaUsuario",
-          usuarios: usuariosConMercadillo,
+          body: "campesinos",
+          campesino: usuariosConMercadillo,
           index: "Admin",
       });
   } catch (error) {

@@ -4,60 +4,10 @@
 <%- include('../includes/header') -%>
 
 <body id="page-top">
-
     <!-- Page Wrapper -->
     <div id="wrapper">
-
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/MercadilloBucaramanga/Admin">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">Admin</div>
-            </a>
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Menú
-            </div>
-            <!-- Nav Item  -->
-            <li class="nav-item">
-                <a class="nav-link" href="/MercadilloBucaramanga/Admin/Usuarios">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Campesinos</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/MercadilloBucaramanga/Admin/Mercadillos">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Mercadillos</span></a>
-            </li>
-
-            <!-- Nav Item  -->
-            <li class="nav-item">
-                <a class="nav-link" href="/MercadilloBucaramanga/Admin/Categorias">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Categorias</span></a>
-            </li>
-
-            <!-- Nav Item  -->
-            <li class="nav-item">
-                <a class="nav-link" href="/MercadilloBucaramanga/Admin/Productos">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Productos Base </span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-        </ul>
-        
+        <%- include('../includes/sidebarAdmin') -%>
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
@@ -138,27 +88,8 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">¿Listo para irse?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Seleccione "Cerrar sesión" a continuación si está listo para finalizar su sesión actual.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                    <a class="btn btn-primary"  href="/MercadilloBucaramanga/Login"  id="cerrar-sesion" >Cerrar sesión</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <%- include('../includes/logoutModal') -%>
 
-
-    
     <!-- Bootstrap core JavaScript-->
     <%- include('../includes/scripts') -%>
 </body>
