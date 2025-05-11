@@ -10,7 +10,6 @@ const service = new MercadilloService();
 export async function getAllMercadillos(req, res) {
     try {
         const mercadillos = await service.getAll();
-        console.log(mercadillos)
         // res.status(200).json({
         //     success: true,
         //     data: mercadillos

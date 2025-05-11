@@ -8,14 +8,16 @@ async function Register(req, res) {
   try {
 
     const newUser = await service.Create(req);
+  
     if (newUser == null)
       return res.status(400).json({ message: "Error al crear el usuario" });
 
     const nameToken = Email.split('@')[0];
+   
     const token = await CreateAccesToken({ id: newUser.Id, UserName: nameToken, });
-
     res.cookie("token", token);
-    res.status(201).send({ nameToken, Email, redirect: "Usuario", });
+    res.status(201).send({ nameToken, Email, redirect: "Usuario", newUser });
+
   } catch (error) {
     if (
       error.code == "P2002" &&

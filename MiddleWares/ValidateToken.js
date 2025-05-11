@@ -4,7 +4,6 @@ import { SECRET_TOKEN } from "../config.js"
 export const authRequired = (req, res, next) => {
 
     const { token } = req.cookies;
-
     if (!token) {
         return res.redirect("/MercadilloBucaramanga?mensaje=sesionFinalizada");
       }

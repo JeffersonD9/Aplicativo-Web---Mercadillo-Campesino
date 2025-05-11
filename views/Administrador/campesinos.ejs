@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -62,12 +60,8 @@
                 </nav>
                 <!-- End of Topbar -->
 
-                <!-- /.container-fluid -->
-
-                 <!-- Begin Page Content -->
-                 <div class="container-fluid">
-
-     
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800 mb-4">Lista de campesinos registrados</h1>
@@ -115,29 +109,26 @@
                                     <tbody>
                                         <% campesino.forEach((campesinos) => { %>
                                             <tr data-id-mercadillo="<%= campesinos.Id_Mercadillo || '' %>">
-                                              <td><%= campesinos.Id %></td>
-                                              <td><%= campesinos.Nombres %></td>
-                                              <td><%= campesinos.Apellidos %></td>
-                                              <td><%= campesinos.Email %></td>
-                                              <td><%= campesinos.Celular %></td>
-                                              <td><%= campesinos.nombreMercadillo %></td>
-                                              <td ><%= campesinos.Puesto %></td>
-                                              <td>
-                                                <a href="#" class="btn btn-outline-danger btn-sm btn-eliminar-usuario" data-toggle="modal" data-target="#eliminarModal" role="button">
-                                                  <i class="bi bi-trash"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-outline-primary btn-sm btn-actualizar-usuario ml-1" data-toggle="modal" data-target="#actualizarModal" role="button">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <% if (campesinos.Estado) { %>
-                                                  <a href="#" class="btn btn-warning btn-sm btn-toggle-estado" data-estado="activo">Desactivar</a>
-                                                <% } else { %>
-                                                  <a href="#" class="btn btn-success btn-sm btn-toggle-estado" data-estado="inactivo">Activar</a>
-                                                <% } %>
-                                              </td>
+                                                <td><%= campesinos.Id %></td>
+                                                <td><span class="nombre"><%= campesinos.Nombres %></span></td>
+                                                <td><span class="apellidos"><%= campesinos.Apellidos %></span></td>
+                                                <td><span class="email"><%= campesinos.Email %></span></td>
+                                                <td><span class="celular"><%= campesinos.Celular %></span></td>
+                                                <td><span class="mercadillo"><%= campesinos.nombreMercadillo %></span></td>
+                                                <td><span class="puesto"><%= campesinos.Puesto %></span></td>
+                                                <td>
+                                                    <a href="#" class="btn btn-outline-danger btn-sm btn-eliminar-usuario" data-id="<%= campesinos.Id %>" data-toggle="modal" data-target="#eliminarModal" role="button">
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-outline-primary btn-sm btn-actualizar-usuario ml-1" data-id="<%= campesinos.Id %>" data-toggle="modal" data-target="#actualizarModal" role="button">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-<%= campesinos.Estado ? 'warning' : 'success' %> btn-sm btn-toggle-estado" data-id="<%= campesinos.Id %>" data-estado="<%= campesinos.Estado ? 'activo' : 'inactivo' %>">
+                                                        <%= campesinos.Estado ? 'Desactivar' : 'Activar' %>
+                                                    </a>
+                                                </td>
                                             </tr>
-                                          <% }); %>
-                                      
+                                        <% }); %>
                                     </tbody>
                                 </table>
                             </div>
@@ -156,7 +147,6 @@
         </div>
         <!-- End of Content Wrapper -->
 
-
     </div>
     <!-- End of Page Wrapper -->
 
@@ -165,87 +155,82 @@
         <i class="fas fa-angle-up"> </i>
     </a>
 
-
-  
-<!-- Modal Eliminar -->
-<div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">¿Estás seguro de eliminar este campesino?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                <!-- Quitar data-dismiss del botón Eliminar -->
-                <button class="btn btn-primary" id="btnConfirmarEliminar">Eliminar</button>
+    <!-- Modal Eliminar -->
+    <div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">¿Estás seguro de eliminar este campesino?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" id="btnConfirmarEliminar">Eliminar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- Modal Crear Campesino -->
-<div class="modal fade" id="crearCampesinoModal" tabindex="-1" role="dialog" aria-labelledby="crearCampesinoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="alert alert-danger d-none" role="alert" id="notificacion"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="crearCampesinoModalLabel">Nuevo Campesino</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="formCrearCampesino">
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="nombresNuevo">Nombres</label>
-                            <input type="text" class="form-control" id="nombresNuevo" required>
+    <div class="modal fade" id="crearCampesinoModal" tabindex="-1" role="dialog" aria-labelledby="crearCampesinoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="alert alert-danger d-none" role="alert" id="notificacion"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearCampesinoModalLabel">Nuevo Campesino</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formCrearCampesino">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="nombresNuevo">Nombres</label>
+                                <input type="text" class="form-control" id="nombresNuevo" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="apellidosNuevo">Apellidos</label>
+                                <input type="text" class="form-control" id="apellidosNuevo" required>
+                            </div>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="apellidosNuevo">Apellidos</label>
-                            <input type="text" class="form-control" id="apellidosNuevo" required>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="emailNuevo">Email</label>
+                                <input type="email" class="form-control" id="emailNuevo" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="celularNuevo">Celular</label>
+                                <input type="text" class="form-control" id="celularNuevo" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="emailNuevo">Email</label>
-                            <input type="email" class="form-control" id="emailNuevo" required>
+                        <div class="form-group">
+                            <label for="mercadilloNuevo">Mercadillo</label>
+                            <select class="form-control" id="mercadilloNuevo" required>
+                                <option value="">Seleccione un mercadillo</option>
+                                <!-- Las opciones se llenarán con JavaScript -->
+                            </select>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="celularNuevo">Celular</label>
-                            <input type="text" class="form-control" id="celularNuevo" required>
+                        <div class="form-group">
+                            <label for="puestoMercadillo">Puesto</label>
+                            <input id="puestoNuevo" class="form-control" type="number"></input>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="mercadilloNuevo">Mercadillo</label>
-                        <select class="form-control" id="mercadilloNuevo" required>
-                            <option value="">Seleccione un mercadillo</option>
-                            <!-- Las opciones se llenarán con JavaScript -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="puestoMercadillo">Puesto</label>
-                        <input id="puestoNuevo" class="form-control" type="number"></input>
-                    </div>
-                    <div class="form-group">
-                        <label for="passwordNuevo">Contraseña</label>
-                        <input type="password" class="form-control" id="passwordNuevo" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="btnGuardarCampesino">Guardar</button>
+                        <div class="form-group">
+                            <label for="passwordNuevo">Contraseña</label>
+                            <input type="password" class="form-control" id="passwordNuevo" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarCampesino">Guardar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-
 
     <!-- Modal Actualizar -->
     <%- include('../includes/modalActualizarCampesino') -%>
@@ -253,11 +238,7 @@
     <!-- Logout Modal-->
     <%- include('../includes/logoutModal') -%>
 
-
-    
     <!-- Bootstrap core JavaScript-->
-    
-    
     <%- include('../includes/scripts') -%>
     
 </body>

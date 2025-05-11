@@ -1,5 +1,4 @@
 
-
 const forminciarSesion = document.querySelector('[data-inicio-sesion]');
 const inputs = document.querySelectorAll('[data-inicio-sesion] input');
 const mensajeError = document.querySelector(".error");
@@ -20,6 +19,7 @@ async function iniciarSesion(e){
     e.preventDefault();
     let Email = (document.getElementById('email').value).trim();
     let Password = (document.getElementById('password').value).trim();
+    console.log("ingreso acá")
     try{
         const registroInicio = await fetch(
             "http://localhost:3000/MercadilloBucaramanga/Login",
@@ -48,12 +48,6 @@ async function iniciarSesion(e){
     }catch(e){
         console.log(e.message);
     }
-    
-
-
-
 }
-
-
 
 forminciarSesion.addEventListener("submit",(e)=>{iniciarSesion(e)});

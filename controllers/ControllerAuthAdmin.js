@@ -36,11 +36,11 @@ export async function RenderDashboardAdmin(req, res) {
   try {
 
     
-    const adminUserFound = await service.validateSession(req);
+    const adminUserFound = await service.validateSession(req.user);
     if (adminUserFound == null) {
       return res.status(401).json({ message: "Usuario no encontrado" });
     }
-    console.log(adminUserFound)
+    
     return res.render("Administrador/administrador", {
       UserName: adminUserFound.UserName,
       index: "Admin",
@@ -66,8 +66,6 @@ export async function MostrarUsuarios(req, res) {
           nombreMercadillo: user.mercadillo?.Nombre || 'Sin mercadillo asignado'
       }));
 
-      console.log(usuariosConMercadillo)
-
       res.render("Administrador/campesinos", {
           UserName: req.user,
           body: "campesinos",
@@ -78,6 +76,18 @@ export async function MostrarUsuarios(req, res) {
       res.status(500).json({ message: error.message });
   }
 }
+
+
+export async function getUsuariosJson(req, res) {
+    try {
+        const usuarios = await service.getAllUsers();
+        console.log(usuarios)
+        res.status(200).json(usuarios);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 
 export async function EliminarUsuario(req, res) {
 

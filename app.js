@@ -15,9 +15,9 @@ const app = express();
 app.use(cors());
 app.use(morgan("dev"));
 
-if (NODE_ENV === "Production") {
-    console.log = function () { };
-}
+// if (NODE_ENV === "Production") {
+//     console.log = function () { };
+// }
 
 // Path 
 const __filename = fileURLToPath(import.meta.url);

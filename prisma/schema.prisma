@@ -15,14 +15,14 @@ model mercadillo {
 }
 
 model productospersonalizados {
-  Id          Int     @id @default(autoincrement())
-  Id_Usuario Int
-  Id_producto Int
-  Nombre      String  @db.VarChar(50)
-  Descripcion String  @db.VarChar(50)
-  Imagen      String
-  Categoria   String  @db.VarChar(50)
-  usuario     usuario @relation(fields: [Id_Usuario], references: [Id])
+  Id              Int     @id @default(autoincrement())
+  Id_Usuario      Int
+  Id_producto     Int
+  NombreProducto  String  @db.VarChar(50)
+  Descripcion     String  @db.VarChar(50)
+  Imagen          String
+  NombreCategoria String  @db.VarChar(50)
+  usuario         usuario @relation(fields: [Id_Usuario], references: [Id])
 }
 
 model usuario {
@@ -38,4 +38,6 @@ model usuario {
   Id_Mercadillo           Int?
   productospersonalizados productospersonalizados[]
   mercadillo              mercadillo?               @relation(fields: [Id_Mercadillo], references: [Id])
+
+  @@unique([Puesto, Id_Mercadillo], name: "unique_puesto_mercadillo")
 }

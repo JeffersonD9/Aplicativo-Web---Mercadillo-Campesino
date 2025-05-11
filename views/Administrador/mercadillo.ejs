@@ -93,8 +93,8 @@
                                         <% mercadillo.forEach((mercadillo) => { %>
                                             <tr data-id="<%= mercadillo.Id %>">
                                                 <td><%= mercadillo.Id %></td>
-                                                <td class="nombre"><%= mercadillo.Nombre %></td>
-                                                <td class="direccion"><%= mercadillo.Direccion %></td>
+                                                <td><span class="nombre"><%= mercadillo.Nombre %></span></td>
+                                                <td><span class="direccion"><%= mercadillo.Direccion %></span></td>
                                                 <td>
                                                     <button class="btn btn-outline-danger btn-sm btn-eliminar" data-toggle="modal" data-target="#eliminarModal" data-id="<%= mercadillo.Id %>">
                                                         <i class="bi bi-trash"></i>
@@ -173,19 +173,32 @@
                 <div class="modal-body">
                     <form id="formEditar">
                         <input type="hidden" id="idEditar">
-                        <div class="form-group">
-                            <label for="nombreEditar">Nombre</label>
-                            <input type="text" class="form-control" id="nombreEditar" required>
+                        <div class="form-group row">
+                            <label for="nombreEditar" class="col-sm-3 col-form-label">Nombre</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="nombreEditar" required>
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="button" class="btn btn-primary btn-actualizar-campo" data-campo="Nombre">
+                                    <i class="bi bi-check"></i> Actualizar
+                                </button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="direccionEditar">Dirección</label>
-                            <input type="text" class="form-control" id="direccionEditar" required>
+                        <div class="form-group row">
+                            <label for="direccionEditar" class="col-sm-3 col-form-label">Dirección</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="direccionEditar" required>
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="button" class="btn btn-primary btn-actualizar-campo" data-campo="Direccion">
+                                    <i class="bi bi-check"></i> Actualizar
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnGuardarEdicion">Guardar Cambios</button>
                 </div>
             </div>
         </div>

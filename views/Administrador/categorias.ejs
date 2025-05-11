@@ -18,8 +18,8 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                     <!-- Sidebar Toggle (Topbar) -->
-                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
                     <!-- Topbar Navbar -->
@@ -27,7 +27,7 @@
                         
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle"  id="userDropdown" role="button"
+                            <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
@@ -48,28 +48,26 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item"   data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" >  </i>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Cerrar sesion
                                 </a>
                             </div>
                         </li>
-
                     </ul>
-
                 </nav>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <h1 class="h3 mb-2 text-gray-800 mb-4">Lista de Categorías </h1>
+                    <h1 class="h3 mb-2 text-gray-800 mb-4">Lista de Categorías</h1>
                     <div class="alert alert-danger d-none" role="alert" id="notificacion"></div>
                     
-                    <!-- Botón para agregar nuevo mercadillo -->
+                    <!-- Botón para agregar nueva categoría -->
                     <div class="d-flex justify-content-between mb-3">
                         <div></div>
                         <button class="btn btn-primary" data-toggle="modal" data-target="#crearModal">
-                            <i class="bi bi-plus-circle"></i> Nuevo categoría
+                            <i class="bi bi-plus-circle"></i> Nueva Categoría
                         </button>
                     </div>
 
@@ -89,7 +87,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -112,15 +110,15 @@
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"> </i>
+        <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Modal para Crear Mercadillo -->
+    <!-- Modal para Crear Categoría -->
     <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="crearModalLabel">Nuevo Mercadillo</h5>
+                    <h5 class="modal-title" id="crearModalLabel">Nueva Categoría</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -130,10 +128,6 @@
                         <div class="form-group">
                             <label for="nombreNuevo">Nombre</label>
                             <input type="text" class="form-control" id="nombreNuevo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="direccionNueva">Dirección</label>
-                            <input type="text" class="form-control" id="direccionNueva" required>
                         </div>
                     </form>
                 </div>
@@ -145,12 +139,12 @@
         </div>
     </div>
 
-    <!-- Modal para Editar Mercadillo -->
+    <!-- Modal para Editar Categoría -->
     <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editarModalLabel">Editar Mercadillo</h5>
+                    <h5 class="modal-title" id="editarModalLabel">Editar Categoría</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -162,10 +156,6 @@
                             <label for="nombreEditar">Nombre</label>
                             <input type="text" class="form-control" id="nombreEditar" required>
                         </div>
-                        <div class="form-group">
-                            <label for="direccionEditar">Dirección</label>
-                            <input type="text" class="form-control" id="direccionEditar" required>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -176,7 +166,7 @@
         </div>
     </div>
 
-    <!-- Modal para Eliminar Mercadillo -->
+    <!-- Modal para Eliminar Categoría -->
     <div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="eliminarModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -187,7 +177,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ¿Estás seguro que deseas eliminar este mercadillo?
+                    ¿Estás seguro que deseas eliminar esta categoría?
                     <input type="hidden" id="idEliminar">
                 </div>
                 <div class="modal-footer">
