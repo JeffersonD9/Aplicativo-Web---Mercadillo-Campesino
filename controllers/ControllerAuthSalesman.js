@@ -43,7 +43,7 @@ export async function ProfileSalesman(req, res) {
     }
 
     const userFound = await service.validateSession(req.user);
-    
+    console.log(userFound)
     if (userFound == null) {
       return res.status(401).json({ message: "Usuario no encontrado" });
     }

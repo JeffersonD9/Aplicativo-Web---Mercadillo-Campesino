@@ -2,9 +2,9 @@ import { getCookie } from "../expresiones.js";
 console.log("Productos");
 
 // Configuración base
-const API_BASE_URL = '/MercadilloBucaramanga/Usuario/Asignar-Productos';
-const PRODUCTOS_URL = `http://18.223.102.119:8080/api-REST/products`;
-const CATEGORIAS_URL = `http://18.223.102.119:8080/api-REST/categories`;
+const API_BASE_URL = 'http://18.223.102.119:8080/api-REST';
+const PRODUCTOS_URL = `${API_BASE_URL}/products`;
+const CATEGORIAS_URL = `${API_BASE_URL}/categories`;
 
 // Elementos del DOM
 const btnGuardarNuevo = document.getElementById("btnGuardarNuevo");
@@ -216,7 +216,7 @@ async function crearProducto() {
 
     try {
         console.log('Creando producto:', { nombre, descripcion, idCategoria });
-        const response = await fetch(`${API_BASE_URL}`, {
+        const response = await fetch(`${PRODUCTOS_URL}/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -443,12 +443,12 @@ async function eliminarProducto() {
 }
 
 // Manejadores de eventos
- document.addEventListener('DOMContentLoaded', function() {
-//     // Cargar categorías y productos al iniciar
-//     console.log('Inicializando página...');
-//     cargarCategorias().then(() => cargarProductos());
+document.addEventListener('DOMContentLoaded', function() {
+    // Cargar categorías y productos al iniciar
+    console.log('Inicializando página...');
+    cargarCategorias().then(() => cargarProductos());
 
-//     // Evento para crear nuevo producto
+    // Evento para crear nuevo producto
     btnGuardarNuevo.addEventListener('click', async function() {
         btnGuardarNuevo.disabled = true;
         try {
@@ -458,45 +458,45 @@ async function eliminarProducto() {
         }
     });
 
-//     // Evento para actualizar producto
-//     btnGuardarEdicion.addEventListener('click', actualizarProducto);
+    // Evento para actualizar producto
+    btnGuardarEdicion.addEventListener('click', actualizarProducto);
 
-//     // Evento para confirmar eliminación
-//     btnConfirmarEliminar.addEventListener('click', eliminarProducto);
+    // Evento para confirmar eliminación
+    btnConfirmarEliminar.addEventListener('click', eliminarProducto);
 
-//     // Delegación de eventos para botones de editar y eliminar
-//     document.addEventListener('click', function(e) {
-//         const btnEditar = e.target.closest('.btn-editar');
-//         const btnEliminar = e.target.closest('.btn-eliminar');
+    // Delegación de eventos para botones de editar y eliminar
+    document.addEventListener('click', function(e) {
+        const btnEditar = e.target.closest('.btn-editar');
+        const btnEliminar = e.target.closest('.btn-eliminar');
 
-//         if (btnEditar) {
-//             cargarDatosEdicion(btnEditar);
-//         }
+        if (btnEditar) {
+            cargarDatosEdicion(btnEditar);
+        }
 
-//         if (btnEliminar) {
-//             const id = btnEliminar.getAttribute('data-id');
-//             document.getElementById('idEliminar').value = id;
-//             modalEliminar.show();
-//         }
-//     });
+        if (btnEliminar) {
+            const id = btnEliminar.getAttribute('data-id');
+            document.getElementById('idEliminar').value = id;
+            modalEliminar.show();
+        }
+    });
 
-//     // Limpiar formulario y notificaciones al cerrar modales
-//     $('#crearModal').on('hidden.bs.modal', () => {
-//         console.log('Modal de creación cerrado');
-//         document.getElementById('formCrear').reset();
-//         limpiarNotificacion('notificacionCrear');
-//         document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
-//         document.body.classList.remove('modal-open');
-//         document.body.style = '';
-//     });
+    // Limpiar formulario y notificaciones al cerrar modales
+    $('#crearModal').on('hidden.bs.modal', () => {
+        console.log('Modal de creación cerrado');
+        document.getElementById('formCrear').reset();
+        limpiarNotificacion('notificacionCrear');
+        document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style = '';
+    });
 
-//     $('#editarModal').on('hidden.bs.modal', () => {
-//         console.log('Modal de edición cerrado');
-//         limpiarNotificacion('notificacionEditar');
-//     });
+    $('#editarModal').on('hidden.bs.modal', () => {
+        console.log('Modal de edición cerrado');
+        limpiarNotificacion('notificacionEditar');
+    });
 
-//     $('#eliminarModal').on('hidden.bs.modal', () => {
-//         console.log('Modal de eliminación cerrado');
-//         limpiarNotificacion('notificacionEliminar');
-//     });
- });
+    $('#eliminarModal').on('hidden.bs.modal', () => {
+        console.log('Modal de eliminación cerrado');
+        limpiarNotificacion('notificacionEliminar');
+    });
+});

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { RenderDashboardAdmin, MostrarUsuarios, EliminarUsuario, getUsuariosJson } from '../controllers/ControllerAuthAdmin.js'
+import { RenderDashboardAdmin, MostrarUsuarios, EliminarUsuario, getPuestoSugerido, getUsuariosJson } from '../controllers/ControllerAuthAdmin.js'
 import { authRequired } from '../MiddleWares/ValidateToken.js'
 import { createMercadillo, deleteMercadillo, getAllMercadillos, getMercadilloById, getMercadillosJson, updateMercadillo } from "../controllers/ControllerMercadillos.js";
 import { UpdateVendedor } from "../controllers/ControllerAuthSalesman.js";
@@ -17,6 +17,7 @@ router.get('/api/usuarios', authRequired, getUsuariosJson);
 router.delete('/Admin/Usuarios/delete/:id_usuario', authRequired, EliminarUsuario)
 router.patch('/Admin/Usuarios/edit/:id_vendedor',authRequired,UpdateVendedor)
 router.post("/Admin/Usuarios/Registrar", authRequired,Register);
+router.get('/Admin/Usuarios/puesto-sugerido',getPuestoSugerido)
 
 // Productos
 
@@ -38,10 +39,6 @@ router.get('/Admin/Mercadillos/:id_mercadillo', authRequired, getMercadilloById)
 router.post('/Admin/Mercadillos/create', authRequired, createMercadillo)
 router.patch('/Admin/Mercadillos/:id_mercadillo', authRequired, updateMercadillo)
 router.delete('/Admin/Mercadillos/:id_mercadillo', authRequired, deleteMercadillo)
-
-
-
-
 
 
 export default router

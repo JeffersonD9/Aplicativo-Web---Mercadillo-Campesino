@@ -16,11 +16,11 @@ export class UserServices {
     async CreateDTOUser(req, creation = false) {
 
         const newUserDTO = {};
-
+        console.log(req.body);
         if (req.body.Nombres !== undefined) newUserDTO.Nombres = req.body.Nombres;
         if (req.body.Apellidos !== undefined) newUserDTO.Apellidos = req.body.Apellidos;
         if (req.body.Email !== undefined) newUserDTO.Email = req.body.Email;
-
+        if(req.body.Id_Mercadillo !== undefined) newUserDTO.Id_Mercadillo = Number(req.body.Id_Mercadillo);
         if (req.body.Password !== undefined) {
             const passwordHash = await EncryptPassword(req.body.Password)
             newUserDTO.Password = passwordHash;
@@ -28,8 +28,7 @@ export class UserServices {
 
         if (req.body.Celular !== undefined) newUserDTO.Celular = req.body.Celular;
         if (req.body.Estado !== undefined) newUserDTO.Estado = req.body.Estado;
-        if (req.body.Id_Mercadillo !== undefined) newUserDTO.Id_Mercadillo = req.body.Id_Mercadillo;
-        
+        if (req.body.Cedula !== undefined) newUserDTO.Cedula = req.body.Cedula;
         if (creation) {
             if (req.body.Puesto !== undefined) newUserDTO.Puesto = req.body.Puesto;
             newUserDTO.Roles = Roles.VENDEDOR
