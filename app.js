@@ -8,18 +8,13 @@ import { fileURLToPath } from 'url';
 import { PORT, NODE_ENV } from "./config.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import Products from "./routes/IndexLadingPage.js"
-import multer from "multer";
+import Products from "./routes/IndexLadingPage.js";
+import { upload } from "./configMulter/multer.js";
 import { RenderIndex } from "./controllers/ControllerMain.js";
+
 const app = express();
-app.use(cors());
-app.use(morgan("dev"));
 
-// if (NODE_ENV === "Production") {
-//     console.log = function () { };
-// }
-
-// Path 
+// Path
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -34,17 +29,12 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// Carpeta pública para archivos estáticos (CSS, JS, imágenes)
+// Carpeta pública para archivos estáticos
 app.use(express.static(path.join(__dirname, "public")));
 
-// Multer
-const uploadPath = path.join(__dirname, 'public', 'Image_Products');
-const upload = multer({ dest: uploadPath });
-
 // Routes
-
 app.get("/MercadilloBucaramanga", (req, res) => {
-    res.redirect(302, "/MercadilloBucaramanga/Inicio");
+  res.redirect(302, "/MercadilloBucaramanga/Inicio");
 });
 app.get("/MercadilloBucaramanga/Inicio", RenderIndex);
 app.use("/MercadilloBucaramanga", Products);
@@ -52,4 +42,5 @@ app.use("/MercadilloBucaramanga", Login, Admin, Salesman);
 
 // Puerto
 app.set("port", PORT);
+
 export default app;

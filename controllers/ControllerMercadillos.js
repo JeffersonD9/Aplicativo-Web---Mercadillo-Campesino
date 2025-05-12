@@ -119,7 +119,6 @@ export async function updateMercadillo(req, res) {
         if (updatedMercadillo == null) {
             return res.status(400).json({ message: "Error al actualizar el mercadillo" });
         }
-
         res.status(200).json({
             message: "Mercadillo actualizado correctamente",
             data: updatedMercadillo

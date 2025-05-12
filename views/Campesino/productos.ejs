@@ -33,55 +33,81 @@
                         </button>
                     </div>
 
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Productos personalizados</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Nombre</th>
-                                            <th>Descripción</th>
-                                            <th>Imagen</th>
-                                            <th>Categoría</th>
-                                            <th>Acción</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Nombre</th>
-                                            <th>Descripción</th>
-                                            <th>Imagen</th>
-                                            <th>Categoría</th>
-                                            <th>Acción</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <% data.data.forEach((producto) => { %>
-                                            <tr data-id-producto="<%= producto.Id || '' %>">
-                                                <td><%= producto.Id %></td>
-                                                <td><span class="nombre"><%= producto.Nombre %></span></td>
-                                                <td><span class="descripcion"><%= producto.Descripcion %></span></td>
-                                                <td><span class="imagen"><%= producto.Imagen %></span></td>
-                                                <td><span class="categoria"><%= producto.Categoria %></span></td>
-                                                <td>
-                                                    <a href="#" class="btn btn-outline-danger btn-sm btn-eliminar-producto" data-id="<%= producto.Id %>" data-toggle="modal" data-target="#eliminarModal" role="button">
-                                                        <i class="bi bi-trash"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        <% }); %>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                 
 
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Productos personalizados</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Imagen</th>
+                        <th>Categoría</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Imagen</th>
+                        <th>Categoría</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <% data.data.forEach((producto) => { %>
+                        <tr data-id-producto="<%= producto.Id || '' %>">
+                            <td><%= producto.Id %></td>
+                            <td><span class="nombre"><%= producto.NombreProducto %></span></td>
+                            <td><span class="descripcion"><%= producto.Descripcion %></span></td>
+                            <td>
+                                <% if (producto.Imagen) { %>
+                                    <img src="<%= producto.Imagen %>" alt="Producto" style="max-width: 100px;">
+                                <% } else { %>
+                                    <span class="imagen">Sin imagen</span>
+                                <% } %>
+                            </td>
+                            <td><span class="categoria"><%= producto.NombreCategoria %></span></td>
+                            <td>
+                                <span class="estado">
+                                    <%= producto.Estado ? 'Habilitado' : 'Deshabilitado' %>
+                                </span>
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-outline-warning btn-sm btn-actualizar-producto" data-id="<%= producto.Id %>" data-toggle="modal" data-target="#actualizarProductoModal" role="button">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="#" class="btn btn-outline-danger btn-sm btn-eliminar-producto" data-id="<%= producto.Id %>" data-toggle="modal" data-target="#eliminarModal" role="button">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                <% if (producto.Estado) { %>
+                                    <a href="#" class="btn btn-outline-secondary btn-sm btn-deshabilitar-producto" data-id="<%= producto.Id %>" role="button">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </a>
+                                <% } else { %>
+                                    <a href="#" class="btn btn-outline-success btn-sm btn-habilitar-producto" data-id="<%= producto.Id %>" role="button">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
                 </div>
 
             </div>
@@ -160,7 +186,8 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="imagenNuevo">Imagen</label>
-                                <input type="text" class="form-control" id="imagenNuevo" maxlength="255">
+                                <input type="file" class="form-control-file" id="imagenNuevo" accept="image/*">
+                                <img id="imagenPrevia" src="" alt="Vista previa" style="max-width: 100px; display: none; margin-top: 10px;">
                             </div>
                         </div>
                     </form>
@@ -173,6 +200,87 @@
         </div>
     </div>
 
+   
+<!-- Modal Actualizar Producto Personalizado -->
+
+<div class="modal fade" id="actualizarProductoModal" tabindex="-1" role="dialog" aria-labelledby="actualizarProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title font-weight-bold" id="actualizarProductoModalLabel">Actualizar Producto Personalizado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert d-none mb-4" role="alert" id="notificacionActualizar"></div>
+                <form id="formActualizarProducto">
+                    <input type="hidden" id="productoIdActualizar">
+                    
+                    <!-- Categoría -->
+                    <div class="form-group">
+                        <label for="categoriaActualizar" class="font-weight-bold">Categoría</label>
+                        <select class="form-control" id="categoriaActualizar" required>
+                            <option value="">Seleccione una categoría</option>
+                            <!-- Opciones cargadas dinámicamente -->
+                        </select>
+                    </div>
+                    
+                    <!-- Producto -->
+                    <div class="form-group mt-4">
+                        <label for="productoActualizar" class="font-weight-bold">Producto</label>
+                        <div class="input-group">
+                            <select class="form-control" id="productoActualizar" required>
+                                <option value="">Seleccione un producto</option>
+                                <!-- Opciones cargadas dinámicamente -->
+                            </select>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" type="button" id="btnActualizarCategoriaProducto">
+                                    <i class="fas fa-sync-alt"></i> Actualizar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Descripción -->
+                    <div class="form-group mt-4">
+                        <label for="descripcionActualizar" class="font-weight-bold">Descripción</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="descripcionActualizar" maxlength="200" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" type="button" id="btnActualizarDescripcion">
+                                    <i class="fas fa-sync-alt"></i> Actualizar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Imagen -->
+                    <div class="form-group mt-4">
+                        <label for="imagenActualizar" class="font-weight-bold">Imagen</label>
+                        <div class="input-group mb-2">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="imagenActualizar" accept="image/*">
+                                <label class="custom-file-label" for="imagenActualizar">Seleccionar archivo</label>
+                            </div>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" type="button" id="btnActualizarImagen">
+                                    <i class="fas fa-sync-alt"></i> Actualizar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-center mt-2">
+                            <img id="imagenPreviaActualizar" src="" alt="Vista previa" class="img-thumbnail" style="max-height: 150px; display: none;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
     <!-- Logout Modal-->
     <%- include('../includes/logoutModal') -%>
 

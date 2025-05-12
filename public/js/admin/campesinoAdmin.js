@@ -623,7 +623,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.remove('modal-open');
         document.body.style = '';
     });
-
+ 
     $('#actualizarModal').on('hidden.bs.modal', () => {
         console.log('Modal de actualización cerrado');
         limpiarNotificacion('notificacionActualizar');

@@ -12,9 +12,7 @@ export class UserServices {
         this.prisma = prisma;
         // this.roles = Roles;
     }
-
     async CreateDTOUser(req, creation = false) {
-
         const newUserDTO = {};
         console.log(req.body);
         if (req.body.Nombres !== undefined) newUserDTO.Nombres = req.body.Nombres;
