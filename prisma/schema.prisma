@@ -15,14 +15,15 @@ model mercadillo {
 }
 
 model productospersonalizados {
-  Id              Int     @id @default(autoincrement())
+  Id              Int      @id @default(autoincrement())
   Id_Usuario      Int
   Id_producto     Int
-  NombreProducto  String  @db.VarChar(50)
-  Descripcion     String  @db.VarChar(50)
+  NombreProducto  String   @db.VarChar(50)
+  Descripcion     String   @db.VarChar(50)
   Imagen          String
-  NombreCategoria String  @db.VarChar(50)
-  usuario         usuario @relation(fields: [Id_Usuario], references: [Id])
+  NombreCategoria String   @db.VarChar(50)
+  Estado          Boolean?
+  usuario         usuario  @relation(fields: [Id_Usuario], references: [Id])
 }
 
 model usuario {
@@ -34,6 +35,7 @@ model usuario {
   Celular                 String                    @db.VarChar(10)
   Roles                   Int                       @default(1)
   Puesto                  Int
+  Cedula                  Int?                      @unique
   Estado                  Boolean                   @default(true)
   Id_Mercadillo           Int?
   productospersonalizados productospersonalizados[]

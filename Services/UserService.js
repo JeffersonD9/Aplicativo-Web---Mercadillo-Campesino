@@ -28,7 +28,7 @@ export class UserServices {
 
         if (req.body.Celular !== undefined) newUserDTO.Celular = req.body.Celular;
         if (req.body.Estado !== undefined) newUserDTO.Estado = req.body.Estado;
-
+        if (req.body.Cedula !== undefined) newUserDTO.Cedula = req.body.Cedula;
         if (creation) {
             if (req.body.Puesto !== undefined) newUserDTO.Puesto = req.body.Puesto;
             newUserDTO.Roles = Roles.VENDEDOR

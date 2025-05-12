@@ -1,7 +1,10 @@
 import { CreateAccesToken } from "../Services/CreateToken.js";
 import { UserServices } from "../Services/UserService.js";
 import { Roles } from "../Helpers/ValidationRoles/Roles.js";
+import { MercadilloService } from "../Services/MercadillosService.js";
+
 const service = new UserServices();
+const mercadilloService = new MercadilloService();
 
 export async function LoginAdmin(req, res) {
 
@@ -51,6 +54,23 @@ export async function RenderDashboardAdmin(req, res) {
     console.error("Error en ProfileAdmin:", error);
     return res.status(500).json({ message: error.message });
   }
+}
+
+export async function getPuestoSugerido(req, res) {
+    try {
+        const idMercadillo = parseInt(req.query.id_Mercadillo);
+
+        if (!idMercadillo || isNaN(idMercadillo)) {
+            return res.status(400).json({ error: 'id_Mercadillo requerido y debe ser numérico' });
+        }
+
+        const puesto = await mercadilloService.GetSuggestPost(idMercadillo);
+        return res.json({ puesto });
+
+    } catch (error) {
+        console.error("Error al obtener puesto sugerido:", error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
+    }
 }
 
 export async function MostrarUsuarios(req, res) {

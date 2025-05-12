@@ -60,6 +60,15 @@ export class MercadilloService {
         }
     }
 
+    async GetSuggestPost(idMercadillo) {
+        const ultimoPuesto = await prisma.usuario.aggregate({
+            where: { Id_Mercadillo: idMercadillo },
+            _max: { Puesto: true }
+        });
+
+        return (ultimoPuesto._max.Puesto || 0) + 1;
+    }
+
     async getByVendor(id_mercadillo, id_vendedor) {
         try {
 
