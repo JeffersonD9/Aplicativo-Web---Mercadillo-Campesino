@@ -18,7 +18,7 @@
                     <div class="form-group">
                         <label for="nombresActualizar">Nombres</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="nombresActualizar" required>
+                            <input type="text" class="form-control" id="nombresActualizar" maxlength="50" required>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Nombres">
                                     <i class="bi bi-check"></i> Actualizar
@@ -31,7 +31,7 @@
                     <div class="form-group">
                         <label for="apellidosActualizar">Apellidos</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="apellidosActualizar" required>
+                            <input type="text" class="form-control" id="apellidosActualizar" maxlength="50" required>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Apellidos">
                                     <i class="bi bi-check"></i> Actualizar
@@ -44,7 +44,7 @@
                     <div class="form-group">
                         <label for="emailActualizar">Email</label>
                         <div class="input-group">
-                            <input type="email" class="form-control" id="emailActualizar" required>
+                            <input type="email" class="form-control" id="emailActualizar" maxlength="100" required>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Email">
                                     <i class="bi bi-check"></i> Actualizar
@@ -57,7 +57,7 @@
                     <div class="form-group">
                         <label for="celularActualizar">Celular</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="celularActualizar" required>
+                            <input type="text" class="form-control" id="celularActualizar" maxlength="10" required>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Celular">
                                     <i class="bi bi-check"></i> Actualizar
@@ -86,7 +86,7 @@
                     <div class="form-group">
                         <label for="puestoActualizar">Puesto</label>
                         <div class="input-group">
-                            <input id="puestoActualizar" class="form-control" type="number">
+                            <input id="puestoActualizar" class="form-control" type="number" min="1" required>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-primary btn-actualizar-campo" data-campo="Puesto">
                                     <i class="bi bi-check"></i> Actualizar

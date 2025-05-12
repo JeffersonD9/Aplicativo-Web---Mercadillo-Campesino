@@ -41,17 +41,17 @@ export async function ProfileSalesman(req, res) {
     if (!req.user.Name || !req.user || !req.user.role) {
       return res.status(400).json({ message: "Datos incompletos o inválidos" });
     }
-  console.log("Aca " ,  req.user.id);
+
     const userFound = await service.validateSession(req.user);
     
     if (userFound == null) {
       return res.status(401).json({ message: "Usuario no encontrado" });
     }
 
-    return res.render("Vendedor/vendedor", {
+    return res.render("Campesino/campesino", {
       UserName: userFound.Nombres,
       index: "Usuario",
-      body: "vendedor",
+      body: "campesino",
       userFound,
     });
 
@@ -67,10 +67,10 @@ export async function EnviarCorreo(req, res) {
   try {
     const Email = req.body.Email;
     const nameToken = Email.split('@')[0];
-    console.log(req.body.Email);
+
 
     const userFound = await service.findUser(Email, role);
-
+ 
     if (userFound == null) {
       return res.status(400).json({ message: `Solicitud rechazada` });
     }

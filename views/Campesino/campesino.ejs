@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../includes/header') -%>
+
+  <body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <%- include('../includes/sidebarCampesino') -%>
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Topbar -->
+          <%- include('../includes/navCampAdm') -%>
+          <!-- End of Topbar -->
+
+          <!-- Formulario Actualizar Campesino -->
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Datos</h5>
+          </div>
+
+          <div class="card-body">
+            <div
+              class="alert alert-danger d-none"
+              role="alert"
+              id="notificacionActualizar"
+            ></div>
+
+            <form
+              id="formActualizarCampesino"
+              class="needs-validation"
+              novalidate
+            >
+              <input type="hidden" id="idActualizar" value="<%- userFound.Id %>"/>
+
+              <!-- Campo Nombres con botón individual -->
+              <div class="form-group row">
+                <label for="nombresActualizar" class="col-sm-3 col-form-label"
+                  >Nombres</label
+                >
+                <div class="col-sm-9">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="nombresActualizar"
+                      maxlength="50"
+                      required
+                      value="<%- userFound.Nombres %>"
+                    />
+                    <div class="input-group-append">
+                      <button
+                        class="btn btn-outline-primary btn-actualizar-campo"
+                        data-campo="Nombres"
+                      >
+                        <i class="fas fa-check"></i> Actualizar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campo Apellidos con botón individual -->
+              <div class="form-group row">
+                <label for="apellidosActualizar" class="col-sm-3 col-form-label"
+                  >Apellidos</label
+                >
+                <div class="col-sm-9">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="apellidosActualizar"
+                      maxlength="50"
+                      required
+                      value="<%- userFound.Apellidos %>"
+                    />
+                    <div class="input-group-append">
+                      <button
+                        class="btn btn-outline-primary btn-actualizar-campo"
+                        data-campo="Apellidos"
+                      >
+                        <i class="fas fa-check"></i> Actualizar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campo Email con botón individual -->
+              <div class="form-group row">
+                <label for="emailActualizar" class="col-sm-3 col-form-label"
+                  >Email</label
+                >
+                <div class="col-sm-9">
+                  <div class="input-group">
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="emailActualizar"
+                      maxlength="100"
+                      required
+                      readonly
+                      value="<%- userFound.Email %>"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campo Celular con botón individual -->
+              <div class="form-group row">
+                <label for="celularActualizar" class="col-sm-3 col-form-label"
+                  >Celular</label
+                >
+                <div class="col-sm-9">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="celularActualizar"
+                      maxlength="10"
+                      required
+                      value="<%- userFound.Celular %>"
+                    />
+                    <div class="input-group-append">
+                      <button
+                        class="btn btn-outline-primary btn-actualizar-campo"
+                        data-campo="Celular"
+                      >
+                        <i class="fas fa-check"></i> Actualizar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campo Mercadillo (solo lectura) -->
+              <div class="form-group row">
+                <label for="mercadilloActualizar" class="col-sm-3 col-form-label"
+                  >Mercadillo</label
+                >
+                <div class="col-sm-9">
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      id="mercadilloActualizar"
+                      type="text"
+                      value="<%- userFound.mercadillo.Nombre %>"
+                      readonly
+                    />
+                 
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campo Puesto (solo lectura) -->
+              <div class="form-group row">
+                <label for="puestoActualizar" class="col-sm-3 col-form-label"
+                  >Puesto</label
+                >
+                <div class="col-sm-9">
+                  <div class="input-group">
+                    <input
+                      id="puestoActualizar"
+                      class="form-control"
+                      type="number"
+                      min="1"
+                      value="<%- userFound.Puesto %>"
+                      readonly
+                    />
+                 
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campo Contraseña con botón individual -->
+              <div class="form-group row">
+                <label for="passwordActualizar" class="col-sm-3 col-form-label"
+                  >Contraseña</label
+                >
+                <div class="col-sm-9">
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="passwordActualizar"
+                      placeholder="**********************************************"
+                    />
+                    <div class="input-group-append">
+                      <button
+                        class="btn btn-outline-primary btn-actualizar-campo"
+                        data-campo="Password"
+                      >
+                        <i class="fas fa-check"></i> Actualizar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <%- include('../includes/footer') -%>
+        <!-- End of Footer -->
+      </div>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"> </i>
+    </a>
+
+    <!-- Logout Modal-->
+    <%- include('../includes/logoutModal') -%>
+
+    <!-- Bootstrap core JavaScript-->
+    <%- include('../includes/scripts') -%>
+    <script src="/js/campesino/datosCampesino.js" type="module"></script>
+  </body>
+</html>

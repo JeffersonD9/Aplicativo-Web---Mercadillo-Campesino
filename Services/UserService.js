@@ -148,7 +148,11 @@ export class UserServices {
                 where: {
                     Id: userId.id,
                 },
+                include: {
+                mercadillo: true // Esto incluye los datos del mercadillo relacionado
+            }
             });
+  
             
             return userFound;
         } catch (error) {

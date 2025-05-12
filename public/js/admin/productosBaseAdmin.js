@@ -2,12 +2,11 @@ import { getCookie } from "../expresiones.js";
 console.log("Productos");
 
 // Configuración base
-const API_BASE_URL = 'http://18.223.102.119:8080/api-REST';
-const PRODUCTOS_URL = `${API_BASE_URL}/products`;
-const CATEGORIAS_URL = `${API_BASE_URL}/categories`;
+const API_BASE_URL = '/MercadilloBucaramanga/Usuario/Asignar-Productos';
+const PRODUCTOS_URL = `http://18.223.102.119:8080/api-REST/products`;
+const CATEGORIAS_URL = `http://18.223.102.119:8080/api-REST/categories`;
 
 // Elementos del DOM
-const notificacion = document.getElementById("notificacion");
 const btnGuardarNuevo = document.getElementById("btnGuardarNuevo");
 const btnGuardarEdicion = document.getElementById("btnGuardarEdicion");
 const btnConfirmarEliminar = document.getElementById("btnConfirmarEliminar");
@@ -21,17 +20,29 @@ const modalEliminar = new bootstrap.Modal(document.getElementById('eliminarModal
 let categoriasMap = {};
 
 // Función para mostrar notificaciones
-function mostrarNotificacion(mensaje, tipo = "success") {
-    const notificacion = document.getElementById("notificacion");
+function mostrarNotificacion(mensaje, tipo = "success", contenedorId) {
+    const notificacion = document.getElementById(contenedorId);
+    if (!notificacion) {
+        console.error(`Contenedor de notificación ${contenedorId} no encontrado`);
+        console.log(mensaje);
+        return;
+    }
     notificacion.textContent = mensaje;
-    notificacion.className = `alert alert-${tipo} visible`;
+    notificacion.className = `alert alert-${tipo}`;
+    notificacion.classList.remove("d-none");
     setTimeout(() => {
-        notificacion.classList.add("fade");
-        setTimeout(() => {
-            notificacion.className = "";
-            notificacion.textContent = "";
-        }, 500);
+        notificacion.classList.add("d-none");
+        notificacion.textContent = "";
     }, 3000);
+}
+
+// Función para limpiar notificaciones
+function limpiarNotificacion(contenedorId) {
+    const notificacion = document.getElementById(contenedorId);
+    if (notificacion) {
+        notificacion.className = "alert d-none";
+        notificacion.textContent = "";
+    }
 }
 
 // Función para cargar las categorías desde la API
@@ -64,7 +75,7 @@ async function cargarCategorias() {
         llenarSelectCategorias(data.data);
     } catch (error) {
         console.error('Error en cargarCategorias:', error);
-        mostrarNotificacion(error.message, 'danger');
+        console.log(error.message);
     }
 }
 
@@ -113,7 +124,7 @@ async function cargarProductos() {
         mostrarProductosEnTabla(data.data);
     } catch (error) {
         console.error('Error en cargarProductos:', error);
-        mostrarNotificacion(error.message, 'danger');
+        console.log(error.message);
     }
 }
 
@@ -182,11 +193,11 @@ async function crearProducto() {
     const idCategoria = document.getElementById('categoriaNuevo').value;
 
     if (!nombre) {
-        mostrarNotificacion('El nombre del producto es requerido', 'warning');
+        mostrarNotificacion('El nombre del producto es requerido', 'warning', 'notificacionCrear');
         return;
     }
     if (!idCategoria) {
-        mostrarNotificacion('La categoría es requerida', 'warning');
+        mostrarNotificacion('La categoría es requerida', 'warning', 'notificacionCrear');
         return;
     }
 
@@ -199,13 +210,13 @@ async function crearProducto() {
         .map(row => row[1].toLowerCase());
     
     if (nombresExistentes.includes(nombre.toLowerCase())) {
-        mostrarNotificacion('Ya existe un producto con este nombre', 'warning');
+        mostrarNotificacion('Ya existe un producto con este nombre', 'warning', 'notificacionCrear');
         return;
     }
 
     try {
         console.log('Creando producto:', { nombre, descripcion, idCategoria });
-        const response = await fetch(`${PRODUCTOS_URL}/create`, {
+        const response = await fetch(`${API_BASE_URL}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -228,7 +239,7 @@ async function crearProducto() {
                 throw new Error('Respuesta de la API inválida: no se devolvió el producto creado');
             }
 
-            mostrarNotificacion('Producto creado exitosamente');
+            mostrarNotificacion('Producto creado exitosamente', 'success', 'notificacionCrear');
             modalCrear.hide();
             document.getElementById('formCrear').reset();
 
@@ -260,19 +271,19 @@ async function crearProducto() {
                 console.log('Fila agregada exitosamente');
             } catch (error) {
                 console.error('Error al agregar fila a DataTables:', error);
-                mostrarNotificacion('Producto creado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning');
+                mostrarNotificacion('Producto creado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning', 'notificacionCrear');
                 await cargarProductos();
             }
         } else {
             if (data.message && data.message.includes('already exists')) {
-                mostrarNotificacion('Ya existe un producto con este nombre', 'danger');
+                mostrarNotificacion('Ya existe un producto con este nombre', 'danger', 'notificacionCrear');
             } else {
                 throw new Error(data.message || `Error al crear producto: ${response.statusText}`);
             }
         }
     } catch (error) {
         console.error('Error en crearProducto:', error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionCrear');
     }
 }
 
@@ -299,12 +310,12 @@ function cargarDatosEdicion(btn) {
             document.getElementById('categoriaEditar').value = categoriaId || data.data.id_Category;
             modalEditar.show();
         } else {
-            mostrarNotificacion('Error al cargar datos del producto', 'danger');
+            mostrarNotificacion('Error al cargar datos del producto', 'danger', 'notificacionEditar');
         }
     })
     .catch(error => {
         console.error('Error al cargar datos para edición:', error);
-        mostrarNotificacion('Error al cargar datos del producto', 'danger');
+        mostrarNotificacion('Error al cargar datos del producto', 'danger', 'notificacionEditar');
     });
 }
 
@@ -316,11 +327,11 @@ async function actualizarProducto() {
     const idCategoria = document.getElementById('categoriaEditar').value;
 
     if (!nombre) {
-        mostrarNotificacion('El nombre del producto es requerido', 'warning');
+        mostrarNotificacion('El nombre del producto es requerido', 'warning', 'notificacionEditar');
         return;
     }
     if (!idCategoria) {
-        mostrarNotificacion('La categoría es requerida', 'warning');
+        mostrarNotificacion('La categoría es requerida', 'warning', 'notificacionEditar');
         return;
     }
 
@@ -343,7 +354,7 @@ async function actualizarProducto() {
         console.log('Respuesta de actualizar producto:', data);
 
         if (response.ok) {
-            mostrarNotificacion('Producto actualizado exitosamente');
+            mostrarNotificacion('Producto actualizado exitosamente', 'success', 'notificacionEditar');
             modalEditar.hide();
 
             // Actualizar la fila en la tabla
@@ -379,7 +390,7 @@ async function actualizarProducto() {
                 console.log('Fila actualizada exitosamente');
             } catch (error) {
                 console.error('Error al actualizar fila en DataTables:', error);
-                mostrarNotificacion('Producto actualizado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning');
+                mostrarNotificacion('Producto actualizado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning', 'notificacionEditar');
                 await cargarProductos();
             }
         } else {
@@ -387,7 +398,7 @@ async function actualizarProducto() {
         }
     } catch (error) {
         console.error('Error en actualizarProducto:', error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionEditar');
     }
 }
 
@@ -395,7 +406,7 @@ async function actualizarProducto() {
 async function eliminarProducto() {
     const id = document.getElementById('idEliminar').value;
     if (!id) {
-        mostrarNotificacion('ID de producto no válido', 'warning');
+        mostrarNotificacion('ID de producto no válido', 'warning', 'notificacionEliminar');
         return;
     }
 
@@ -412,7 +423,7 @@ async function eliminarProducto() {
         console.log('Respuesta de eliminar producto:', data);
 
         if (response.ok) {
-            mostrarNotificacion('Producto eliminado exitosamente');
+            mostrarNotificacion('Producto eliminado exitosamente', 'success', 'notificacionEliminar');
             modalEliminar.hide();
 
             // Eliminar la fila de la tabla
@@ -427,17 +438,17 @@ async function eliminarProducto() {
         }
     } catch (error) {
         console.error('Error en eliminarProducto:', error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionEliminar');
     }
 }
 
 // Manejadores de eventos
-document.addEventListener('DOMContentLoaded', function() {
-    // Cargar categorías y productos al iniciar
-    console.log('Inicializando página...');
-    cargarCategorias().then(() => cargarProductos());
+ document.addEventListener('DOMContentLoaded', function() {
+//     // Cargar categorías y productos al iniciar
+//     console.log('Inicializando página...');
+//     cargarCategorias().then(() => cargarProductos());
 
-    // Evento para crear nuevo producto
+//     // Evento para crear nuevo producto
     btnGuardarNuevo.addEventListener('click', async function() {
         btnGuardarNuevo.disabled = true;
         try {
@@ -447,31 +458,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Evento para actualizar producto
-    btnGuardarEdicion.addEventListener('click', actualizarProducto);
+//     // Evento para actualizar producto
+//     btnGuardarEdicion.addEventListener('click', actualizarProducto);
 
-    // Evento para confirmar eliminación
-    btnConfirmarEliminar.addEventListener('click', eliminarProducto);
+//     // Evento para confirmar eliminación
+//     btnConfirmarEliminar.addEventListener('click', eliminarProducto);
 
-    // Delegación de eventos para botones de editar y eliminar
-    document.addEventListener('click', function(e) {
-        const btnEditar = e.target.closest('.btn-editar');
-        const btnEliminar = e.target.closest('.btn-eliminar');
+//     // Delegación de eventos para botones de editar y eliminar
+//     document.addEventListener('click', function(e) {
+//         const btnEditar = e.target.closest('.btn-editar');
+//         const btnEliminar = e.target.closest('.btn-eliminar');
 
-        if (btnEditar) {
-            cargarDatosEdicion(btnEditar);
-        }
+//         if (btnEditar) {
+//             cargarDatosEdicion(btnEditar);
+//         }
 
-        if (btnEliminar) {
-            const id = btnEliminar.getAttribute('data-id');
-            document.getElementById('idEliminar').value = id;
-            modalEliminar.show();
-        }
-    });
+//         if (btnEliminar) {
+//             const id = btnEliminar.getAttribute('data-id');
+//             document.getElementById('idEliminar').value = id;
+//             modalEliminar.show();
+//         }
+//     });
 
-    // Limpiar formulario al cerrar modal de creación
-    $('#crearModal').on('hidden.bs.modal', () => {
-        console.log('Modal de creación cerrado');
-        document.getElementById('formCrear').reset();
-    });
-});
+//     // Limpiar formulario y notificaciones al cerrar modales
+//     $('#crearModal').on('hidden.bs.modal', () => {
+//         console.log('Modal de creación cerrado');
+//         document.getElementById('formCrear').reset();
+//         limpiarNotificacion('notificacionCrear');
+//         document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+//         document.body.classList.remove('modal-open');
+//         document.body.style = '';
+//     });
+
+//     $('#editarModal').on('hidden.bs.modal', () => {
+//         console.log('Modal de edición cerrado');
+//         limpiarNotificacion('notificacionEditar');
+//     });
+
+//     $('#eliminarModal').on('hidden.bs.modal', () => {
+//         console.log('Modal de eliminación cerrado');
+//         limpiarNotificacion('notificacionEliminar');
+//     });
+ });

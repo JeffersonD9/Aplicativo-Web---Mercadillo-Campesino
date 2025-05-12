@@ -1,6 +1,23 @@
 import { CustomProducts } from "../Services/CustomProducts.js";
 const customProductsService = new CustomProducts();
 
+export async function getProductosRender(req, res) {
+    try {
+     const userId = req.user.id;
+     const result = await customProductsService.getProductsByUserId(userId);
+
+      res.render("Campesino/productos", {
+          UserName: req.user,
+          body: "productos",
+          data: result,
+          index: "campesino",
+      });
+      console.log(result.data)
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+}
+
 export async function getProductos(req, res) {
   try {
     const userId = req.user.id;
@@ -20,8 +37,9 @@ export async function getProductos(req, res) {
 export async function crearProducto(req, res) {
   try {
     const { Id_producto, NombreProducto, Descripcion, NombreCategoria } = req.body;
+    
     const userId = req.user.id;
-
+    console.log(req.body, "  req, body")
     const result = await customProductsService.create(
       { Id_producto, NombreProducto, Descripcion, NombreCategoria, userId },
       req.file

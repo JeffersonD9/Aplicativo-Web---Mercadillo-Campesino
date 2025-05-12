@@ -5,7 +5,6 @@ console.log("Mercadillos");
 const MERCADILLOS_URL = `/MercadilloBucaramanga/Admin/Mercadillos`;
 
 // Elementos del DOM
-const notificacion = document.getElementById("notificacion");
 const btnGuardarNuevo = document.getElementById("btnGuardarNuevo");
 const btnConfirmarEliminar = document.getElementById("btnConfirmarEliminar");
 
@@ -15,17 +14,30 @@ const modalEditar = new bootstrap.Modal(document.getElementById('editarModal'));
 const modalEliminar = new bootstrap.Modal(document.getElementById('eliminarModal'));
 
 // Función para mostrar notificaciones
-function mostrarNotificacion(mensaje, tipo = "success") {
-    const notificacion = document.getElementById("notificacion");
+function mostrarNotificacion(mensaje, tipo = "success", contenedorId) {
+    const notificacion = document.getElementById(contenedorId);
+    if (!notificacion) {
+        console.error(`Contenedor de notificación ${contenedorId} no encontrado`);
+        return;
+    }
     notificacion.textContent = mensaje;
     notificacion.className = `alert alert-${tipo} visible`;
     setTimeout(() => {
         notificacion.classList.add("fade");
         setTimeout(() => {
-            notificacion.className = "";
+            notificacion.className = "alert d-none";
             notificacion.textContent = "";
         }, 500);
     }, 3000);
+}
+
+// Función para limpiar notificaciones
+function limpiarNotificacion(contenedorId) {
+    const notificacion = document.getElementById(contenedorId);
+    if (notificacion) {
+        notificacion.className = "alert d-none";
+        notificacion.textContent = "";
+    }
 }
 
 // Función para cargar los mercadillos desde la API
@@ -52,7 +64,7 @@ async function cargarMercadillos() {
         mostrarMercadillosEnTabla(data);
     } catch (error) {
         console.error('Error en cargarMercadillos:', error);
-        mostrarNotificacion(error.message, 'danger');
+        console.log(error.message);
     }
 }
 
@@ -125,7 +137,7 @@ async function crearMercadillo() {
     const direccion = document.getElementById('direccionNueva').value.trim();
 
     if (!nombre || !direccion) {
-        mostrarNotificacion('El nombre y la dirección del mercadillo son requeridos', 'warning');
+        mostrarNotificacion('El nombre y la dirección del mercadillo son requeridos', 'warning', 'notificacionCrear');
         return;
     }
 
@@ -138,7 +150,7 @@ async function crearMercadillo() {
         .map(row => row[1].toLowerCase());
     
     if (nombresExistentes.includes(nombre.toLowerCase())) {
-        mostrarNotificacion('Ya existe un mercadillo con este nombre', 'warning');
+        mostrarNotificacion('Ya existe un mercadillo con este nombre', 'warning', 'notificacionCrear');
         return;
     }
 
@@ -158,13 +170,12 @@ async function crearMercadillo() {
         console.log('Respuesta de crear mercadillo:', JSON.stringify(data, null, 2));
 
         if (response.ok) {
-            // Nota: Asume que la API devuelve { Id, Nombre, Direccion }. Si es diferente, ajustar los campos.
             if (!data || !data.Id || !data.Nombre || !data.Direccion) {
                 console.error('Respuesta de la API inválida:', data);
                 throw new Error('Respuesta de la API inválida: no se devolvió el mercadillo creado');
             }
 
-            mostrarNotificacion('Mercadillo creado exitosamente');
+            mostrarNotificacion('Mercadillo creado exitosamente', 'success', 'notificacionCrear');
             modalCrear.hide();
             document.getElementById('formCrear').reset();
 
@@ -196,7 +207,7 @@ async function crearMercadillo() {
                 console.log('Fila agregada exitosamente');
             } catch (error) {
                 console.error('Error al agregar fila a DataTables:', error);
-                mostrarNotificacion('Mercadillo creado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning');
+                mostrarNotificacion('Mercadillo creado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning', 'notificacionCrear');
                 await cargarMercadillos();
             }
         } else {
@@ -204,7 +215,7 @@ async function crearMercadillo() {
         }
     } catch (error) {
         console.error('Error en crearMercadillo:', error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionCrear');
     }
 }
 
@@ -218,7 +229,7 @@ function cargarDatosEdicion(btn) {
 
     if (!nombreElement || !direccionElement) {
         console.error('No se encontraron las clases .nombre o .direccion en la fila:', fila);
-        mostrarNotificacion('Error al cargar datos del mercadillo: estructura de la tabla inválida', 'danger');
+        mostrarNotificacion('Error al cargar datos del mercadillo: estructura de la tabla inválida', 'danger', 'notificacionEditar');
         return;
     }
 
@@ -234,7 +245,7 @@ function cargarDatosEdicion(btn) {
 async function actualizarCampoIndividual(id, campo, valor) {
     try {
         if (!valor) {
-            mostrarNotificacion(`El campo ${campo} no puede estar vacío`, 'warning');
+            mostrarNotificacion(`El campo ${campo} no puede estar vacío`, 'warning', 'notificacionEditar');
             return;
         }
 
@@ -252,7 +263,7 @@ async function actualizarCampoIndividual(id, campo, valor) {
             const currentName = table.row(row).data()[1].toLowerCase();
 
             if (nombresExistentes.includes(valor.toLowerCase()) && valor.toLowerCase() !== currentName) {
-                mostrarNotificacion('Ya existe un mercadillo con este nombre', 'warning');
+                mostrarNotificacion('Ya existe un mercadillo con este nombre', 'warning', 'notificacionEditar');
                 return;
             }
         }
@@ -273,7 +284,7 @@ async function actualizarCampoIndividual(id, campo, valor) {
         console.log('Respuesta de actualizar campo:', data);
 
         if (response.ok) {
-            mostrarNotificacion(`Campo ${campo} actualizado exitosamente`);
+            mostrarNotificacion(`Campo ${campo} actualizado exitosamente`, 'success', 'notificacionEditar');
 
             // Actualizar la fila en la tabla
             const table = $('#dataTable').DataTable();
@@ -293,7 +304,7 @@ async function actualizarCampoIndividual(id, campo, valor) {
                 console.log('Fila actualizada exitosamente');
             } catch (error) {
                 console.error('Error al actualizar fila en DataTables:', error);
-                mostrarNotificacion('Campo actualizado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning');
+                mostrarNotificacion('Campo actualizado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning', 'notificacionEditar');
                 await cargarMercadillos();
             }
         } else {
@@ -301,7 +312,7 @@ async function actualizarCampoIndividual(id, campo, valor) {
         }
     } catch (error) {
         console.error(`Error al actualizar campo ${campo}:`, error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionEditar');
     }
 }
 
@@ -309,7 +320,7 @@ async function actualizarCampoIndividual(id, campo, valor) {
 async function eliminarMercadillo() {
     const id = document.getElementById('idEliminar').value;
     if (!id) {
-        mostrarNotificacion('ID de mercadillo no válido', 'warning');
+        mostrarNotificacion('ID de mercadillo no válido', 'warning', 'notificacionEliminar');
         return;
     }
 
@@ -326,7 +337,7 @@ async function eliminarMercadillo() {
         console.log('Respuesta de eliminar mercadillo:', data);
 
         if (response.ok) {
-            mostrarNotificacion('Mercadillo eliminado exitosamente');
+            mostrarNotificacion('Mercadillo eliminado exitosamente', 'success', 'notificacionEliminar');
             modalEliminar.hide();
 
             // Eliminar la fila de la tabla
@@ -340,7 +351,7 @@ async function eliminarMercadillo() {
                 console.log('Fila eliminada exitosamente');
             } catch (error) {
                 console.error('Error al eliminar fila en DataTables:', error);
-                mostrarNotificacion('Mercadillo eliminado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning');
+                mostrarNotificacion('Mercadillo eliminado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning', 'notificacionEliminar');
                 await cargarMercadillos();
             }
         } else {
@@ -348,7 +359,7 @@ async function eliminarMercadillo() {
         }
     } catch (error) {
         console.error('Error en eliminarMercadillo:', error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionEliminar');
     }
 }
 
@@ -396,9 +407,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Limpiar formulario al cerrar modal de creación
+    // Limpiar formulario y notificaciones al cerrar modales
     $('#crearModal').on('hidden.bs.modal', () => {
         console.log('Modal de creación cerrado');
         document.getElementById('formCrear').reset();
+        limpiarNotificacion('notificacionCrear');
+    });
+
+    $('#editarModal').on('hidden.bs.modal', () => {
+        console.log('Modal de edición cerrado');
+        limpiarNotificacion('notificacionEditar');
+    });
+
+    $('#eliminarModal').on('hidden.bs.modal', () => {
+        console.log('Modal de eliminación cerrado');
+        limpiarNotificacion('notificacionEliminar');
     });
 });

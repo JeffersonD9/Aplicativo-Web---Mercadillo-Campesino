@@ -6,7 +6,6 @@ const API_BASE_URL = 'http://18.223.102.119:8080/api-REST';
 const CATEGORIAS_URL = `${API_BASE_URL}/categories`;
 
 // Elementos del DOM
-const notificacion = document.getElementById("notificacion");
 const btnGuardarNuevo = document.getElementById("btnGuardarNuevo");
 const btnGuardarEdicion = document.getElementById("btnGuardarEdicion");
 const btnConfirmarEliminar = document.getElementById("btnConfirmarEliminar");
@@ -16,18 +15,31 @@ const modalCrear = new bootstrap.Modal(document.getElementById('crearModal'));
 const modalEditar = new bootstrap.Modal(document.getElementById('editarModal'));
 const modalEliminar = new bootstrap.Modal(document.getElementById('eliminarModal'));
 
-// Función para mostrar notificaciones
-function mostrarNotificacion(mensaje, tipo = "success") {
-    const notificacion = document.getElementById("notificacion");
+// Función para mostrar notificaciones en el modal especificado
+function mostrarNotificacion(mensaje, tipo = "success", contenedorId) {
+    const notificacion = document.getElementById(contenedorId);
+    if (!notificacion) {
+        console.error(`Contenedor de notificación ${contenedorId} no encontrado`);
+        return;
+    }
     notificacion.textContent = mensaje;
     notificacion.className = `alert alert-${tipo} visible`;
     setTimeout(() => {
         notificacion.classList.add("fade");
         setTimeout(() => {
-            notificacion.className = "";
+            notificacion.className = "alert d-none";
             notificacion.textContent = "";
         }, 500);
     }, 3000);
+}
+
+// Función para limpiar notificaciones al cerrar un modal
+function limpiarNotificacion(contenedorId) {
+    const notificacion = document.getElementById(contenedorId);
+    if (notificacion) {
+        notificacion.className = "alert d-none";
+        notificacion.textContent = "";
+    }
 }
 
 // Función para cargar las categorías desde la API
@@ -54,7 +66,8 @@ async function cargarCategorias() {
         mostrarCategoriasEnTabla(data.data);
     } catch (error) {
         console.error('Error en cargarCategorias:', error);
-        mostrarNotificacion(error.message, 'danger');
+        // Mostrar error en la consola, ya que no hay modal activo
+        console.log(error.message);
     }
 }
 
@@ -124,7 +137,7 @@ async function crearCategoria() {
     const nombre = document.getElementById('nombreNuevo').value.trim();
 
     if (!nombre) {
-        mostrarNotificacion('El nombre de la categoría es requerido', 'warning');
+        mostrarNotificacion('El nombre de la categoría es requerido', 'warning', 'notificacionCrear');
         return;
     }
 
@@ -137,7 +150,7 @@ async function crearCategoria() {
         .map(row => row[1].toLowerCase());
     
     if (nombresExistentes.includes(nombre.toLowerCase())) {
-        mostrarNotificacion('Ya existe una categoría con este nombre', 'warning');
+        mostrarNotificacion('Ya existe una categoría con este nombre', 'warning', 'notificacionCrear');
         return;
     }
 
@@ -162,7 +175,7 @@ async function crearCategoria() {
                 throw new Error('Respuesta de la API inválida: no se devolvió la categoría creada');
             }
 
-            mostrarNotificacion('Categoría creada exitosamente');
+            mostrarNotificacion('Categoría creada exitosamente', 'success', 'notificacionCrear');
             modalCrear.hide();
             document.getElementById('formCrear').reset();
 
@@ -191,7 +204,7 @@ async function crearCategoria() {
                 console.log('Fila agregada exitosamente');
             } catch (error) {
                 console.error('Error al agregar fila a DataTables:', error);
-                mostrarNotificacion('Categoría creada, pero no se pudo actualizar la tabla. Recargando datos...', 'warning');
+                mostrarNotificacion('Categoría creada, pero no se pudo actualizar la tabla. Recargando datos...', 'warning', 'notificacionCrear');
                 await cargarCategorias();
             }
         } else {
@@ -199,7 +212,7 @@ async function crearCategoria() {
         }
     } catch (error) {
         console.error('Error en crearCategoria:', error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionCrear');
     }
 }
 
@@ -212,7 +225,7 @@ function cargarDatosEdicion(btn) {
 
     if (!nombreElement) {
         console.error('No se encontró la clase .nombre en la fila:', fila);
-        mostrarNotificacion('Error al cargar datos de la categoría: estructura de la tabla inválida', 'danger');
+        mostrarNotificacion('Error al cargar datos de la categoría: estructura de la tabla inválida', 'danger', 'notificacionEditar');
         return;
     }
 
@@ -228,7 +241,7 @@ async function actualizarCategoria() {
     const nombre = document.getElementById('nombreEditar').value.trim();
 
     if (!nombre) {
-        mostrarNotificacion('El nombre de la categoría es requerido', 'warning');
+        mostrarNotificacion('El nombre de la categoría es requerido', 'warning', 'notificacionEditar');
         return;
     }
 
@@ -246,7 +259,7 @@ async function actualizarCategoria() {
     const currentName = table.row(row).data()[1].toLowerCase();
 
     if (nombresExistentes.includes(nombre.toLowerCase()) && nombre.toLowerCase() !== currentName) {
-        mostrarNotificacion('Ya existe una categoría con este nombre', 'warning');
+        mostrarNotificacion('Ya existe una categoría con este nombre', 'warning', 'notificacionEditar');
         return;
     }
 
@@ -265,7 +278,7 @@ async function actualizarCategoria() {
         console.log('Respuesta de actualizar categoría:', data);
 
         if (response.ok) {
-            mostrarNotificacion('Categoría actualizada exitosamente');
+            mostrarNotificacion('Categoría actualizada exitosamente', 'success', 'notificacionEditar');
             modalEditar.hide();
 
             // Actualizar la fila en la tabla
@@ -291,7 +304,7 @@ async function actualizarCategoria() {
                 console.log('Fila actualizada exitosamente');
             } catch (error) {
                 console.error('Error al actualizar fila en DataTables:', error);
-                mostrarNotificacion('Categoría actualizada, pero no se pudo actualizar la tabla. Recargando datos...', 'warning');
+                mostrarNotificacion('Categoría actualizada, pero no se pudo actualizar la tabla. Recargando datos...', 'warning', 'notificacionEditar');
                 await cargarCategorias();
             }
         } else {
@@ -299,7 +312,7 @@ async function actualizarCategoria() {
         }
     } catch (error) {
         console.error('Error en actualizarCategoria:', error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionEditar');
     }
 }
 
@@ -307,7 +320,7 @@ async function actualizarCategoria() {
 async function eliminarCategoria() {
     const id = document.getElementById('idEliminar').value;
     if (!id) {
-        mostrarNotificacion('ID de categoría no válido', 'warning');
+        mostrarNotificacion('ID de categoría no válido', 'warning', 'notificacionEliminar');
         return;
     }
 
@@ -324,7 +337,7 @@ async function eliminarCategoria() {
         console.log('Respuesta de eliminar categoría:', data);
 
         if (response.ok) {
-            mostrarNotificacion('Categoría eliminada exitosamente');
+            mostrarNotificacion('Categoría eliminada exitosamente', 'success', 'notificacionEliminar');
             modalEliminar.hide();
 
             // Eliminar la fila de la tabla
@@ -338,7 +351,7 @@ async function eliminarCategoria() {
                 console.log('Fila eliminada exitosamente');
             } catch (error) {
                 console.error('Error al eliminar fila en DataTables:', error);
-                mostrarNotificacion('Categoría eliminada, pero no se pudo actualizar la tabla. Recargando datos...', 'warning');
+                mostrarNotificacion('Categoría eliminada, pero no se pudo actualizar la tabla. Recargando datos...', 'warning', 'notificacionEliminar');
                 await cargarCategorias();
             }
         } else {
@@ -346,7 +359,7 @@ async function eliminarCategoria() {
         }
     } catch (error) {
         console.error('Error en eliminarCategoria:', error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionEliminar');
     }
 }
 
@@ -381,9 +394,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Limpiar formulario al cerrar modal de creación
+    // Limpiar notificaciones al cerrar modales
     $('#crearModal').on('hidden.bs.modal', () => {
         console.log('Modal de creación cerrado');
         document.getElementById('formCrear').reset();
+        limpiarNotificacion('notificacionCrear');
+    });
+
+    $('#editarModal').on('hidden.bs.modal', () => {
+        console.log('Modal de edición cerrado');
+        limpiarNotificacion('notificacionEditar');
+    });
+
+    $('#eliminarModal').on('hidden.bs.modal', () => {
+        console.log('Modal de eliminación cerrado');
+        limpiarNotificacion('notificacionEliminar');
     });
 });

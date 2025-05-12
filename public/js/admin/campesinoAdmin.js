@@ -7,8 +7,8 @@ const ADMIN_USUARIOS_URL = `${API_BASE_URL}/Admin/Usuarios`;
 const MERCADILLOS_URL = `${API_BASE_URL}/api/mercadillos`;
 
 // Elementos del DOM
-const notificacion = document.getElementById("notificacion");
 const btnConfirmarEliminar = document.getElementById("btnConfirmarEliminar");
+const btnGuardarCampesino = document.getElementById("btnGuardarCampesino");
 
 // Modales
 const modalEliminar = new bootstrap.Modal(document.getElementById("eliminarModal"));
@@ -17,21 +17,32 @@ const modalCrear = new bootstrap.Modal(document.getElementById('crearCampesinoMo
 
 // Variables de estado
 let idUsuarioAEliminar = null;
-let filaAEliminar = null;
 let mercadillosCache = [];
 
 // Función para mostrar notificaciones
-function mostrarNotificacion(mensaje, tipo = "success") {
-    const notificacion = document.getElementById("notificacion");
+function mostrarNotificacion(mensaje, tipo = "success", contenedorId) {
+    const notificacion = document.getElementById(contenedorId);
+    if (!notificacion) {
+        console.error(`Contenedor de notificación ${contenedorId} no encontrado`);
+        console.log(mensaje);
+        return;
+    }
     notificacion.textContent = mensaje;
-    notificacion.className = `alert alert-${tipo} visible`;
+    notificacion.className = `alert alert-${tipo}`;
+    notificacion.classList.remove("d-none");
     setTimeout(() => {
-        notificacion.classList.add("fade");
-        setTimeout(() => {
-            notificacion.className = "";
-            notificacion.textContent = "";
-        }, 500);
+        notificacion.classList.add("d-none");
+        notificacion.textContent = "";
     }, 3000);
+}
+
+// Función para limpiar notificaciones
+function limpiarNotificacion(contenedorId) {
+    const notificacion = document.getElementById(contenedorId);
+    if (notificacion) {
+        notificacion.className = "alert d-none";
+        notificacion.textContent = "";
+    }
 }
 
 // Función para cargar los mercadillos (para selects)
@@ -49,10 +60,11 @@ async function cargarMercadillos(selectId) {
         }
         
         const select = document.getElementById(selectId);
-        while (select.options.length > 1) {
-            select.remove(1);
+        if (!select) {
+            console.error(`Select con ID ${selectId} no encontrado`);
+            return;
         }
-        
+        select.innerHTML = '<option value="">Seleccione un mercadillo</option>';
         mercadillosCache.forEach(mercadillo => {
             const option = document.createElement('option');
             option.value = mercadillo.Id;
@@ -61,7 +73,7 @@ async function cargarMercadillos(selectId) {
         });
     } catch (error) {
         console.error('Error al cargar mercadillos:', error);
-        mostrarNotificacion('Error al cargar la lista de mercadillos', 'danger');
+        console.log('Error al cargar la lista de mercadillos');
     }
 }
 
@@ -69,7 +81,6 @@ async function cargarMercadillos(selectId) {
 async function cargarCampesinos() {
     try {
         console.log('Cargando campesinos...');
-        console.log('Token:', getCookie("token"));
         const response = await fetch(`/MercadilloBucaramanga/api/usuarios`, {
             headers: {
                 'Authorization': `Bearer ${getCookie("token")}`
@@ -91,7 +102,7 @@ async function cargarCampesinos() {
         mostrarCampesinosEnTabla(data);
     } catch (error) {
         console.error('Error en cargarCampesinos:', error);
-        mostrarNotificacion(error.message, 'danger');
+        console.log(error.message);
     }
 }
 
@@ -117,15 +128,15 @@ function mostrarCampesinosEnTabla(campesinos) {
             <td><span class="email">${campesino.Email}</span></td>
             <td><span class="celular">${campesino.Celular}</span></td>
             <td><span class="mercadillo">${mercadilloNombre}</span></td>
-            <td><span class="puesto">${campesino.Puesto || 0}</span></td>
+            <td><span class="puesto">${campesino.Puesto}</span></td>
             <td>
                 <button class="btn btn-outline-primary btn-sm btn-actualizar-usuario" data-id="${campesino.Id}">
                     <i class="bi bi-pencil"></i> Editar
                 </button>
-                <button class="btn btn-outline-danger btn-sm btn-eliminar-usuario " data-id="${campesino.Id}">
+                <button class="btn btn-outline-danger btn-sm btn-eliminar-usuario" data-id="${campesino.Id}">
                     <i class="bi bi-trash"></i> Eliminar
                 </button>
-                <button class="btn btn-sm btn-toggle-estado ${btnEstadoClase} " data-id="${campesino.Id}" data-estado="${estado}">
+                <button class="btn btn-sm btn-toggle-estado ${btnEstadoClase}" data-id="${campesino.Id}" data-estado="${estado}">
                     ${btnEstadoTexto}
                 </button>
             </td>
@@ -187,14 +198,19 @@ async function crearCampesino(event) {
     };
 
     if (!campesino.Nombres || !campesino.Apellidos || !campesino.Email || !campesino.Id_Mercadillo || !campesino.Password) {
-        mostrarNotificacion('Todos los campos son requeridos', 'warning');
+        mostrarNotificacion('Todos los campos son requeridos', 'warning', 'notificacionCrear');
+        return;
+    }
+
+    if (!campesino.Puesto || campesino.Puesto <= 0) {
+        mostrarNotificacion('El puesto debe ser un número mayor que 0', 'warning', 'notificacionCrear');
         return;
     }
 
     // Validar formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(campesino.Email)) {
-        mostrarNotificacion('El email no es válido', 'warning');
+        mostrarNotificacion('El email no es válido', 'warning', 'notificacionCrear');
         return;
     }
 
@@ -207,7 +223,7 @@ async function crearCampesino(event) {
         .map(node => node.querySelector('.email')?.textContent.toLowerCase());
     
     if (emailsExistentes.includes(campesino.Email.toLowerCase())) {
-        mostrarNotificacion('Ya existe un campesino con este email', 'warning');
+        mostrarNotificacion('Ya existe un campesino con este email', 'warning', 'notificacionCrear');
         return;
     }
 
@@ -235,7 +251,7 @@ async function crearCampesino(event) {
         }
 
         console.log('Nuevo campesino:', nuevoCampesino);
-        mostrarNotificacion(dataMercadillo.message || 'Campesino creado exitosamente');
+        mostrarNotificacion(dataMercadillo.message || 'Campesino creado exitosamente', 'success', 'notificacionCrear');
 
         // Agregar la nueva fila a la tabla
         const mercadilloNombre = nuevoCampesino.mercadillo?.Nombre || 
@@ -251,15 +267,15 @@ async function crearCampesino(event) {
                 `<span class="email">${nuevoCampesino.Email || ''}</span>`,
                 `<span class="celular">${nuevoCampesino.Celular || ''}</span>`,
                 `<span class="mercadillo">${mercadilloNombre}</span>`,
-                `<span class="puesto">${nuevoCampesino.Puesto || 0}</span>`,
+                `<span class="puesto">${nuevoCampesino.Puesto}</span>`,
                 `
                 <button class="btn btn-outline-primary btn-sm btn-actualizar-usuario" data-id="${nuevoCampesino.Id}">
                     <i class="bi bi-pencil"></i> Editar
                 </button>
-                <button class="btn btn-outline-danger btn-sm btn-eliminar-usuario ml-1" data-id="${nuevoCampesino.Id}">
+                <button class="btn btn-outline-danger btn-sm btn-eliminar-usuario" data-id="${nuevoCampesino.Id}">
                     <i class="bi bi-trash"></i> Eliminar
                 </button>
-                <button class="btn btn-sm btn-toggle-estado btn-warning ml-1" data-id="${nuevoCampesino.Id}" data-estado="activo">
+                <button class="btn btn-sm btn-toggle-estado btn-warning" data-id="${nuevoCampesino.Id}" data-estado="activo">
                     Desactivar
                 </button>
                 `
@@ -268,12 +284,12 @@ async function crearCampesino(event) {
             console.log('Fila agregada exitosamente');
         } catch (error) {
             console.error('Error al agregar fila a DataTables:', error);
-            mostrarNotificacion('Campesino creado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning');
+            mostrarNotificacion('Campesino creado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning', 'notificacionCrear');
             await cargarCampesinos();
         }
     } catch (error) {
         console.error('Error al crear campesino:', error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionCrear');
     } finally {
         console.log('Cerrando modal de creación...');
         modalCrear.hide();
@@ -286,21 +302,26 @@ async function crearCampesino(event) {
 }
 
 // Función para actualizar un campo individual
-async function actualizarCampoIndividual(id, campo, valor) {
+async function actualizarCampoIndividual(id, campo, valor, btn) {
     try {
         if (campo === 'Password' && !valor) {
-            mostrarNotificacion('No se proporcionó nueva contraseña', 'info');
+            mostrarNotificacion('No se proporcionó nueva contraseña', 'info', 'notificacionActualizar');
             return;
         }
 
         if (campo === 'Puesto') {
-            valor = Number(valor) || null;
+            const puestoNum = Number(valor);
+            if (!puestoNum || puestoNum <= 0) {
+                mostrarNotificacion('El puesto debe ser un número mayor que 0', 'warning', 'notificacionActualizar');
+                return;
+            }
+            valor = puestoNum;
         }
 
         if (campo === 'Email') {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(valor)) {
-                mostrarNotificacion('El email no es válido', 'warning');
+                mostrarNotificacion('El email no es válido', 'warning', 'notificacionActualizar');
                 return;
             }
 
@@ -316,7 +337,7 @@ async function actualizarCampoIndividual(id, campo, valor) {
             const currentEmail = row.querySelector('.email')?.textContent.toLowerCase();
 
             if (emailsExistentes.includes(valor.toLowerCase()) && valor.toLowerCase() !== currentEmail) {
-                mostrarNotificacion('Ya existe un campesino con este email', 'warning');
+                mostrarNotificacion('Ya existe un campesino con este email', 'warning', 'notificacionActualizar');
                 return;
             }
         }
@@ -337,7 +358,7 @@ async function actualizarCampoIndividual(id, campo, valor) {
         console.log('Respuesta de actualizar campo:', data);
 
         if (response.ok) {
-            mostrarNotificacion(`Campo ${campo} actualizado exitosamente`);
+            mostrarNotificacion(`Campo ${campo} actualizado exitosamente`, 'success', 'notificacionActualizar');
 
             // Actualizar la fila en la tabla
             const table = $('#dataTable').DataTable();
@@ -367,14 +388,14 @@ async function actualizarCampoIndividual(id, campo, valor) {
                         row.setAttribute('data-id-mercadillo', valor);
                         break;
                     case 'Puesto':
-                        updatedRowData[6] = `<span class="puesto">${valor || 0}</span>`;
+                        updatedRowData[6] = `<span class="puesto">${valor}</span>`;
                         break;
                 }
                 table.row(row).data(updatedRowData).draw(false);
                 console.log('Fila actualizada exitosamente');
             } catch (error) {
                 console.error('Error al actualizar fila en DataTables:', error);
-                mostrarNotificacion('Campo actualizado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning');
+                mostrarNotificacion('Campo actualizado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning', 'notificacionActualizar');
                 await cargarCampesinos();
             }
         } else {
@@ -382,7 +403,12 @@ async function actualizarCampoIndividual(id, campo, valor) {
         }
     } catch (error) {
         console.error(`Error al actualizar campo ${campo}:`, error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionActualizar');
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-check"></i> Actualizar';
+        }
     }
 }
 
@@ -390,7 +416,7 @@ async function actualizarCampoIndividual(id, campo, valor) {
 async function eliminarUsuario() {
     if (!idUsuarioAEliminar) {
         console.error("No hay ID de usuario para eliminar");
-        mostrarNotificacion('ID de usuario no válido', 'warning');
+        mostrarNotificacion('ID de usuario no válido', 'warning', 'notificacionEliminar');
         return;
     }
 
@@ -407,7 +433,7 @@ async function eliminarUsuario() {
         console.log('Respuesta de eliminar usuario:', data);
 
         if (response.ok) {
-            mostrarNotificacion(data.message || 'Campesino eliminado exitosamente');
+            mostrarNotificacion(data.message || 'Campesino eliminado exitosamente', 'success', 'notificacionEliminar');
             modalEliminar.hide();
 
             // Eliminar la fila de la tabla
@@ -421,7 +447,7 @@ async function eliminarUsuario() {
                 console.log('Fila eliminada exitosamente');
             } catch (error) {
                 console.error('Error al eliminar fila en DataTables:', error);
-                mostrarNotificacion('Campesino eliminado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning');
+                mostrarNotificacion('Campesino eliminado, pero no se pudo actualizar la tabla. Recargando datos...', 'warning', 'notificacionEliminar');
                 await cargarCampesinos();
             }
         } else {
@@ -429,10 +455,9 @@ async function eliminarUsuario() {
         }
     } catch (error) {
         console.error('Error al eliminar campesino:', error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionEliminar');
     } finally {
         idUsuarioAEliminar = null;
-        filaAEliminar = null;
     }
 }
 
@@ -453,14 +478,14 @@ async function toggleEstadoUsuario(id, nuevoEstado) {
         console.log('Respuesta de cambiar estado:', data);
 
         if (response.ok) {
-            mostrarNotificacion(`Campesino ${nuevoEstado ? 'activado' : 'desactivado'} exitosamente`);
+            mostrarNotificacion(`Campesino ${nuevoEstado ? 'activado' : 'desactivado'} exitosamente`, 'success', 'notificacionActualizar');
             return true;
         } else {
             throw new Error(data.message || 'Error al cambiar estado');
         }
     } catch (error) {
         console.error('Error al cambiar estado:', error);
-        mostrarNotificacion(error.message, 'danger');
+        mostrarNotificacion(error.message, 'danger', 'notificacionActualizar');
         return false;
     }
 }
@@ -490,8 +515,7 @@ async function abrirModalActualizar(campesino) {
         document.getElementById('apellidosActualizar').value = campesino.apellidos;
         document.getElementById('emailActualizar').value = campesino.email;
         document.getElementById('celularActualizar').value = campesino.celular;
-        const puesto = Number(campesino.puesto);
-        document.getElementById('puestoActualizar').value = isNaN(puesto) ? 0 : puesto;
+        document.getElementById('puestoActualizar').value = Number(campesino.puesto);
         document.getElementById('passwordActualizar').value = '';
         if (campesino.idMercadillo) {
             document.getElementById('mercadilloActualizar').value = campesino.idMercadillo;
@@ -499,7 +523,7 @@ async function abrirModalActualizar(campesino) {
         modalActualizar.show();
     } catch (error) {
         console.error('Error al abrir modal de actualización:', error);
-        mostrarNotificacion('Error al preparar formulario de edición', 'danger');
+        mostrarNotificacion('Error al preparar formulario de edición', 'danger', 'notificacionActualizar');
     }
 }
 
@@ -515,15 +539,8 @@ document.addEventListener('DOMContentLoaded', function() {
         modalCrear.show();
     });
 
-    // Formulario de creación
-    const formCrearCampesino = document.getElementById('formCrearCampesino');
-    formCrearCampesino?.addEventListener('submit', (event) => {
-        event.preventDefault();
-        crearCampesino(event);
-    });
-
     // Botones de formularios
-    document.getElementById('btnGuardarCampesino')?.addEventListener('click', crearCampesino);
+    btnGuardarCampesino?.addEventListener('click', crearCampesino);
     btnConfirmarEliminar?.addEventListener("click", eliminarUsuario);
     document.getElementById('btnClose')?.addEventListener('click', () => modalEliminar.hide());
 
@@ -535,26 +552,21 @@ document.addEventListener('DOMContentLoaded', function() {
             const id = document.getElementById('idActualizar').value;
             
             let valor;
-            const inputId = `${campo.toLowerCase()}Actualizar`;
-            
             if (campo === 'Id_Mercadillo') {
                 valor = document.getElementById('mercadilloActualizar').value;
             } else {
-                valor = document.getElementById(inputId).value;
+                valor = document.getElementById(`${campo.toLowerCase()}Actualizar`).value;
             }
 
             if (!valor && campo !== 'Password') {
-                mostrarNotificacion(`El campo ${campo} no puede estar vacío`, 'warning');
+                mostrarNotificacion(`El campo ${campo} no puede estar vacío`, 'warning', 'notificacionActualizar');
                 return;
             }
 
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Actualizando...';
 
-            actualizarCampoIndividual(id, campo, valor).finally(() => {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-check"></i> Actualizar';
-            });
+            actualizarCampoIndividual(id, campo, valor, btn);
         }
     });
 
@@ -564,7 +576,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.classList.contains('btn-eliminar-usuario')) {
             const fila = e.target.closest('tr');
             idUsuarioAEliminar = fila.querySelector('td:first-child').textContent;
-            filaAEliminar = fila;
             
             const nombre = fila.querySelector('.nombre')?.textContent || 'este campesino';
             document.querySelector('#eliminarModal .modal-title').textContent = 
@@ -582,7 +593,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 email: fila.querySelector('.email')?.textContent || '',
                 celular: fila.querySelector('.celular')?.textContent || '',
                 idMercadillo: fila.getAttribute('data-id-mercadillo'),
-                puesto: fila.querySelector('.puesto')?.textContent || '0'
+                puesto: fila.querySelector('.puesto')?.textContent
             };
             abrirModalActualizar(campesino);
         }
@@ -603,9 +614,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Limpiar formulario al cerrar modal de creación
+    // Limpiar formulario y notificaciones al cerrar modales
     $('#crearCampesinoModal').on('hidden.bs.modal', () => {
         console.log('Modal de creación cerrado');
         document.getElementById('formCrearCampesino').reset();
+        limpiarNotificacion('notificacionCrear');
+        document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style = '';
+    });
+
+    $('#actualizarModal').on('hidden.bs.modal', () => {
+        console.log('Modal de actualización cerrado');
+        limpiarNotificacion('notificacionActualizar');
+    });
+
+    $('#eliminarModal').on('hidden.bs.modal', () => {
+        console.log('Modal de eliminación cerrado');
+        limpiarNotificacion('notificacionEliminar');
     });
 });

@@ -17,54 +17,17 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Cerrar sesion
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </nav>
+                <%- include('../includes/navCampAdm') -%>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
+                 <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Lista de Productos</h5>
+                </div>
                 <div class="container-fluid">
-                    <h1 class="h3 mb-2 text-gray-800 mb-4">Lista de Productos</h1>
-                    <div class="alert alert-danger d-none" role="alert" id="notificacion"></div>
                     
                     <!-- Botón para agregar nuevo producto -->
-                    <div class="d-flex justify-content-between mb-3">
+                    <div class="d-flex justify-content-between mb-3 mt-3">
                         <div></div>
                         <button class="btn btn-primary" data-toggle="modal" data-target="#crearModal">
                             <i class="bi bi-plus-circle"></i> Nuevo Producto
@@ -123,10 +86,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert d-none" id="notificacionCrear"></div>
                     <form id="formCrear">
                         <div class="form-group">
                             <label for="nombreNuevo">Nombre</label>
-                            <input type="text" class="form-control" id="nombreNuevo" required>
+                            <input type="text" class="form-control" id="nombreNuevo" maxlength="50" required>
                         </div>
                         <div class="form-group">
                             <label for="descripcionNuevo">Descripción</label>
@@ -160,11 +124,12 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert d-none" id="notificacionEditar"></div>
                     <form id="formEditar">
                         <input type="hidden" id="idEditar">
                         <div class="form-group">
                             <label for="nombreEditar">Nombre</label>
-                            <input type="text" class="form-control" id="nombreEditar" required>
+                            <input type="text" class="form-control" id="nombreEditar" maxlength="50" required>
                         </div>
                         <div class="form-group">
                             <label for="descripcionEditar">Descripción</label>
@@ -198,6 +163,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert d-none" id="notificacionEliminar"></div>
                     ¿Estás seguro que deseas eliminar este Producto?
                     <input type="hidden" id="idEliminar">
                 </div>

@@ -34,7 +34,7 @@ export class CustomProducts {
     async create(data, file = null) {
         try {
             const { Id_producto, NombreProducto, Descripcion, NombreCategoria, userId } = data;
-
+            console.log(data, " ****** ")
             // Validar datos requeridos
             if (!NombreProducto || !Descripcion || !NombreCategoria) {
                 return { success: false, error: "Todos los campos son obligatorios" };
