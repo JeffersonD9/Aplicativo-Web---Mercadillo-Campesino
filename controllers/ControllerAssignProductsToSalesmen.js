@@ -128,6 +128,8 @@ export async function actualizarProducto(req, res) {
     if ('Estado' in req.body) {
       updates.Estado = req.body.Estado;
     }
+
+    console.log(req.body.Estado, " ******* ESTADO ******")
     
     // Validar si se proporcionó al menos un campo para actualizar
     if (Object.keys(updates).length === 0 && !req.file) {

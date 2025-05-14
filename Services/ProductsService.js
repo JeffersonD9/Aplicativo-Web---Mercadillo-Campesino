@@ -22,33 +22,31 @@ export class ProductService {
 
         return productsDTO;
     }
-
-    async getAll(count) {
-
-        const productos = await prisma.productospersonalizados.findMany({
-            take: count,
-            where: {
-                usuario: {
-                    Id_Mercadillo: {
-                        not: null
-                    }
-                }
-            },
-            include: {
-                usuario: {
-                    include: {
-                        mercadillo: true
-                    }
+async getAll(count) {
+    const productos = await prisma.productospersonalizados.findMany({
+        take: count,
+        where: {
+            Estado: true, // Solo productos activos
+            usuario: {
+                Estado: true, // Solo usuarios activos
+                Id_Mercadillo: {
+                    not: null // Con mercadillo asignado
                 }
             }
-        });
-    
-        if (!productos)
-            return null;
-    
-        return this.BuildDTOProducts(productos);
-    }
-    
+        },
+        include: {
+            usuario: {
+                include: {
+                    mercadillo: true
+                }
+            }
+        }
+    });
+    console.log(productos)
+    if (!productos) return null;
+
+    return this.BuildDTOProducts(productos);
+}
 
     async getByCategory(categoryName) {
 

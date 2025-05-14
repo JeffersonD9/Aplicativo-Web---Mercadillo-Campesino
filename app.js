@@ -25,6 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 
+
 // Configuración de vistas
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));

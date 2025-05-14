@@ -16,5 +16,4 @@ async function CreateAccesToken(payload){
         );
     }) 
 }
-
 export{CreateAccesToken}

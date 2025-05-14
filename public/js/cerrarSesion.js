@@ -1,4 +1,5 @@
 const cerrarSesion = document.querySelector("#cerrar-sesion");
+
 cerrarSesion.addEventListener("click",async(e)=>{
     e.preventDefault();
     try {
@@ -12,6 +13,7 @@ cerrarSesion.addEventListener("click",async(e)=>{
     const jsonCerrar = await cerrar.json();
     
     if(cerrarSesion.textContent.trim() === "Registrarse"){
+      
       document.location.href = "/MercadilloBucaramanga/Registrar" ;
     }else{
       document.location.href = jsonCerrar.redirect;

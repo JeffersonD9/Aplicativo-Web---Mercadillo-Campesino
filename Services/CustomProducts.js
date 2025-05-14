@@ -101,11 +101,11 @@ export class CustomProducts {
         updateData.NombreCategoria = fields.NombreCategoria;
       }
       if ("Estado" in fields) {
-        updateData.Estado = Boolean(fields.Estado);
+        updateData.Estado =fields.Estado === "true" ? true : false;
       }
 
       // Manejo de imagen
-      console.log('Verificando file:', file);
+      console.log('Verificando file:', fields.Estado);
       if (file) {
         console.log('Se proporcionó un nuevo archivo:', file.filename);
         // Eliminar imagen anterior si existe

@@ -1,4 +1,3 @@
-
 import { getCookie } from "../expresiones.js";
 console.log("Productos Personalizados");
 
@@ -12,7 +11,21 @@ let dataTable;
 document.addEventListener('DOMContentLoaded', () => {
     dataTable = $('#dataTable').DataTable({
         language: {
-            url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            emptyTable: "No hay datos disponibles en la tabla",
+            info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+            infoEmpty: "Mostrando 0 a 0 de 0 entradas",
+            infoFiltered: "(filtrado de _MAX_ entradas totales)",
+            lengthMenu: "Mostrar _MENU_ entradas",
+            loadingRecords: "Cargando...",
+            processing: "Procesando...",
+            search: "Buscar:",
+            zeroRecords: "No se encontraron registros coincidentes",
+            paginate: {
+                first: "Primero",
+                last: "Último",
+                next: "Siguiente",
+                previous: "Anterior"
+            }
         }
     });
 });
@@ -313,6 +326,7 @@ async function recargarTabla() {
         mostrarNotificacion('Error al recargar la tabla', 'danger', 'notificacionCrear');
     }
 }
+
 // Función para cargar datos en el modal de edición
 async function cargarDatosParaEditar(productoId) {
     try {
@@ -359,7 +373,6 @@ async function cargarDatosParaEditar(productoId) {
 }
 
 // Función para actualizar un campo específico del producto
-
 async function actualizarCampoProducto(productoId, campo, valor) {
     try {
         const formData = new FormData();
@@ -503,6 +516,7 @@ async function actualizarCamposProducto(productoId, campos) {
         mostrarNotificacion(error.message, 'danger', 'notificacionActualizar');
     }
 }
+
 // Función para eliminar un producto
 async function eliminarProducto(productoId) {
     try {
@@ -548,7 +562,7 @@ async function cambiarEstadoProducto(productoId, estado) {
     try {
         const formData = new FormData();
         formData.append('Estado', estado);
-
+        
         const response = await fetch(`${PRODUCTOS_URL}/${productoId}`, {
             method: 'PATCH',
             headers: {
@@ -563,7 +577,7 @@ async function cambiarEstadoProducto(productoId, estado) {
 
         mostrarNotificacion(`Producto ${estado ? 'habilitado' : 'deshabilitado'} exitosamente`, 'success', 'notificacionCrear');
 
-        // Actualizar la fila en la tabla
+        // Actualizar la fila en(activity) en la tabla
         try {
             const table = $('#dataTable').DataTable();
             const row = table.rows((idx, data, node) => {
@@ -662,48 +676,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Manejador para actualizar categoría y producto
-document.getElementById('btnActualizarCategoriaProducto').addEventListener('click', () => {
-    const productoId = document.getElementById('productoIdActualizar').value;
-    const categoriaValue = document.getElementById('categoriaActualizar').value;
-    const productoValue = document.getElementById('productoActualizar').value;
-    if (!categoriaValue || !productoValue) {
-        mostrarNotificacion('Debe seleccionar una categoría y un producto', 'danger', 'notificacionActualizar');
-        return;
-    }
-    const categoria = JSON.parse(categoriaValue);
-    const producto = JSON.parse(productoValue);
-    const campos = {
-        NombreCategoria: categoria.name,
-        NombreProducto: producto.name,
-        Id_producto: producto.id
-    };
-    actualizarCamposProducto(productoId, campos);
-});
+    document.getElementById('btnActualizarCategoriaProducto').addEventListener('click', () => {
+        const productoId = document.getElementById('productoIdActualizar').value;
+        const categoriaValue = document.getElementById('categoriaActualizar').value;
+        const productoValue = document.getElementById('productoActualizar').value;
+        if (!categoriaValue || !productoValue) {
+            mostrarNotificacion('Debe seleccionar una categoría y un producto', 'danger', 'notificacionActualizar');
+            return;
+        }
+        const categoria = JSON.parse(categoriaValue);
+        const producto = JSON.parse(productoValue);
+        const campos = {
+            NombreCategoria: categoria.name,
+            NombreProducto: producto.name,
+            Id_producto: producto.id
+        };
+        actualizarCamposProducto(productoId, campos);
+    });
 
-document.getElementById('btnActualizarDescripcion').addEventListener('click', () => {
-    const productoId = document.getElementById('productoIdActualizar').value;
-    const descripcion = document.getElementById('descripcionActualizar').value.trim();
-    if (!descripcion) {
-        mostrarNotificacion('La descripción es obligatoria', 'danger', 'notificacionActualizar');
-        return;
-    }
-    actualizarCampoProducto(productoId, 'Descripcion', descripcion);
-});
+    document.getElementById('btnActualizarDescripcion').addEventListener('click', () => {
+        const productoId = document.getElementById('productoIdActualizar').value;
+        const descripcion = document.getElementById('descripcionActualizar').value.trim();
+        if (!descripcion) {
+            mostrarNotificacion('La descripción es obligatoria', 'danger', 'notificacionActualizar');
+            return;
+        }
+        actualizarCampoProducto(productoId, 'Descripcion', descripcion);
+    });
 
-document.getElementById('btnActualizarImagen').addEventListener('click', () => {
-    const productoId = document.getElementById('productoIdActualizar').value;
-    const imagenInput = document.getElementById('imagenActualizar');
-    const imagen = imagenInput.files[0];
-    if (!imagen) {
-        mostrarNotificacion('Debe seleccionar una imagen', 'danger', 'notificacionActualizar');
-        return;
-    }
-    if (!imagen.type.startsWith('image/')) {
-        mostrarNotificacion('El archivo debe ser una imagen válida', 'danger', 'notificacionActualizar');
-        return;
-    }
-    actualizarCampoProducto(productoId, 'Imagen', imagen);
-});
+    document.getElementById('btnActualizarImagen').addEventListener('click', () => {
+        const productoId = document.getElementById('productoIdActualizar').value;
+        const imagenInput = document.getElementById('imagenActualizar');
+        const imagen = imagenInput.files[0];
+        if (!imagen) {
+            mostrarNotificacion('Debe seleccionar una imagen', 'danger', 'notificacionActualizar');
+            return;
+        }
+        if (!imagen.type.startsWith('image/')) {
+            mostrarNotificacion('El archivo debe ser una imagen válida', 'danger', 'notificacionActualizar');
+            return;
+        }
+        actualizarCampoProducto(productoId, 'Imagen', imagen);
+    });
+
     // Vista previa de la imagen en el modal de edición
     document.getElementById('imagenActualizar').addEventListener('change', (e) => {
         const imagenPrevia = document.getElementById('imagenPreviaActualizar');
@@ -750,16 +765,18 @@ document.getElementById('btnActualizarImagen').addEventListener('click', () => {
     });
 
     // Manejadores para habilitar/deshabilitar producto
-document.addEventListener('click', (e) => {
-    if (e.target.closest('.btn-habilitar-producto')) {
-        const productoId = e.target.closest('.btn-habilitar-producto').getAttribute('data-id');
-        cambiarEstadoProducto(productoId, true); // Cambia a habilitado (true)
-    } else if (e.target.closest('.btn-deshabilitar-producto')) {
-        console.log("Deshabilitando producto");
-        const productoId = e.target.closest('.btn-deshabilitar-producto').getAttribute('data-id');
-        cambiarEstadoProducto(productoId, false); // Cambia a deshabilitado (false)
-    }
-});
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-habilitar-producto')) {
+            const productoId = e.target.closest('.btn-habilitar-producto').getAttribute('data-id');
+            cambiarEstadoProducto(productoId, true); // Cambia a habilitado (true)
+            console.log(true)
+        } else if (e.target.closest('.btn-deshabilitar-producto')) {
+            console.log("Deshabilitando producto");
+            const productoId = e.target.closest('.btn-deshabilitar-producto').getAttribute('data-id');
+            console.log("falso")
+            cambiarEstadoProducto(productoId, false); // Cambia a deshabilitado (false)
+        }
+    });
 
     // Cargar datos iniciales
     recargarTabla();

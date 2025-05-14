@@ -99,13 +99,13 @@ export async function MostrarUsuarios(req, res) {
 
 
 export async function getUsuariosJson(req, res) {
-    try {
-        const usuarios = await service.getAllUsers();
-        console.log(usuarios)
-        res.status(200).json(usuarios);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+      try {
+          const usuarios = await service.getAllUsers();
+          console.log(usuarios)
+          res.status(200).json(usuarios);
+      } catch (error) {
+          res.status(500).json({ message: error.message });
+      }
 }
 
 

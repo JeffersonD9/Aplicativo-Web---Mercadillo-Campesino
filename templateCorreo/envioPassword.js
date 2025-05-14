@@ -21,7 +21,7 @@ export function enviar_email(email,token){
     let mail_options ={
         form: "Pabs",
         to:`${email}`,
-        subject:"Cambiar Contraseña",
+        subject:"Cambiar Contraseña Mercadillo Campesino",
         html:`<a href="http://localhost:3000/MercadilloBucaramanga/Restablecer/${token}"> ${token}</a>`
     };
 

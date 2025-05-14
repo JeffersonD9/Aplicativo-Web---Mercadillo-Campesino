@@ -84,7 +84,7 @@ async function cargarCampesinos() {
         const response = await fetch(`/MercadilloBucaramanga/api/usuarios`, {
             headers: {
                 'Authorization': `Bearer ${getCookie("token")}`
-            }
+                }
         });
 
         if (!response.ok) {
@@ -112,7 +112,7 @@ function mostrarCampesinosEnTabla(campesinos) {
     const table = $('#dataTable');
     const tbody = table.find('tbody');
     tbody.empty(); // Limpiar el contenido del tbody
-
+    console.log("campesinos " , campesinos)
     campesinos.forEach((campesino) => {
         const mercadilloNombre = campesino.mercadillo?.Nombre || 'Sin mercadillo';
         const estado = campesino.Estado ? 'activo' : 'inactivo';
@@ -127,6 +127,7 @@ function mostrarCampesinosEnTabla(campesinos) {
             <td><span class="apellidos">${campesino.Apellidos}</span></td>
             <td><span class="email">${campesino.Email}</span></td>
             <td><span class="celular">${campesino.Celular}</span></td>
+            <td><span class="cedula">${campesino.Cedula}</span></td>
             <td><span class="mercadillo">${mercadilloNombre}</span></td>
             <td><span class="puesto">${campesino.Puesto}</span></td>
             <td>
@@ -191,13 +192,14 @@ async function crearCampesino(event) {
         Apellidos: document.getElementById('apellidosNuevo').value.trim(),
         Email: document.getElementById('emailNuevo').value.trim(),
         Celular: document.getElementById('celularNuevo').value.trim(),
+        Cedula: document.getElementById('cedulaNuevo').value.trim(),
         Id_Mercadillo: Number(document.getElementById('mercadilloNuevo').value),
         Puesto: Number(document.getElementById('puestoNuevo').value),
         Password: document.getElementById('passwordNuevo').value.trim(),
         Roles: 2 // Rol para campesinos
     };
 
-    if (!campesino.Nombres || !campesino.Apellidos || !campesino.Email || !campesino.Id_Mercadillo || !campesino.Password) {
+    if (!campesino.Nombres || !campesino.Apellidos || !campesino.Cedula || !campesino.Email || !campesino.Id_Mercadillo || !campesino.Password) {
         mostrarNotificacion('Todos los campos son requeridos', 'warning', 'notificacionCrear');
         return;
     }
@@ -224,6 +226,18 @@ async function crearCampesino(event) {
     
     if (emailsExistentes.includes(campesino.Email.toLowerCase())) {
         mostrarNotificacion('Ya existe un campesino con este email', 'warning', 'notificacionCrear');
+        return;
+    }
+
+    // Verificar si la cédula ya existe
+    const cedulasExistentes = table
+        .rows()
+        .nodes()
+        .toArray()
+        .map(node => node.querySelector('.cedula')?.textContent.trim());
+    
+    if (cedulasExistentes.includes(campesino.Cedula.trim())) {
+        mostrarNotificacion('Ya existe un campesino con esta cédula', 'warning', 'notificacionCrear');
         return;
     }
 
@@ -266,6 +280,7 @@ async function crearCampesino(event) {
                 `<span class="apellidos">${nuevoCampesino.Apellidos || ''}</span>`,
                 `<span class="email">${nuevoCampesino.Email || ''}</span>`,
                 `<span class="celular">${nuevoCampesino.Celular || ''}</span>`,
+                `<span class="cedula">${nuevoCampesino.Cedula || ''}</span>`,
                 `<span class="mercadillo">${mercadilloNombre}</span>`,
                 `<span class="puesto">${nuevoCampesino.Puesto}</span>`,
                 `
@@ -318,27 +333,42 @@ async function actualizarCampoIndividual(id, campo, valor, btn) {
             valor = puestoNum;
         }
 
-        if (campo === 'Email') {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(valor)) {
-                mostrarNotificacion('El email no es válido', 'warning', 'notificacionActualizar');
-                return;
-            }
-
+        if (campo === 'Email' || campo === 'Cedula') {
             const table = $('#dataTable').DataTable();
-            const emailsExistentes = table
-                .rows()
-                .nodes()
-                .toArray()
-                .map(node => node.querySelector('.email')?.textContent.toLowerCase());
             const row = table.rows((idx, data, node) => {
                 return $(node).find('.btn-actualizar-usuario').data('id') == id;
             }).nodes()[0];
-            const currentEmail = row.querySelector('.email')?.textContent.toLowerCase();
 
-            if (emailsExistentes.includes(valor.toLowerCase()) && valor.toLowerCase() !== currentEmail) {
-                mostrarNotificacion('Ya existe un campesino con este email', 'warning', 'notificacionActualizar');
-                return;
+            if (campo === 'Email') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(valor)) {
+                    mostrarNotificacion('El email no es válido', 'warning', 'notificacionActualizar');
+                    return;
+                }
+
+                const emailsExistentes = table
+                    .rows()
+                    .nodes()
+                    .toArray()
+                    .map(node => node.querySelector('.email')?.textContent.toLowerCase());
+                const currentEmail = row.querySelector('.email')?.textContent.toLowerCase();
+
+                if (emailsExistentes.includes(valor.toLowerCase()) && valor.toLowerCase() !== currentEmail) {
+                    mostrarNotificacion('Ya existe un campesino con este email', 'warning', 'notificacionActualizar');
+                    return;
+                }
+            } else if (campo === 'Cedula') {
+                const cedulasExistentes = table
+                    .rows()
+                    .nodes()
+                    .toArray()
+                    .map(node => node.querySelector('.cedula')?.textContent.trim());
+                const currentCedula = row.querySelector('.cedula')?.textContent.trim();
+
+                if (cedulasExistentes.includes(valor.trim()) && valor.trim() !== currentCedula) {
+                    mostrarNotificacion('Ya existe un campesino con esta cédula', 'warning', 'notificacionActualizar');
+                    return;
+                }
             }
         }
 
@@ -382,13 +412,16 @@ async function actualizarCampoIndividual(id, campo, valor, btn) {
                     case 'Celular':
                         updatedRowData[4] = `<span class="celular">${valor}</span>`;
                         break;
+                    case 'Cedula':
+                        updatedRowData[5] = `<span class="cedula">${valor}</span>`;
+                        break;
                     case 'Id_Mercadillo':
                         const mercadillo = mercadillosCache.find(m => m.Id == valor) || { Nombre: 'Sin mercadillo' };
-                        updatedRowData[5] = `<span class="mercadillo">${mercadillo.Nombre}</span>`;
+                        updatedRowData[6] = `<span class="mercadillo">${mercadillo.Nombre}</span>`;
                         row.setAttribute('data-id-mercadillo', valor);
                         break;
                     case 'Puesto':
-                        updatedRowData[6] = `<span class="puesto">${valor}</span>`;
+                        updatedRowData[7] = `<span class="puesto">${valor}</span>`;
                         break;
                 }
                 table.row(row).data(updatedRowData).draw(false);
@@ -515,6 +548,7 @@ async function abrirModalActualizar(campesino) {
         document.getElementById('apellidosActualizar').value = campesino.apellidos;
         document.getElementById('emailActualizar').value = campesino.email;
         document.getElementById('celularActualizar').value = campesino.celular;
+        document.getElementById('cedulaActualizar').value = campesino.cedula;
         document.getElementById('puestoActualizar').value = Number(campesino.puesto);
         document.getElementById('passwordActualizar').value = '';
         if (campesino.idMercadillo) {
@@ -547,6 +581,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Manejador de eventos para botones de actualización individual
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-actualizar-campo')) {
+            e.preventDefault(); // Prevenir comportamiento predeterminado
             const btn = e.target;
             const campo = btn.getAttribute('data-campo');
             const id = document.getElementById('idActualizar').value;
@@ -592,6 +627,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 apellidos: fila.querySelector('.apellidos')?.textContent || '',
                 email: fila.querySelector('.email')?.textContent || '',
                 celular: fila.querySelector('.celular')?.textContent || '',
+                cedula: fila.querySelector('.cedula')?.textContent || '',
                 idMercadillo: fila.getAttribute('data-id-mercadillo'),
                 puesto: fila.querySelector('.puesto')?.textContent
             };

@@ -80,8 +80,10 @@
                                 <div class="product-category">${product.category || 'Sin categoría'}</div>
                                 <h3 class="product-title">${product.title || 'Producto sin nombre'}</h3>
                                 <div class="product-meta">
-                                    <span class="product-producer">👤 ${product.producer || 'Productor no especificado'}</span>
-                                    <span class="product-mercado">📍 ${product.mercadillo || 'Mercadillo desconocido'}</span>
+                                    <i class=" bi bi-person-fill">
+                                    <span class="product-mercado"> ${product.producer || 'Productor no especificado'}</span></i>
+                                    <i class="bi bi-geo-alt-fill text-danger">
+                                    <span class="product-mercado "> ${product.mercadillo || 'Mercadillo desconocido'}</span></i>
                                 </div>
                                 <p class="product-description">${product.description || 'Sin descripción'}</p>
                                 ${whatsappNumber ? `

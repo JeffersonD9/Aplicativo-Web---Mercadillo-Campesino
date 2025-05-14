@@ -19,21 +19,21 @@
     },
     "homepage": "https://github.com/JeffersonD9/Aplicativo-Web-Mercadillo-Campesino/tree/Testing/main#readme",
     "devDependencies": {
+        "@fortawesome/fontawesome-free": "5.15.3",
         "@prisma/client": "^5.13.0",
         "bcrypt": "^5.1.1",
+        "bootstrap": "4.6.0",
+        "chart.js": "2.9.4",
         "cookie-parser": "^1.4.6",
+        "datatables.net-bs4": "1.10.24",
         "express": "^4.19.2",
+        "jquery": "3.6.0",
+        "jquery.easing": "^1.4.1",
         "jsonwebtoken": "^9.0.2",
         "morgan": "^1.10.0",
         "mysql": "^2.18.1",
         "nodemon": "^3.1.0",
-        "prisma": "^5.13.0",
-        "@fortawesome/fontawesome-free": "5.15.3",
-        "bootstrap": "4.6.0",
-        "chart.js": "2.9.4",
-        "datatables.net-bs4": "1.10.24",
-        "jquery": "3.6.0",
-        "jquery.easing": "^1.4.1"
+        "prisma": "^5.13.0"
     },
     "dependencies": {
         "cors": "^2.8.5",
@@ -41,7 +41,7 @@
         "ejs": "^3.1.10",
         "express-validator": "^7.0.1",
         "multer": "^1.4.5-lts.1",
-        "nodemailer": "^6.9.13",
+        "nodemailer": "^6.10.1",
         "passport": "^0.7.0",
         "passport-local": "^1.0.0",
         "Prisma": "npm:prisma@^5.13.0"

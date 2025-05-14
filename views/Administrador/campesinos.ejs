@@ -51,6 +51,7 @@
                                             <th>Apellidos</th>
                                             <th>Email</th>
                                             <th>Celular</th>
+                                            <th>Cédula</th>
                                             <th>Mercadillo</th>
                                             <th>Puesto</th>
                                             <th>Acción</th>
@@ -63,6 +64,7 @@
                                             <th>Apellidos</th>
                                             <th>Email</th>
                                             <th>Celular</th>
+                                            <th>Cédula</th>
                                             <th>Mercadillo</th>
                                             <th>Puesto</th>
                                             <th>Acción</th>
@@ -76,6 +78,7 @@
                                                 <td><span class="apellidos"><%= campesinos.Apellidos %></span></td>
                                                 <td><span class="email"><%= campesinos.Email %></span></td>
                                                 <td><span class="celular"><%= campesinos.Celular %></span></td>
+                                                <td><span class="cedula"><%= campesinos.Cedula %></span></td>
                                                 <td><span class="mercadillo"><%= campesinos.nombreMercadillo %></span></td>
                                                 <td><span class="puesto"><%= campesinos.Puesto %></span></td>
                                                 <td>
@@ -173,6 +176,13 @@
                                 <input type="text" class="form-control" id="celularNuevo" maxlength="10" required>
                             </div>
                         </div>
+                        <div class="form-row">
+                            
+                            <div class="form-group col-md-6">
+                                <label for="cedulaNuevo">Cedula</label>
+                                <input type="text" class="form-control" id="cedulaNuevo" maxlength="30" required>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="mercadilloNuevo">Mercadillo</label>
                             <select class="form-control" id="mercadilloNuevo" required>
@@ -200,9 +210,6 @@
 
     <!-- Modal Actualizar -->
     <%- include('../includes/modalActualizarCampesino') -%>
-
-    <!-- Logout Modal-->
-    <%- include('../includes/logoutModal') -%>
 
     <!-- Bootstrap core JavaScript-->
     <%- include('../includes/scripts') -%>

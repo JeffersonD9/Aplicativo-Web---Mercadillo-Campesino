@@ -27,7 +27,7 @@ export async function LogOut(req, res) {
   res.cookie("token", "", {
     expires: new Date(0),
   });
-  //console.log(req.user.userName)
+
   return res
     .status(200)
     .json({ redirect: "/MercadilloBucaramanga" });

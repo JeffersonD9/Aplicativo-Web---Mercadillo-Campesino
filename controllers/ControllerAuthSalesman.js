@@ -66,11 +66,11 @@ export async function ProfileSalesman(req, res) {
 export async function EnviarCorreo(req, res) {
   try {
     const Email = req.body.Email;
-    const nameToken = Email.split('@')[0];
-
+    const nameToken = Email;
+    
 
     const userFound = await service.findUser(Email, role);
- 
+    console.log(userFound);
     if (userFound == null) {
       return res.status(400).json({ message: `Solicitud rechazada` });
     }
@@ -89,11 +89,13 @@ export async function EnviarCorreo(req, res) {
 
 //form
 export async function FromCambiarPassword(req, res) {
-  return res.render("enviarTokenEmail");
+
+  return res.render("Email/enviarTokenEmail");
+
 }
 
 export async function RestablecerPassword(req, res) {
-  return res.render("cambiarPassword");
+  return res.render("Email/cambiarPassword");
 }
 
 export async function ActualizarPassword(req, res) {

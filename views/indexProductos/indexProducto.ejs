@@ -9,25 +9,28 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <%- include('../includes/sidebarAdmin') -%>
+        <%- include('./sidebarProductos') -%>
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
             <div id="content">
 
-                <%- include('../includes/navCampAdm') -%>
-                
-                <!-- End of Topbar -->
+                <%- include('./navProductos') -%>
 
-                <!-- Begin Page Content -->
-                
-
+                    
                     <!-- Page Heading -->
-                   
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Bienvienido <%- adminUserFound.Nombres %> <%- adminUserFound.Apellidos %></h5>
+                    <div class="container">
+                        <div class=" mt-4" id="mercadillos">
+                     
                     </div>
-                
+                    </div>
+                    <div class="container">
+                    <div id="productos" class="mt-4 row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mx-auto w-lg-75" style="max-width: 1200px; min-width: 320px;">
+                    <!-- Los productos se insertarán aquí dinámicamente -->
+                    </div>
+                </div>
+                                        
+
                 <!-- /.container-fluid -->
 
             </div>
@@ -50,9 +53,10 @@
     </a>
 
 
-
     <!-- Bootstrap core JavaScript-->
     <%- include('../includes/scripts') -%>
+
+    <script src="/js/indexProducto/productos.js"></script>
 </body>
 
 </html>
