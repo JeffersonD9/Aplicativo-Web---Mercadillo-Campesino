@@ -1,121 +1,68 @@
-import {
-  CreateItem,
-  SearchByIdItem,
-  SearchsItems,
-  DeleteItem,
-  UpdateItem,
-} from "../Services/ServicesProducts.js";
-import { PrismaClient } from "@prisma/client";
+import { ProductService } from "../Services/ProductsService.js";
+let service = new ProductService()
 
-const prisma = new PrismaClient();
+export const getAllProductos = async (req, res) => {
+    try {
 
-export async function CreateProduct(req, res) {
-  const { Nombre, Descripcion, Precio, Presentacion } = req.body;
-  const Disponibilidad = !!Number(req.body.Disponibilidad);
-  const id_Categoria = parseInt(req.body.id_Categoria);
-  const id_Usuario = parseInt(req.body.id_Usuario);
-
-  try {
-    const encontrarProducto = await SearchByIdItem(id_Categoria,Nombre,id_Usuario);
-    if (encontrarProducto.length > 0) {
-      return res
-        .status(400)
-        .json({ message: "El producto ya se encuentra creado" });
-    }
-
-    const productos = await prisma.productos.create({
-      data: {
-        Nombre,
-        Descripcion,
-        Disponibilidad,
-        Precio,
-        Presentacion,
-        id_Categoria,
-        id_Usuario,
-        Imagen: req.file.path,
-      },
-    });
-
-    res.status(200).json({ message: "Producto Creado", productos });
-  } catch (error) {
-    res.status(500).json({ message: error });
-    console.log(error);
-  }
-}
-
-export async function GetProductById(req, res) {
-  const id_categoria = parseInt(req.params.id_Categoria, 10);
-  const id = parseInt(req.params.id, 10);
-  try {
-    const getProductById = await SearchByIdItem(id_categoria, id);
-    res.status(200).json({ message: "Producto", data: getProductById });
-  } catch (error) {
-    res.status(500).json({ message: error });
-    console.log(error);
-  }
-}
-
-export async function GetProducts(req, res) {
-  try {
-    const categoria = await prisma.categorias.findMany();
-    const productos = await prisma.productos.findMany({
-      where: {
-        id_Usuario: req.user.id, // Filtrar productos por el ID del usuario
-      },
-      include: {
-        categorias: true, // Incluir la categoría relacionada
-      },
-      orderBy: {
-        id: "desc", // Ordenar por id de forma descendente para obtener los últimos registros
-      },
-    });
-
-    res.render("Vendedor/vendedor", {
-      UserName: req.user,
-      body: "listaProductos",
-
-      productos,
-      categoria,
-    });
-
-    console.log(" aca ", productos);
-  } catch (error) {
-    res.status(500).json({ message: error });
-    console.log(error);
-  }
-}
-
-export async function DeleteProduct(req, res) {
-  const id = parseInt(req.params.id_producto, 10);
-  try {
-    const deleteProduct = await DeleteItem(id);
-    res.status(200).json({ message: "Producto Borrado", data: deleteProduct });
-  } catch (error) {
-    res.status(500).json({ message: error });
-    console.log(error);
-  }
-}
-
-export async function UpdateProduct(req, res) {
-  
-  const id_producto = parseInt(req.params.id_producto, 10);
-  const data = req.body;
-  const id_Categoria = parseInt(req.body.id_Categoria);
-  const id_Usuario = parseInt(req.body.id_Usuario);
- 
-  const Imagen = (!req.file?.path) ? req.body.file  : req.file.path;
-  console.log("Esta es la imagen ", Imagen)
-  try {
+        var products = await service.getAll(6);
       
-    const updateProduct = await UpdateItem(id_producto,data,id_Categoria,id_Usuario,Imagen);
+        if (products == null)
+            return res.status(204).json({ message: `No Content`, data: [] });
+      
+        return res.status(200).json(products);
 
-    res.status(200).json({message: "Producto actualizado correctamente",producto: updateProduct,});
-
-    
-  } catch (error) {
-    res.status(500).json({ message: error });
-    console.log(error);
-  }
-}
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).json({ error: 'Error al obtener los productos' });
+    }
+};
 
 
+export const getAllProducto = async (req, res) => {
+    try {
+
+        var products = await service.getAll();
+        console.log(" ********** " , products , " ********* productos ***")
+        if (products == null)
+            return res.status(204).json({ message: `No Content`, data: [] });
+      
+        return res.status(200).json(products);
+
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).json({ error: 'Error al obtener los productos' });
+    }
+};
+
+export const getIndexProductos = async (req, res) => {
+ try {
+        
+        res.render("indexProductos/indexProducto", {
+            body: "indexProductos",
+            index: "Admin",
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+
+
+export const getProductosByCategoria = async (req, res) => {
+    try {
+        const { categoria } = req.params;
+
+        if (categoria === undefined || categoria === null || categoria === "")
+            return res.status(402).json({ message: `La categoria no puede estar vaciá` });
+
+        var products = await service.getByCategory(categoria);
+        if (products == null)
+            return res.status(204).json({ message: `No Content`, data: [] });
+        res.status(200).json(products);
+    } catch (error) {
+        console.error('Error al obtener productos por categoría:', error);
+        res.status(500).json({ error: 'Error al obtener productos por categoría' });
+    }
+};

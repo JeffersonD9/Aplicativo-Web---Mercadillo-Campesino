@@ -1,47 +1,47 @@
 import express from "express";
 import Login from "./routes/LoginRoute.js";
-import Task from "./routes/TaskRoutes.js";
 import morgan from "morgan";
 import Salesman from "./routes/DashBoardSalesman.js";
 import Admin from "./routes/DashBoardAdmin.js";
-import Main from "./routes/DashBoardMain.js"
 import path from "path";
-import { PORT,NODE_ENV } from "./config.js";
+import { fileURLToPath } from 'url';
+import { PORT, NODE_ENV } from "./config.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
-import multer from "multer";
+import Products from "./routes/IndexLadingPage.js";
+import { upload } from "./configMulter/multer.js";
+import { RenderIndex } from "./controllers/ControllerMain.js";
+import { verifyUser } from "./MiddleWares/VerifyUserLogged.js";
 const app = express();
+
+// Path
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Middlewares
 app.use(cors());
 app.use(morgan("dev"));
-
-if (NODE_ENV === "Production") {
-    console.log = function () {}; 
-  }
-
-//Path
-let __dirname = path.dirname(new URL(import.meta.url).pathname);
-__dirname = __dirname.slice(1);
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views")); //Identificar la carpeta views
-app.use(express.static(path.join(__dirname, "public"))); //Identificar la carpeta public
-app.use( "/imagenes", express.static(path.join(__dirname, "imagenes"))); //Identificar la carpeta imagenes
-
-const uploadPath = path.join(__dirname, 'public', 'Image_Products');
-console.log(uploadPath)
-const upload = multer({dest: uploadPath})
-
-app.set("port", PORT);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
+app.use(verifyUser);
 
+// Configuración de vistas
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// Carpeta pública para archivos estáticos
+app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
-app.get("/",(res,req)=>{
-    return req.redirect("/MercadilloBucaramanga")
-})
-app.use("/MercadilloBucaramanga",Main,Login, Admin, Salesman);
-//app.use('/MercarilloBucaramanga',Admin)
+app.get("/MercadilloBucaramanga", (req, res) => {
+  res.redirect(302, "/MercadilloBucaramanga/Inicio");
+});
+app.get("/MercadilloBucaramanga/Inicio", RenderIndex);
+app.use("/MercadilloBucaramanga", Products);
+app.use("/MercadilloBucaramanga", Login, Admin, Salesman);
+
+// Puerto
+app.set("port", PORT);
 
 export default app;

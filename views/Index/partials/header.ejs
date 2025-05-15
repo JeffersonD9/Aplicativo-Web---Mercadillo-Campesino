@@ -1,0 +1,43 @@
+<header>
+    <div class="nav-container">
+        <div class="logo">
+            <i class="fas fa-leaf"></i> Mercadillo Campesino
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="/MercadilloBucaramanga/productos" target="_blank">Productos</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <% if (usuario) { %>
+                <div class="user-dropdown">
+                    <span class="dropdown-toggle" style="cursor: pointer;">
+                        <i class="fas fa-user"></i>
+                        <%= usuario.nombre %> ▼
+                    </span>
+                    <div class="dropdown-menu"
+                        style="display: none; position: absolute; background-color: white; border: 1px solid #ccc; padding: 10px;">
+                        <% if (usuario.role==1) { %>
+                            <a href="/MercadilloBucaramanga/Admin">
+                                <i class="fas fa-crown"></i> Panel Admin
+                            </a>
+                            <% } else { %>
+                                <a href="/MercadilloBucaramanga/Usuario">
+                                    <i class="fas fa-tachometer-alt"></i> Mi Panel
+                                </a>
+                                <% } %>
+                                    <a href="#" id="cerrar-sesion">
+                                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                                    </a>
+                    </div>
+                </div>
+                <% } else { %>
+                    <a href="#" class="login-btn" id="iniciar-sesion">
+                        <i class="fas fa-user"></i> Iniciar Sesión
+                    </a>
+                    <% } %>
+        </div>
+    </div>
+</header>

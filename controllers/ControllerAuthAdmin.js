@@ -1,29 +1,33 @@
 import { CreateAccesToken } from "../Services/CreateToken.js";
-import bcrypt from "bcrypt";
-import {
-  SearchAdmin,
-  validatePassword,
-  ValidateSessionAdmin,
-  SearchAdminUserName,
-} from "../Services/ServicesAdmin.js";
+import { UserServices } from "../Services/UserService.js";
+import { Roles } from "../Helpers/ValidationRoles/Roles.js";
+import { MercadilloService } from "../Services/MercadillosService.js";
+
+const service = new UserServices();
+const mercadilloService = new MercadilloService();
 
 export async function LoginAdmin(req, res) {
+
   const { Email, Password } = req.body;
   try {
-    const userfound = await SearchAdmin(Email);
-    const passwordOk = await validatePassword(userfound, Password);
-    if (!passwordOk)
+
+    const role = Roles.ADMIN;
+    const nameToken = Email.split('@')[0];
+    
+    const userValidate = await service.validateUserLogin(Email, role, Password);
+    
+    if (userValidate == null)
       return res.status(400).json({ message: "Invalidate Credentials" });
-    const role = userfound.id_Rol;
 
     const token = await CreateAccesToken({
-      id: userfound.id,
+      id: userValidate.Id,
       role: role,
-      userName: userfound.UserName,
+      Name: nameToken,
     });
+
     res.cookie("token", token);
     res.status(201).send({
-      Email: userfound.Email,
+      Email: userValidate.Email,
       redirect: "Admin",
     });
   } catch (error) {
@@ -31,78 +35,117 @@ export async function LoginAdmin(req, res) {
   }
 }
 
-export async function ProfileAdmin(req, res) {
+export async function RenderDashboardAdmin(req, res) {
   try {
-    const adminUserFound = await ValidateSessionAdmin(req);
-    if (!adminUserFound) res.status(401).json({ message: "User not Found" });
+
+    
+    const adminUserFound = await service.validateSession(req.user);
+    if (adminUserFound == null) {
+      return res.status(401).json({ message: "Usuario no encontrado" });
+    }
+    
     return res.render("Administrador/administrador", {
       UserName: adminUserFound.UserName,
       index: "Admin",
-      body:"datosAdmin",
+      body: "administrador",
       adminUserFound
     });
+    
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error en ProfileAdmin:", error);
+    return res.status(500).json({ message: error.message });
   }
 }
 
-/* ***** ** *** * ***/
-import { PrismaClient } from "@prisma/client";
-import { SearchUser } from "../Services/ServicesUser.js";
-const prisma = new PrismaClient();
+export async function getPuestoSugerido(req, res) {
+    try {
+        const idMercadillo = parseInt(req.query.id_Mercadillo);
+
+        if (!idMercadillo || isNaN(idMercadillo)) {
+            return res.status(400).json({ error: 'id_Mercadillo requerido y debe ser numérico' });
+        }
+
+        const puesto = await mercadilloService.GetSuggestPost(idMercadillo);
+        return res.json({ puesto });
+
+    } catch (error) {
+        console.error("Error al obtener puesto sugerido:", error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}
 
 export async function MostrarUsuarios(req, res) {
   try {
-    const usuarios = await prisma.usuario.findMany();
-    if (!usuarios) res.status(401).json({ message: "User not Found" });
-    res.render("Administrador/administrador", {
-      UserName: req.user,
-      body: "listaUsuario",
-      usuarios,
-      index: "Admin",
-    });
+      const usuarios = await service.getAllUsers();
+      
+      if (usuarios == null) return res.status(401).json({ message: "Users not Found" });
+
+      // Opcional: Transformar los datos para facilitar el acceso en la vista
+      const usuariosConMercadillo = usuarios.map(user => ({
+          ...user,
+          nombreMercadillo: user.mercadillo?.Nombre || 'Sin mercadillo asignado'
+      }));
+
+      res.render("Administrador/campesinos", {
+          UserName: req.user,
+          body: "campesinos",
+          campesino: usuariosConMercadillo,
+          index: "Admin",
+      });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
   }
 }
+
+
+export async function getUsuariosJson(req, res) {
+      try {
+          const usuarios = await service.getAllUsers();
+          console.log(usuarios)
+          res.status(200).json(usuarios);
+      } catch (error) {
+          res.status(500).json({ message: error.message });
+      }
+}
+
 
 export async function EliminarUsuario(req, res) {
-  const id_usuario = parseInt(req.params.id_usuario, 10);
+
   try {
-    const resultado = await prisma.usuario.delete({
-      where: {
-        id: id_usuario,
-      },
-    });
-    res.status(200).json({ message: "Usuario Borrado", data: resultado });
+
+    const id_usuario = parseInt(req.params.id_usuario, 10);
+    const result = service.deleteUser(id_usuario);
+    res.status(200).json({ message: "Usuario Borrado", data: result });
   } catch (error) {
     res.status(500).json({ message: error });
     console.log(error);
   }
 }
 
-export async function ActualizarAdmin(req, res) {
-  const { Email, Password, UserName, celular} = req.body;
-  console.log(req.body)
-  const id_adminbody = parseInt(req.params.id_admin, 10);
+// export async function ActualizarAdmin(req, res) {
 
-  try {
-    const passwordHash = await bcrypt.hash(Password,10)
-    const actualizarAdmin= await prisma.admin.update({
-      where: { id: id_adminbody },
-      data: {Email,
-      Password:passwordHash,
-      celular,
-      UserName
-    }
-    });
-    res.status(200).json({
-      message: "Usuario actualizado",
-      data: actualizarAdmin,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error });
-    console.log(error);
-  }
-}
+//   const { Email, Password, UserName, celular } = req.body;
+//   console.log(req.body)
+//   const id_adminbody = parseInt(req.params.id_admin, 10);
+
+//   try {
+//     const passwordHash = await bcrypt.hash(Password, 10)
+//     const actualizarAdmin = await prisma.admin.update({
+//       where: { id: id_adminbody },
+//       data: {
+//         Email,
+//         Password: passwordHash,
+//         celular,
+//         UserName
+//       }
+//     });
+//     res.status(200).json({
+//       message: "Usuario actualizado",
+//       data: actualizarAdmin,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: error });
+//     console.log(error);
+//   }
+// }
 

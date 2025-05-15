@@ -1,0 +1,113 @@
+<section class="products" id="productos">
+    <h2 class="section-title">Algunos De Nuestros Productores</h2>
+    <div class="products-grid">
+        <!-- Los productos se cargarán dinámicamente -->
+    </div>
+    <div class="text-center mt-4">
+        <a href="/MercadilloBucaramanga/productos" class="btn btn-primary">Ver todos los productos</a>
+    </div>
+    <br>
+</section>
+
+<script type="module">
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            console.log('Iniciando carga de productos...');
+
+            // Obtener los productos destacados desde la API
+            const response = await fetch('/MercadilloBucaramanga/Inicio/Productos');
+            console.log('Respuesta de la API:', response.status, response.statusText);
+
+            if (!response.ok) {
+                throw new Error(`Error al obtener los productos: ${response.status}`);
+            }
+
+            const resultado = await response.json();
+            console.log('Datos recibidos del servidor:', resultado);
+
+            // Comprobar si la respuesta tiene formato { message, data }
+            const productos = resultado.data ? resultado.data :
+                (Array.isArray(resultado) ? resultado : []);
+
+            console.log('Productos procesados:', productos);
+
+            // Renderizar los productos en la sección correspondiente
+            const productosContainer = document.querySelector('.products-grid');
+
+            if (productosContainer) {
+                // Limpiar el contenedor
+                productosContainer.innerHTML = '';
+
+                if (productos.length === 0) {
+                    console.log('No hay productos para mostrar');
+                    productosContainer.innerHTML = '<div class="no-products">No hay productos destacados disponibles</div>';
+                    return;
+                }
+
+                console.log('Renderizando', productos.length, 'productos');
+
+                // Crear las tarjetas de productos
+                productos.forEach(product => {
+                    if (!product) return; // Saltar productos nulos
+
+                    try {
+                        const productCard = document.createElement('div');
+                        productCard.className = 'product-card';
+
+                        const whatsappNumber = product.phone ? product.phone.replace(/\D/g, '') : '';
+
+                        const mensaje = [
+                            '*¡HOLA!*',
+                            '',
+                            `Vi tu producto "*${product.title || 'de su catálogo'}*" en el *Mercadillo Bucaramanga* y me interesa.`,
+                            '',
+                            '¿Podrías darme más información sobre:',
+                            '- Precio',
+                            '- Disponibilidad',
+                            '- Entregar',
+                            '',
+                            '¡Muchas gracias!*'
+                        ].join('\n');
+
+                        const mensajePredefinido = encodeURIComponent(mensaje);
+                        const whatsappLink = whatsappNumber ? `https://wa.me/${whatsappNumber}?text=${mensajePredefinido}` : '';
+
+                        productCard.innerHTML = `
+                            <div class="product-image">
+                                <img src="${product.image || '/MercadilloBucaramanga/img/placeholder.jpg'}" alt="${product.title || 'Producto'}" />
+                            </div>
+                            <div class="product-info">
+                                <div class="product-category">${product.category || 'Sin categoría'}</div>
+                                <h3 class="product-title">${product.title || 'Producto sin nombre'}</h3>
+                                <div class="product-meta">
+                                    <i class=" bi bi-person-fill">
+                                    <span class="product-mercado"> ${product.producer || 'Productor no especificado'}</span></i>
+                                    <i class="bi bi-geo-alt-fill text-danger">
+                                    <span class="product-mercado "> ${product.mercadillo || 'Mercadillo desconocido'}</span></i>
+                                </div>
+                                <p class="product-description">${product.description || 'Sin descripción'}</p>
+                                ${whatsappNumber ? `
+                                <div class="product-contact">
+                                    <a href="${whatsappLink}" target="_blank" class="whatsapp-button" title="Contactar por WhatsApp">
+                                        <i class="fab fa-whatsapp"></i> Chatear
+                                    </a>
+                                </div>
+                                ` : ''}
+                            </div>
+                        `;
+
+                        productosContainer.appendChild(productCard);
+                    } catch (renderError) {
+                        console.error('Error al renderizar producto:', renderError, product);
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            const productosContainer = document.querySelector('.products-grid');
+            if (productosContainer) {
+                productosContainer.innerHTML = '<div class="error">Error al cargar los productos: ' + error.message + '</div>';
+            }
+        }
+    });
+</script>
