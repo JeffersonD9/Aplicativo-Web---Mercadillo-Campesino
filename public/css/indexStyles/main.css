@@ -175,6 +175,8 @@ nav ul li a:hover::after {
     background-color: white;
     margin: 5% auto;
     max-width: 400px;
+    min-width: 400px;
+    max-height: 450px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     overflow: hidden;
@@ -635,4 +637,54 @@ footer {
     margin-top: 2rem;
     border-top: 1px solid #495057;
     color: #adb5bd;
+}
+
+/* DropDown logout */
+
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+    font-size: 0.95rem;
+    z-index: 3000;
+}
+
+.user-dropdown .dropdown-toggle {
+    cursor: pointer;
+    font-weight: 500;
+    color: #4d8249;
+    padding: 8px;
+    border-radius: 6px;
+    background-color: transparent;
+    transition: background-color 0.3s;
+}
+
+.user-dropdown .dropdown-toggle:hover {
+    background-color: rgba(77, 130, 73, 0.1);
+}
+
+.user-dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 8px;
+    min-width: 160px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 0;
+    z-index: 9999;
+}
+
+.user-dropdown .dropdown-menu a {
+    display: block;
+    padding: 10px 16px;
+    text-decoration: none;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.user-dropdown .dropdown-menu a:hover {
+    background-color: #f0f0f0;
 }

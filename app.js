@@ -11,7 +11,7 @@ import cookieParser from "cookie-parser";
 import Products from "./routes/IndexLadingPage.js";
 import { upload } from "./configMulter/multer.js";
 import { RenderIndex } from "./controllers/ControllerMain.js";
-
+import { verifyUser } from "./MiddleWares/VerifyUserLogged.js";
 const app = express();
 
 // Path
@@ -24,7 +24,7 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(verifyUser);
 
 // Configuración de vistas
 app.set("view engine", "ejs");

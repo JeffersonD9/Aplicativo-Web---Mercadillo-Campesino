@@ -5,7 +5,7 @@ import { createMercadillo, deleteMercadillo, getAllMercadillos, getMercadilloByI
 import { UpdateVendedor } from "../controllers/ControllerAuthSalesman.js";
 import { Register } from "../controllers/ControllerRegister.js";
 import { noCache } from "../MiddleWares/cache.js";
-import {getCategorias} from "../controllers/controllerCategorias.js"
+import { getCategorias } from "../controllers/controllerCategorias.js"
 import { getProductosBase } from "../controllers/ControllerProductosBase.js";
 const router = Router()
 
@@ -22,7 +22,7 @@ router.get('/Admin/Usuarios/puesto-sugerido', getPuestoSugerido, noCache)
 
 router.get('/Admin/Productos/create', noCache);
 router.get('/Admin/Productos/edit', noCache);
-router.get('/Admin/Productos/', noCache,getProductosBase);
+router.get('/Admin/Productos/', noCache, getProductosBase);
 
 // Categorias
 
