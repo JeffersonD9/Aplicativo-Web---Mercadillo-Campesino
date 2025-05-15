@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../includes/header') -%>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+       
+        <!-- Sidebar -->
+        <%- include('../includes/sidebarAdmin') -%>
+        
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <%- include('../includes/navCampAdm') -%>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                  <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Lista de mercadillos</h5>
+                </div>
+                <div class="container-fluid">
+                    
+                    <!-- Botón para agregar nuevo mercadillo -->
+                    <div class="d-flex justify-content-between mb-3 mt-3">
+                        <div></div>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#crearModal">
+                            <i class="bi bi-plus-circle"></i> Nuevo Mercadillo
+                        </button>
+                    </div>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Mercadillos</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nombre</th>
+                                            <th>Dirección</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% mercadillo.forEach((mercadillo) => { %>
+                                            <tr data-id="<%= mercadillo.Id %>">
+                                                <td><%= mercadillo.Id %></td>
+                                                <td><span class="nombre"><%= mercadillo.Nombre %></span></td>
+                                                <td><span class="direccion"><%= mercadillo.Direccion %></span></td>
+                                                <td>
+                                                    <button class="btn btn-outline-danger btn-sm btn-eliminar" data-toggle="modal" data-target="#eliminarModal" data-id="<%= mercadillo.Id %>">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-primary btn-sm btn-editar ml-1" data-toggle="modal" data-target="#editarModal" data-id="<%= mercadillo.Id %>">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <%- include('../includes/footer') -%>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"> </i>
+    </a>
+
+    <!-- Modal para Crear Mercadillo -->
+    <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="crearModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearModalLabel">Nuevo Mercadillo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert d-none" role="alert" id="notificacionCrear"></div>
+                    <form id="formCrear">
+                        <div class="form-group">
+                            <label for="nombreNuevo">Nombre</label>
+                            <input type="text" class="form-control" id="nombreNuevo" maxlength="50" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="direccionNueva">Dirección</label>
+                            <input type="text" class="form-control" id="direccionNueva" maxlength="100" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarNuevo">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Editar Mercadillo -->
+    <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarModalLabel">Editar Mercadillo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert d-none" role="alert" id="notificacionEditar"></div>
+                    <form id="formEditar">
+                        <input type="hidden" id="idEditar">
+                        <div class="form-group row">
+                            <label for="nombreEditar" class="col-sm-3 col-form-label" >Nombre</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="nombreEditar" maxlength="50" required>
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="button" class="btn btn-primary btn-actualizar-campo" data-campo="Nombre">
+                                    <i class="bi bi-check"></i> Actualizar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="direccionEditar" class="col-sm-3 col-form-label">Dirección</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="direccionEditar" maxlength="100" required>
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="button" class="btn btn-primary btn-actualizar-campo" data-campo="Direccion">
+                                    <i class="bi bi-check"></i> Actualizar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Eliminar Mercadillo -->
+    <div class="modal fade" id="eliminarModal" tabindex="-1" role="dialog" aria-labelledby="eliminarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eliminarModalLabel">Confirmar Eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert d-none" role="alert" id="notificacionEliminar"></div>
+                    ¿Estás seguro que deseas eliminar este mercadillo?
+                    <input type="hidden" id="idEliminar">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript-->
+    <%- include('../includes/scripts') -%>
+    
+</body>
+<script src="/js/admin/mercadilloAdmin.js" type="module"></script>
+</html>

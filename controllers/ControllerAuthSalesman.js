@@ -1,51 +1,63 @@
 import { CreateAccesToken } from "../Services/CreateToken.js";
-import {
-  SearchUser,
-  SearchUserName,
-  ValidateSessionAdmin,
-  ActualizarVendedor,
-} from "../Services/ServicesUser.js";
-import { UpdateUser, validatePassword } from "../Services/ServicesAdmin.js";
 import { enviar_email } from "../templateCorreo/envioPassword.js";
-import bcrypt from "bcrypt";
+import { UserServices } from "../Services/UserService.js";
+import { Roles } from "../Helpers/ValidationRoles/Roles.js";
+
+const service = new UserServices();
+const role = Roles.VENDEDOR;
 
 export async function LoginSalesman(req, res) {
+
   const { Email, Password } = req.body;
 
   try {
-    const userFound = await SearchUser(Email);
-    const passwordOk = await validatePassword(userFound, Password);
-    if (!passwordOk)
+
+    const nameToken = Email.split('@')[0];
+    const userValidate = await service.validateUserLogin(Email, role, Password);
+
+    if (userValidate == null)
       return res.status(400).json({ message: "Invalidate Credentials" });
-    const role = userFound.id_Rol;
+
     const token = await CreateAccesToken({
-      id: userFound.id,
-      userName: userFound.UserName,
+      id: userValidate.Id,
       role: role,
+      Name: nameToken,
     });
 
     res.cookie("token", token);
     res.status(201).send({
-      UserName: userFound.UserName,
+      UserName: nameToken,
       redirect: "Usuario",
     });
   } catch (error) {
     res.status(500).json({ message: error });
   }
 }
-export async function ProfileSalesman(req, res) {
-  try {
-    const userFound = await ValidateSessionAdmin(req);
-    if (!userFound) return res.status(400).json({ message: "User not Found" });
 
-    return res.render("Vendedor/vendedor", {
-      UserName: userFound.UserName,
+export async function ProfileSalesman(req, res) {
+
+  try {
+
+    if (!req.user.Name || !req.user || !req.user.role) {
+      return res.status(400).json({ message: "Datos incompletos o inválidos" });
+    }
+
+    const userFound = await service.validateSession(req.user);
+    console.log(userFound)
+    if (userFound == null) {
+      return res.status(401).json({ message: "Usuario no encontrado" });
+    }
+
+    return res.render("Campesino/campesino", {
+      UserName: userFound.Nombres,
       index: "Usuario",
-      body: "datosVendedor",
+      body: "campesino",
       userFound,
     });
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.log(error)
+    return res.status(500).json({ message: "Internal error" });
   }
 }
 
@@ -54,15 +66,20 @@ export async function ProfileSalesman(req, res) {
 export async function EnviarCorreo(req, res) {
   try {
     const Email = req.body.Email;
-    console.log(req.body.Email);
-    const userFound = await SearchUser(Email);
-    if (!userFound) {
+    const nameToken = Email;
+    
+
+    const userFound = await service.findUser(Email, role);
+    console.log(userFound);
+    if (userFound == null) {
       return res.status(400).json({ message: `Solicitud rechazada` });
     }
+
     const token = await CreateAccesToken({
-      id: userFound.id,
-      userName: userFound.UserName,
+      id: userFound.Id,
+      userName: nameToken,
     });
+
     enviar_email(Email, token);
     res.status(200).json({ message: "Correo Enviado" });
   } catch (error) {
@@ -72,25 +89,30 @@ export async function EnviarCorreo(req, res) {
 
 //form
 export async function FromCambiarPassword(req, res) {
-  return res.render("enviarTokenEmail");
+
+  return res.render("Email/enviarTokenEmail");
+
 }
 
 export async function RestablecerPassword(req, res) {
-  return res.render("cambiarPassword");
+  return res.render("Email/cambiarPassword");
 }
 
 export async function ActualizarPassword(req, res) {
-  try {
-    const { UserName, Password } = req.body;
-    console.log(req.body);
-    const userFound = await SearchUserName(UserName);
 
-    if (!userFound)
+  try {
+
+    const { Email, Password } = req.body;
+    console.log(req.body);
+
+    const userFound = await service.findUser(Email, role, Password);
+
+    if (userFound == null)
       return res.status(400).json({ message: "Invalidate Credentials" });
 
-    const passwordHash = await bcrypt.hash(Password, 10);
-    const usuarioActualizado = await UpdateUser(UserName, passwordHash);
+    const usuarioActualizado = await service.changePassword(Email, role, Password);
     console.log(usuarioActualizado);
+
     if (!usuarioActualizado) {
       return res
         .status(400)
@@ -104,14 +126,28 @@ export async function ActualizarPassword(req, res) {
 
 export async function UpdateVendedor(req, res) {
   try {
-    const id_vendedor = parseInt(req.params.id_vendedor, 10);
     const data = req.body;
-    const Imagen = !req.file?.path ? req.body.file : req.file.path;
-    const userfound = await ActualizarVendedor(id_vendedor,data,Imagen);
-    if (!userfound)
-      return res.status(400).json({ message: "Error al actualizar" });
-    return res.status(200).json({ userfound });
+
+    const id_vendedor = parseInt(req.params.id_vendedor, 10);
+    
+    if (isNaN(id_vendedor)) {
+      return res.status(400).json({ message: "ID de vendedor inválido" });
+    }
+
+    // if (!data || Object.keys(data).length === 0) {
+    //   return res.status(400).json({ message: "Datos de actualización vacíos" });
+    // }
+
+    const userfound = await service.ActualizarVendedor(id_vendedor, req);
+
+    if (userfound == null) {
+      return res.status(400).json({ message: "Error al actualizar el vendedor" });
+    }
+
+    return res.status(200).json({ message: "Vendedor actualizado correctamente"});
+
   } catch (error) {
-    res.status(500).json({ message: error });
+    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 }

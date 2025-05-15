@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<link rel="stylesheet" href="/css/indexStyles/main.css">
+<link rel="stylesheet" href="/css/indexStyles/responsive.css">
+<%- include('./partials/head') %>
+
+    <body>
+        <!-- Header Section -->
+        <%- include('./partials/header') %>
+
+            <% if (mensaje==='sesionFinalizada' ) { %>
+                <div id="notificacion" class="alert alert-warning"
+                    style="position: fixed; top: 20px; right: 20px; z-index: 9999; background-color: #f8d7da; color: #721c24; padding: 12px 20px; border-radius: 8px;">
+                    Tu sesión ha finalizado. Serás redirigido...
+                </div>
+
+                <script>
+                    setTimeout(() => {
+                        const noti = document.getElementById('notificacion');
+                        if (noti) noti.style.display = 'none';
+                        window.location.href = "/MercadilloBucaramanga";
+                    }, 3000);
+                </script>
+                <% } %>
+
+                    <!-- Hero Section -->
+                    <%- include('./partials/hero') %>
+
+                        <!-- About Section -->
+                        <%- include('./partials/about') %>
+
+                            <!-- Features Section -->
+                            <%- include('./partials/features') %>
+
+                                <!-- Products Section -->
+                                <%- include('./partials/products') %>
+                                    <!-- Login Modal -->
+                                    <%- include('../login') %>
+                                        <!-- Testimonials Section -->
+                                        <%- /* include('./partials/testimonials') */%>
+
+                                            <!-- CTA Section -->
+                                            <%- include('./partials/cta') %>
+
+                                                <!-- Footer -->
+                                                <%- include('./partials/footer') %>
+
+                                                    <!-- Scripts -->
+                                                    <script src="/js/loginModal.js"></script>
+                                                    <script src="/js/login.js"></script>
+                                                   <script src="/js/dropDownUserLogged.js"></script>
+    </body>

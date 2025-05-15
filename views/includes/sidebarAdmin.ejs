@@ -1,31 +1,54 @@
-<nav class="navbar navbar-expand-md sidebar p-0 px-2 pt-1 navbar-light bg-light fixed-top col-md-3 col-lg-2   d-md-block nav-width" >
-    <!-- Logo visible en todos los tamaños -->
-    
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-    <!-- Botón de hamburguesa para pantallas pequeñas -->
-    <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a style="margin-right: 5px; font-size: 20px;"
-    class="navbar-brand"
-    href="/MercadilloBucaramanga"
-    >Mercadillo</a
-  >
-    <!-- Contenido del navbar colapsable -->
-    <div class="collapse navbar-collapse navbar-expand-md  col-md-3 col-lg-2 hamburguesa  " id="navbarNav">
-        <ul class="navbar-nav flex-column">
-            <li class="nav-item active mt-2">
-                <a class="nav-link" href="/MercadilloBucaramanga/Admin">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/MercadilloBucaramanga/Admin/Usuarios">Vendedores</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/MercadilloBucaramanga/Admin/Categorias">Categorías</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/MercadilloBucaramanga/Admin/Catalogos">Catálogos</a>
-            </li>
-        </ul>
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/MercadilloBucaramanga/Admin">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Admin</div>
+    </a>
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Menú
     </div>
-</nav>
+    <!-- Nav Item  -->
+    <li class="nav-item">
+        <a class="nav-link" href="/MercadilloBucaramanga/Admin/Usuarios">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Campesinos</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/MercadilloBucaramanga/Admin/Mercadillos">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Mercadillos</span></a>
+    </li>
+
+    <!-- Nav Item  -->
+    <li class="nav-item">
+        <a class="nav-link" href="/MercadilloBucaramanga/Admin/Categorias">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Categorias</span></a>
+    </li>
+
+    <!-- Nav Item  -->
+    <li class="nav-item">
+        <a class="nav-link" href="/MercadilloBucaramanga/Admin/Productos">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Productos Base </span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+       <li class="nav-item">
+        <a class="nav-link" href="/MercadilloBucaramanga">
+            <i class="fas fa-arrow-left mr-2"></i>
+            <span>Volver Inicio Mercadillo</span></a>
+    </li>
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>
